@@ -6,7 +6,7 @@ from genealogy.individual.forms import AddIndividual
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
+# New comment
     form = AddIndividual()
 
     if form.validate_on_submit():
