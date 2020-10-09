@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+  <h1>Welcome to the Genealogy App</h1>
+    <form method="POST">
+      {{form.hidden_tag()}}
+      {{form.forename.label}} {{form.forename() }}
+      {{form.middle_name.label}} {{form.middle_name() }}
+      {{form.surname.label}} {{form.surname() }}
+      {{form.submit()}}
+    </form>
+</div>
+{% endblock %}
