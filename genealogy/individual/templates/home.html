@@ -4,10 +4,24 @@
   <h1>Welcome to the Genealogy App</h1>
     <form method="POST">
       {{form.hidden_tag()}}
-      {{form.forename.label}} {{form.forename() }}
-      {{form.middle_name.label}} {{form.middle_name() }}
-      {{form.surname.label}} {{form.surname() }}
+
+      {{form.father_forename.label}} {{form.father_forename() }}
+      {{form.father_middle_name.label}} {{form.father_middle_name() }}
+      {{form.father_surname.label}} {{form.father_surname() }}
+
+      <br>
+
+      {{form.mother_forename.label}} {{form.mother_forename() }}
+      {{form.mother_middle_name.label}} {{form.mother_middle_name() }}
+      {{form.mother_surname.label}} {{form.mother_surname() }}
+
+      <br>
+
+      {{form.child_forename.label}} {{form.child_forename() }}
+      {{form.child_middle_name.label}} {{form.child_middle_name() }}
+      {{form.child_surname.label}} {{form.child_surname() }}
       {{form.submit()}}
     </form>
+
 </div>
 {% endblock %}
