@@ -2,26 +2,36 @@
 {% block content %}
 <div class="jumbotron">
   <h1>Welcome to the Genealogy App</h1>
-    <form method="POST">
-      {{form.hidden_tag()}}
-
-      {{form.father_forename.label}} {{form.father_forename() }}
-      {{form.father_middle_name.label}} {{form.father_middle_name() }}
-      {{form.father_surname.label}} {{form.father_surname() }}
-
-      <br>
-
-      {{form.mother_forename.label}} {{form.mother_forename() }}
-      {{form.mother_middle_name.label}} {{form.mother_middle_name() }}
-      {{form.mother_surname.label}} {{form.mother_surname() }}
-
-      <br>
-
-      {{form.child_forename.label}} {{form.child_forename() }}
-      {{form.child_middle_name.label}} {{form.child_middle_name() }}
-      {{form.child_surname.label}} {{form.child_surname() }}
-      {{form.submit()}}
-    </form>
-
+  <form method="POST">
+    {{form.hidden_tag()}}
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          {% if fathername %}
+          <h3> {{ fathername }} </h3>
+          {% else %}
+          {{form.father_forenames.label}} {{form.father_forenames()}}
+          {{form.father_surname.label}} {{form.father_surname() }}
+          {% endif %}
+        </div>
+        <div class="col">
+          {% if mothername %}
+          <h3> {{ mothername }} </h3>
+          {% else %}
+          {{form.mother_forenames.label}} {{form.mother_forenames()}}
+          {{form.mother_surname.label}} {{form.mother_surname() }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          {{form.child_forenames.label}} {{form.child_forenames() }}
+          {{form.child_surname.label}} {{form.child_surname() }}
+          {{form.submit()}}
+        </div>
+      </div>
+    </div>
+</form>
 </div>
+
 {% endblock %}

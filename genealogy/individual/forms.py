@@ -4,13 +4,10 @@ from wtforms import StringField, SubmitField
 
 class AddIndividual(FlaskForm):
 
-    father_forename = StringField("Father Name: ")
-    father_middle_name = StringField()
+    father_forenames = StringField("Father forenames: ")
     father_surname = StringField()
-    mother_forename = StringField("Mother Name: ")
-    mother_middle_name = StringField()
+    mother_forenames = StringField("Mother forenames: ")
     mother_surname = StringField()
-    child_forename = StringField("Child Name: ")
-    child_middle_name = StringField()
+    child_forenames = StringField("Child forenames: ")
     child_surname = StringField()
     submit = SubmitField(label="Add Child")

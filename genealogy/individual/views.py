@@ -12,11 +12,10 @@ genealogy_blueprint = Blueprint("individual",__name__,
 #     form = AddIndividual()
 #
 #     if form.child_submit():
-#         forename = form.child_forename.data
-#         middle_name = form.child_middle_name.data
+#         forenames = form.child_forenames.data
 #         surname = form.child_surname.data
 #
-#         new_individual = Individual(surname, forename, middle_name)
+#         new_individual = Individual(surname, forenames)
 #         db.session.add(new_individual)
 #         db.session.commit()
 #

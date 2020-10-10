@@ -10,17 +10,17 @@ class Individual(db.Model):
     __tablename__ = "individual"
 
     id = db.Column(db.Integer, primary_key=True)
-    forename = db.Column(db.Text)
-    middle_name = db.Column(db.Text)
+    forenames = db.Column(db.Text)
     surname = db.Column(db.Text)
+    fullname = db.Column(db.Text)
 
     parents = db.relationship("Parents", secondary="family_link")
 
 
-    def __init__(self,surname,forename=None,middle_name=None):
-        self.forename = forename
-        self.middle_name = middle_name
+    def __init__(self,surname,fullname,forenames=None):
+        self.forenames = forenames
         self.surname = surname
+        self.fullname = fullname
 
     def __repr__(self):
         pass
