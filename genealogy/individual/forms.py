@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, IntegerField, SubmitField
 
 
 class AddIndividual(FlaskForm):
@@ -10,4 +10,4 @@ class AddIndividual(FlaskForm):
     mother_surname = StringField()
     child_forenames = StringField("Child forenames: ")
     child_surname = StringField()
-    submit = SubmitField(label="Add Child")
+    #submit = SubmitField(label="Add Child")

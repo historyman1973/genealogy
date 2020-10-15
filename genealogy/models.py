@@ -9,6 +9,7 @@ class Individual(db.Model):
 
     __tablename__ = "individual"
 
+
     id = db.Column(db.Integer, primary_key=True)
     forenames = db.Column(db.Text)
     surname = db.Column(db.Text)
@@ -17,7 +18,7 @@ class Individual(db.Model):
     parents = db.relationship("Parents", secondary="family_link")
 
 
-    def __init__(self,surname,fullname,forenames=None):
+    def __init__(self,surname,fullname=None,forenames=None):
         self.forenames = forenames
         self.surname = surname
         self.fullname = fullname

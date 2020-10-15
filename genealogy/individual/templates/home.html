@@ -4,30 +4,24 @@
   <h1>Welcome to the Genealogy App</h1>
   <form method="POST">
     {{form.hidden_tag()}}
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col">
-          {% if fathername %}
-          <h3> {{ fathername }} </h3>
-          {% else %}
+        <div class="col-md-6">
           {{form.father_forenames.label}} {{form.father_forenames()}}
           {{form.father_surname.label}} {{form.father_surname() }}
-          {% endif %}
+          <input type="submit" value="Add" name="addfather"/>
         </div>
-        <div class="col">
-          {% if mothername %}
-          <h3> {{ mothername }} </h3>
-          {% else %}
+        <div class="col-md-6">
           {{form.mother_forenames.label}} {{form.mother_forenames()}}
           {{form.mother_surname.label}} {{form.mother_surname() }}
-          {% endif %}
+          <input type="submit" value="Add" name="addmother"/>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-md-6">
           {{form.child_forenames.label}} {{form.child_forenames() }}
           {{form.child_surname.label}} {{form.child_surname() }}
-          {{form.submit()}}
+          <input type="submit" value="Add" name="addchild"/>
         </div>
       </div>
     </div>
