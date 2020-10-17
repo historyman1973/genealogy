@@ -1,24 +1,37 @@
 from genealogy import app
-from flask import render_template, session, redirect, url_for, request
+from flask import render_template, session, request
 from genealogy import db
-from genealogy.models import Individual, Parents
+from genealogy.models import Individual, Parents, FamilyLink
 from genealogy.individual.forms import AddIndividual
-from sqlalchemy.sql import exists
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
     form = AddIndividual()
 
     def fullname(first, last):
         return first + " " + last
 
+    def create_partners():
+        new_parents = Parents(session["new_father.id"], session["new_mother.id"])
+        db.session.add(new_parents)
+        db.session.commit()
+        db.session.flush()
+
+        session["new_partners.id"] = new_parents.id
+
+    def link_child():
+        c = FamilyLink(session["new_child.id"], session["new_partners.id"])
+        db.session.add(c)
+        db.session.commit()
+        db.session.flush()
+
     if request.method == "POST":
 
-        new_father = Individual("",None,None)
-        new_mother = Individual("",None,None)
-        new_child = Individual("",None,None)
-        new_partners = Parents(None,None)
+        new_father = Individual("", None, None)
+        new_mother = Individual("", None, None)
+        new_child = Individual("", None, None)
+        new_partners = Parents(None, None)
 
         if request.form.get("addfather") == "Add":
             father_forenames = form.father_forenames.data
@@ -31,14 +44,8 @@ def index():
             db.session.commit()
             db.session.flush()
             session["new_father.id"] = new_father.id
-
-
-            # if Parents.query.filter_by(father_id=session["new_father.id"], mother_id=session["new_mother.id"]):
-            #     pass
-            # else:
-            #     new_partners = Parents(session["new_father.id"], session["new_mother.id"])
-            #     db.session.add(new_partners)
-            #     db.session.commit()
+            if form.mother_forenames.data or form.mother_surname.data:
+                create_partners()
 
         if request.form.get("addmother") == "Add":
             mother_forenames = form.mother_forenames.data
@@ -48,17 +55,11 @@ def index():
             new_mother = Individual(mother_surname, mother_fullname, mother_forenames)
             db.session.add(new_mother)
 
-
             db.session.commit()
             db.session.flush()
             session["new_mother.id"] = new_mother.id
-
-            # if Parents.query.filter_by(father_id=session["new_father.id"], mother_id=session["new_mother.id"]):
-            #     pass
-            # else:
-            #     new_partners = Parents(session["new_father.id"], session["new_mother.id"])
-            #     db.session.add(new_partners)
-            #     db.session.commit()
+            if form.father_forenames.data or form.father_surname.data:
+                create_partners()
 
         if request.form.get("addchild") == "Add":
             child_forenames = form.child_forenames.data
@@ -67,19 +68,19 @@ def index():
 
             new_child = Individual(child_surname, child_fullname, child_forenames)
             db.session.add(new_child)
-            focus_person = new_child
 
             db.session.commit()
+            db.session.flush()
 
-        print("New father ID is " + str(session["new_father.id"]))
-        print("New mother ID is " + str(session["new_mother.id"]))
+            session["new_child.id"] = new_child.id
+
+            if form.father_forenames.data or form.father_surname.data or form.mother_forenames.data or form.mother_surname.data:
+                link_child()
 
         return render_template("home.html", form=form)
 
-        # return render_template("home.html", form=form, focus_father=focus_father, focus_mother=focus_mother,
-        #                        focus_person=focus_person, focus_partners=focus_partners)
-
     return render_template("home.html", form=form)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
