@@ -1,13 +1,16 @@
 from genealogy import app
 from flask import render_template, session, request
 from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink
+from genealogy.models import Individual, Parents, FamilyLink, FocusPeople
 from genealogy.individual.forms import AddIndividual
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = AddIndividual()
+
+    father_fullname = None
+    mother_fullname = None
 
     def fullname(first, last):
         return first + " " + last
@@ -28,11 +31,6 @@ def index():
 
     if request.method == "POST":
 
-        new_father = Individual("", None, None)
-        new_mother = Individual("", None, None)
-        new_child = Individual("", None, None)
-        new_partners = Parents(None, None)
-
         if request.form.get("addfather") == "Add":
             father_forenames = form.father_forenames.data
             father_surname = form.father_surname.data
@@ -44,6 +42,17 @@ def index():
             db.session.commit()
             db.session.flush()
             session["new_father.id"] = new_father.id
+            session["father_fullname"] = father_fullname
+
+            if FocusPeople.query.get(1) is None:
+                focus_father = FocusPeople(new_father.id,)
+                db.session.add(focus_father)
+
+                db.session.commit()
+                db.session.flush()
+
+                print(FocusPeople.query.get(1).focus_father)
+
             if form.mother_forenames.data or form.mother_surname.data:
                 create_partners()
 
@@ -58,6 +67,8 @@ def index():
             db.session.commit()
             db.session.flush()
             session["new_mother.id"] = new_mother.id
+            session["mother_fullname"] = mother_fullname
+
             if form.father_forenames.data or form.father_surname.data:
                 create_partners()
 
@@ -77,7 +88,7 @@ def index():
             if form.father_forenames.data or form.father_surname.data or form.mother_forenames.data or form.mother_surname.data:
                 link_child()
 
-        return render_template("home.html", form=form)
+        return render_template("home.html", form=form, father_fullname=father_fullname, mother_fullname=mother_fullname)
 
     return render_template("home.html", form=form)
 

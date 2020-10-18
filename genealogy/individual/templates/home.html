@@ -6,21 +6,76 @@
     {{form.hidden_tag()}}
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-6">
-          {{form.father_forenames.label}} {{form.father_forenames()}}
-          {{form.father_surname.label}} {{form.father_surname() }}
-          <input type="submit" value="Add" name="addfather"/>
+
+
+        <div class="col col-sm-2">
+          {{form.grandfather1_forenames.label}}
         </div>
-        <div class="col-md-6">
-          {{form.mother_forenames.label}} {{form.mother_forenames()}}
-          {{form.mother_surname.label}} {{form.mother_surname() }}
-          <input type="submit" value="Add" name="addmother"/>
+        <div class="col col-sm-4">
+          {{form.grandfather1_forenames()}}
+          {{form.grandfather1_surname() }}
+          <input type="submit" value="Add" name="addgrandfather1"/>
+        </div>
+        <br>
+        <div class="col col-sm-2">
+          {{form.grandfather2_forenames.label}}
+        </div>
+        <div class="col col-sm-4">
+          {{form.grandfather2_forenames()}}
+          {{form.grandfather2_surname() }}
+          <input type="submit" value="Add" name="addgrandfather2"/>
         </div>
       </div>
+
       <div class="row">
-        <div class="col-md-6">
+        <div class="col col-sm-2">
+          {{form.grandmother1_forenames.label}}
+        </div>
+        <div class="col col-sm-4">
+          {{form.grandmother1_forenames()}}
+          {{form.grandmother1_surname() }}
+          <input type="submit" value="Add" name="addgrandmother1"/>
+        </div>
+        <br>
+        <div class="col col-sm-2">
+          {{form.grandmother2_forenames.label}}
+        </div>
+        <br>
+        <div class="col col-sm-4">
+          {{form.grandmother2_forenames() }}
+          {{form.grandmother2_surname() }}
+          <input type="submit" value="Add" name="addgrandmother2"/>
+        </div>
+      </div>
+
+
+      <div class="row">
+
+
+        <div class="col col-sm-2">
+          {{form.father_forenames.label}}
+        </div>
+        <div class="col col-sm-4">
+          {{form.father_forenames() }}
+          {{form.father_surname() }}
+          <input type="submit" value="Add" name="addfather"/>
+        </div>
+        <div class="col-sm-2">
+          {{form.mother_forenames.label}}
+        </div>
+        <div class="col col-sm-4">
+          {{form.mother_forenames() }}
+          {{form.mother_surname() }}
+          <input type="submit" value="Add" name="addmother"/>
+        </div>
+        </div>
+
+
+      </div>
+      <div class="row">
+        <div class="col-md-12">
           {{form.child_forenames.label}} {{form.child_forenames() }}
-          {{form.child_surname.label}} {{form.child_surname() }}
+          {{form.child_surname() }}
           <input type="submit" value="Add" name="addchild"/>
         </div>
       </div>

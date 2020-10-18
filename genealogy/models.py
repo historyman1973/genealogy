@@ -45,4 +45,15 @@ class Parents(db.Model):
         self.mother_id = mother_id
 
 
+class FocusPeople(db.Model):
+    __tablename__ = "focuspeople"
+
+    id = db.Column(db.Integer, primary_key=True)
+    focus_father = db.Column(db.Integer, db.ForeignKey("individual.id"))
+
+    def __init__(self, focus_father=None, focus_mother=None):
+        self.focus_father = focus_father
+        self.focus_mother = focus_mother
+
+
 db.create_all()
