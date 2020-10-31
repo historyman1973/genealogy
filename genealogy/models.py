@@ -50,6 +50,7 @@ class FocusPeople(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     focus_father = db.Column(db.Integer, db.ForeignKey("individual.id"))
+    focus_mother = db.Column(db.Integer, db.ForeignKey("individual.id"))
 
     def __init__(self, focus_father=None, focus_mother=None):
         self.focus_father = focus_father
