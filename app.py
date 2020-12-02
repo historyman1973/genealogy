@@ -12,46 +12,12 @@ def index():
     if request.method == "POST":
 
         if request.form.get("addfather") == "Add":
-            father_forenames = form.father_forenames.data
-            father_surname = form.father_surname.data
-            father_fullname = fullname(father_forenames, father_surname)
-
-            new_father = Individual(father_surname, father_fullname, father_forenames)
-            db.session.add(new_father)
-
-            db.session.commit()
-            db.session.flush()
-
-            session["father.id"] = new_father.id
-
-            if session.get("mother.id") is None:
-                print(
-                    "Creating partner record, father ID is " + str(session.get("father.id")) + ", mother ID is " + str(
-                        session.get("mother.id")))
-                create_partners(father_id=session["father.id"], mother_id=None)
-            else:
-                update_partners(partners_id=session["partners.id"], father_id=session["father.id"],
-                                mother_id=session["mother.id"])
+            add_father(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmother") == "Add":
-            mother_forenames = form.mother_forenames.data
-            mother_surname = form.mother_surname.data
-            mother_fullname = fullname(mother_forenames, mother_surname)
-
-            new_mother = Individual(mother_surname, mother_fullname, mother_forenames)
-            db.session.add(new_mother)
-
-            db.session.commit()
-            db.session.flush()
-            session["mother.id"] = new_mother.id
-
-            if session.get("father.id") is None:
-                create_partners(father_id=None, mother_id=session["mother.id"])
-            else:
-                update_partners(partners_id=session["partners.id"], father_id=session["father.id"],
-                                mother_id=session["mother.id"])
+            add_mother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
@@ -75,46 +41,12 @@ def show_family(parentsid):
     if request.method == "POST":
 
         if request.form.get("addfather") == "Add":
-            father_forenames = form.father_forenames.data
-            father_surname = form.father_surname.data
-            father_fullname = fullname(father_forenames, father_surname)
-
-            new_father = Individual(father_surname, father_fullname, father_forenames)
-            db.session.add(new_father)
-
-            db.session.commit()
-            db.session.flush()
-
-            session["father.id"] = new_father.id
-            session["father_fullname"] = father_fullname
-
-            if session.get("mother.id") is None:
-                create_partners(father_id=session["father.id"], mother_id=None)
-            else:
-                update_partners(partners_id=session["partners.id"], father_id=session["father.id"],
-                                mother_id=session["mother.id"])
+            add_father(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmother") == "Add":
-            mother_forenames = form.mother_forenames.data
-            mother_surname = form.mother_surname.data
-            mother_fullname = fullname(mother_forenames, mother_surname)
-
-            new_mother = Individual(mother_surname, mother_fullname, mother_forenames)
-            db.session.add(new_mother)
-
-            db.session.commit()
-            db.session.flush()
-            session["mother.id"] = new_mother.id
-            session["mother_fullname"] = mother_fullname
-
-            if session.get("father.id") is None:
-                create_partners(father_id=None, mother_id=session["mother.id"])
-            else:
-                update_partners(partners_id=session["partners.id"],
-                                father_id=session["father.id"],
-                                mother_id=session["mother.id"])
+            add_mother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
@@ -183,6 +115,50 @@ def link_child(individual_id, parents_id):
         db.session.add(c)
         db.session.commit()
         db.session.flush()
+
+
+def add_father(form):
+    father_forenames = form.father_forenames.data
+    father_surname = form.father_surname.data
+    father_fullname = fullname(father_forenames, father_surname)
+
+    new_father = Individual(father_surname, father_fullname, father_forenames)
+    db.session.add(new_father)
+
+    db.session.commit()
+    db.session.flush()
+
+    session["father.id"] = new_father.id
+    session["father_fullname"] = father_fullname
+
+    if session.get("mother.id") is None:
+        create_partners(father_id=session["father.id"], mother_id=None)
+    else:
+        update_partners(partners_id=session["partners.id"], father_id=session["father.id"],
+                        mother_id=session["mother.id"])
+
+    return
+
+
+def add_mother(form):
+    mother_forenames = form.mother_forenames.data
+    mother_surname = form.mother_surname.data
+    mother_fullname = fullname(mother_forenames, mother_surname)
+
+    new_mother = Individual(mother_surname, mother_fullname, mother_forenames)
+    db.session.add(new_mother)
+
+    db.session.commit()
+    db.session.flush()
+    session["mother.id"] = new_mother.id
+
+    if session.get("father.id") is None:
+        create_partners(father_id=None, mother_id=session["mother.id"])
+    else:
+        update_partners(partners_id=session["partners.id"], father_id=session["father.id"],
+                        mother_id=session["mother.id"])
+
+    return
 
 
 if __name__ == "__main__":
