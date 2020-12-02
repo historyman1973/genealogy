@@ -27,8 +27,8 @@ class Individual(db.Model):
         self.surname = surname
         self.fullname = fullname
 
-    def __repr__(self):
-        pass
+    # def __repr__(self):
+    #     return (str(self.fullname))
 
 
 class Parents(db.Model):
@@ -43,6 +43,9 @@ class Parents(db.Model):
     def __init__(self, father_id=None, mother_id=None):
         self.father_id = father_id
         self.mother_id = mother_id
+
+    # def __repr__ (self):
+    #     return f"Father ID: {self.father_id} Mother ID: {self.mother_id}"
 
 
 class FocusPeople(db.Model):

@@ -1,5 +1,27 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
+#
+# class AddFather(FlaskForm):
+#
+#     father_forenames = StringField("Father forenames: ")
+#     father_surname = StringField()
+#     father_fullname = StringField()
+#     fathersubmit = SubmitField("Add")
+#
+# class AddMother(FlaskForm):
+#
+#     mother_forenames = StringField("Mother forenames: ")
+#     mother_surname = StringField()
+#     mother_fullname = StringField()
+#     mothersubmit = SubmitField("Add")
+#
+# class AddChild(FlaskForm):
+#
+#     child_forenames = StringField("Child forenames: ")
+#     child_surname = StringField()
+#     child_fullname = StringField()
+#     childsubmit = SubmitField("Add")
+
 
 
 class AddIndividual(FlaskForm):
@@ -19,6 +41,7 @@ class AddIndividual(FlaskForm):
     father_forenames = StringField("Father forenames: ")
     father_surname = StringField()
     father_fullname = StringField()
+
     mother_forenames = StringField("Mother forenames: ")
     mother_surname = StringField()
     mother_fullname = StringField()
