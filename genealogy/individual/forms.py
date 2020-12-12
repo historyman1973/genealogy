@@ -38,13 +38,14 @@ class AddIndividual(FlaskForm):
     grandmother2_forenames = StringField("Mother's mother: ")
     grandmother2_surname = StringField()
 
-    father_forenames = StringField("Father forenames: ")
+    father_forenames = StringField("Father: ")
     father_surname = StringField()
     father_fullname = StringField()
 
-    mother_forenames = StringField("Mother forenames: ")
+    mother_forenames = StringField("Mother: ")
     mother_surname = StringField()
     mother_fullname = StringField()
 
-    child_forenames = StringField("Child forenames: ")
+    child_forenames = StringField()
     child_surname = StringField()
+    child_fullname = StringField()

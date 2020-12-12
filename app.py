@@ -28,6 +28,9 @@ def index():
 def show_family(parentsid):
     form = AddIndividual()
 
+    childlist = db.session.query(Individual.fullname).join(FamilyLink).filter(Parents.id == parentsid).all()
+    children = [c[0] for c in childlist]
+
     try:
         father_fullname = Individual.query.get(Parents.query.get(parentsid).father_id).fullname
     except:
@@ -63,13 +66,22 @@ def show_family(parentsid):
 
             session["child.id"] = new_child.id
 
-            if form.father_forenames.data or form.father_surname.data or form.mother_forenames.data or \
-                    form.mother_surname.data:
-                link_child()
+            link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
 
-            return render_template("home.html", form=form, child_fullname=child_fullname)
+            childlist = db.session.query(Individual.fullname).join(FamilyLink).filter(Parents.id == parentsid).all()
+            children = [c[0] for c in childlist]
 
-    return render_template("home.html", form=form, father_fullname=father_fullname, mother_fullname=mother_fullname)
+            session["children"] = children
+
+            form.child_forenames.data = ""
+
+            # return render_template("home.html", form=form, father_fullname=father_fullname,
+            #                       mother_fullname=mother_fullname, children=children)
+
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("home.html", form=form, father_fullname=father_fullname, mother_fullname=mother_fullname,
+                           children=children)
 
 
 def fullname(first, last):
@@ -91,7 +103,6 @@ def create_partners(father_id=None, mother_id=None):
 
 def update_partners(partners_id, father_id=None, mother_id=None):
     if db.session.query(Parents).filter_by(id=partners_id, father_id=father_id).scalar() is None:
-        print("Running update partner, partners ID is " + str(partners_id) + " and father ID is " + str(father_id))
         updated_father = db.session.query(Parents).get(partners_id)
         parentsid = session["partners.id"]
         updated_father.father_id = session["father.id"]
@@ -99,7 +110,6 @@ def update_partners(partners_id, father_id=None, mother_id=None):
         db.session.flush()
         return parentsid
     elif db.session.query(Parents).filter_by(id=partners_id, mother_id=mother_id).scalar() is None:
-        print("Running update partner, partners ID is " + str(partners_id) + " and mother ID is " + str(mother_id))
         updated_mother = db.session.query(Parents).get(partners_id)
         parentsid = session["partners.id"]
         updated_mother.mother_id = session["mother.id"]

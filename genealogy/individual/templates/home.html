@@ -1,38 +1,74 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="jumbotron">
-    <h1>Welcome to the Genealogy App</h1>
-    <form method="POST">
-        {{form.hidden_tag()}}
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col col-sm-2">
-                    {{ form.father_forenames.label }}
-                </div>
-                <div class="col col-sm-4">
-                    {% if father_fullname %}
-                    <h3>{{ father_fullname }}</h3>
-                    {% else %}
-                    {{ form.father_forenames() }}
-                    {{ form.father_surname() }}
-                    <input type="submit" value="Add" name="addfather"/>
-                    {% endif %}
-                </div>
-                <div class="col col-sm-2">
-                    {{ form.mother_forenames.label }}
-                </div>
-                <div class="col col-sm-4">
-                    {% if mother_fullname %}
-                    <h3>{{ mother_fullname }}</h3>
-                    {% else %}
-                    {{ form.mother_forenames() }}
-                    {{ form.mother_surname() }}
-                    <input type="submit" value="Add" name="addmother"/>
-                    {% endif %}
-                </div>
-            </div>
+<div class="container-lg p-3 mb-2 bg-light text-black">
+    <div class="card">
+            <div class="card-deck mb-3 text-center">
+        <!--        <div class="card-body">-->
+            <form method="POST" class="col-md-12">
+                {{form.hidden_tag()}}
+<!--                <div class="container">-->
+                    <div class="row row-cols-2 row-cols-md-2">
+                        <div class="col">
+                            <div class="container">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{{ form.father_forenames.label }}</span>
+                                    </div>
+                                    {% if father_fullname %}
+                                    <h3>{{ father_fullname }}</h3>
+                                    {% else %}
+                                    {{ form.father_forenames() }}
+                                    {{ form.father_surname() }}
+                                    <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="container">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{{ form.mother_forenames.label }}</span>
+                                    </div>
+                                    {% if mother_fullname %}
+                                    <h3>{{ mother_fullname }}</h3>
+                                    {% else %}
+                                    {{ form.mother_forenames() }}
+                                    {{ form.mother_surname() }}
+                                    <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <hr />
+                    <div class="row">
+                        <div class="col col-sm-6">
+                            <h4>Children</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-sm-6">
+                            {% if children %}
+                            <ul class="list-group">
+                                {% for child in children %}
+                                <li class="list-group-item"><h3>{{ child }}</h3></li>
+                                {% endfor %}
+                            </ul>
+                            <br>
+                            {% endif %}
+                            <div class="input-group">
+                                {{ form.child_forenames() }}
+                                {{ form.child_surname() }}
+                                <input type="submit" class="btn btn-primary" value="Add" name="addchild"/>
+                            </div>
+                        </div>
+                    </div>
+<!--                </div>-->
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
 
