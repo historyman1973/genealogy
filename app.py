@@ -28,8 +28,20 @@ def index():
 def show_family(parentsid):
     form = AddIndividual()
 
-    childlist = db.session.query(Individual.fullname).join(FamilyLink).filter(Parents.id == parentsid).all()
-    children = [c[0] for c in childlist]
+    # children = Individual \
+    #     .query \
+    #     .join(FamilyLink, FamilyLink.individual_id == Individual.id) \
+    #     .add_columns(Individual.id,
+    #                  Individual.forenames,
+    #                  Individual.surname,
+    #                  Individual.fullname,
+    #                  FamilyLink.parents_id) \
+    #     .all()
+
+    children = db.session.query(Individual) \
+        .join(FamilyLink) \
+        .filter(FamilyLink.parents_id == parentsid) \
+        .filter(FamilyLink.individual_id == Individual.id)
 
     try:
         father_fullname = Individual.query.get(Parents.query.get(parentsid).father_id).fullname
@@ -68,17 +80,27 @@ def show_family(parentsid):
 
             link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
 
-            childlist = db.session.query(Individual.fullname).join(FamilyLink).filter(Parents.id == parentsid).all()
-            children = [c[0] for c in childlist]
+            # children = Individual \
+            #     .query \
+            #     .join(FamilyLink, FamilyLink.individual_id == Individual.id) \
+            #     .add_columns(Individual.id,
+            #                  Individual.forenames,
+            #                  Individual.surname,
+            #                  Individual.fullname,
+            #                  FamilyLink.parents_id) \
+            #     .all()
 
-            session["children"] = children
+            children = db.session.query(Individual) \
+                .join(FamilyLink) \
+                .filter(FamilyLink.parents_id == parentsid) \
+                .filter(FamilyLink.individual_id == Individual.id)
+
+
+            # session["children"] = children
 
             form.child_forenames.data = ""
 
-            # return render_template("home.html", form=form, father_fullname=father_fullname,
-            #                       mother_fullname=mother_fullname, children=children)
-
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+            return redirect(url_for("show_family", parentsid=session["partners.id"], children=children))
 
     return render_template("home.html", form=form, father_fullname=father_fullname, mother_fullname=mother_fullname,
                            children=children)
