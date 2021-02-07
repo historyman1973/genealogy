@@ -1,5 +1,10 @@
 from genealogy import db
+import enum
 
+class Gender(enum.Enum):
+    male = 'Male'
+    female = 'Female'
+    unknown = 'Unknown'
 
 class FamilyLink(db.Model):
     __tablename__ = "family_link"
@@ -19,12 +24,16 @@ class Individual(db.Model):
     forenames = db.Column(db.Text)
     surname = db.Column(db.Text)
     fullname = db.Column(db.Text)
+    gender = db.Column(db.Enum(Gender), default=Gender.unknown, nullable=False)
+    dob = db.Column(db.Date)
 
     parents = db.relationship("Parents", secondary=FamilyLink.__table__)
 
-    def __init__(self, surname, fullname=None, forenames=None):
+    def __init__(self, surname, fullname=None, forenames=None, gender=Gender.unknown, dob=None):
         self.forenames = forenames
         self.surname = surname
+        self.gender = gender
+        self.dob = dob
         self.fullname = fullname
 
     # def __repr__(self):

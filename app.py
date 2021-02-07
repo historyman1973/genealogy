@@ -1,7 +1,7 @@
 from genealogy import app
 from flask import render_template, session, request, redirect, url_for
 from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink
+from genealogy.models import Individual, Parents, FamilyLink, Gender
 from genealogy.individual.forms import AddIndividual
 
 
@@ -28,30 +28,21 @@ def index():
 def show_family(parentsid):
     form = AddIndividual()
 
-    # children = Individual \
-    #     .query \
-    #     .join(FamilyLink, FamilyLink.individual_id == Individual.id) \
-    #     .add_columns(Individual.id,
-    #                  Individual.forenames,
-    #                  Individual.surname,
-    #                  Individual.fullname,
-    #                  FamilyLink.parents_id) \
-    #     .all()
-
     children = db.session.query(Individual) \
         .join(FamilyLink) \
         .filter(FamilyLink.parents_id == parentsid) \
         .filter(FamilyLink.individual_id == Individual.id)
 
     try:
-        father_fullname = Individual.query.get(Parents.query.get(parentsid).father_id).fullname
+        father = Individual.query.get(Parents.query.get(parentsid).father_id)
     except:
-        father_fullname = None
+        father = None
 
     try:
-        mother_fullname = Individual.query.get(Parents.query.get(parentsid).mother_id).fullname
+        mother = Individual.query.get(Parents.query.get(parentsid).mother_id)
     except:
-        mother_fullname = None
+        mother = None
+
 
     if request.method == "POST":
 
@@ -68,9 +59,11 @@ def show_family(parentsid):
         if request.form.get("addchild") == "Add":
             child_forenames = form.child_forenames.data
             child_surname = form.child_surname.data
+            child_gender = form.child_gender.data
+            child_dob = form.child_dob.data
             child_fullname = fullname(child_forenames, child_surname)
 
-            new_child = Individual(child_surname, child_fullname, child_forenames)
+            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob)
             db.session.add(new_child)
 
             db.session.commit()
@@ -80,30 +73,16 @@ def show_family(parentsid):
 
             link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
 
-            # children = Individual \
-            #     .query \
-            #     .join(FamilyLink, FamilyLink.individual_id == Individual.id) \
-            #     .add_columns(Individual.id,
-            #                  Individual.forenames,
-            #                  Individual.surname,
-            #                  Individual.fullname,
-            #                  FamilyLink.parents_id) \
-            #     .all()
-
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parentsid) \
                 .filter(FamilyLink.individual_id == Individual.id)
 
-
-            # session["children"] = children
-
             form.child_forenames.data = ""
 
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children))
 
-    return render_template("home.html", form=form, father_fullname=father_fullname, mother_fullname=mother_fullname,
-                           children=children)
+    return render_template("home.html", form=form, father=father, mother=mother, children=children)
 
 
 def fullname(first, last):
@@ -152,9 +131,11 @@ def link_child(individual_id, parents_id):
 def add_father(form):
     father_forenames = form.father_forenames.data
     father_surname = form.father_surname.data
+    father_gender = Gender.male
+    father_dob = form.father_dob.data
     father_fullname = fullname(father_forenames, father_surname)
 
-    new_father = Individual(father_surname, father_fullname, father_forenames)
+    new_father = Individual(father_surname, father_fullname, father_forenames, father_gender, father_dob)
     db.session.add(new_father)
 
     db.session.commit()
@@ -175,9 +156,11 @@ def add_father(form):
 def add_mother(form):
     mother_forenames = form.mother_forenames.data
     mother_surname = form.mother_surname.data
+    mother_gender = Gender.female
+    mother_dob = form.mother_dob.data
     mother_fullname = fullname(mother_forenames, mother_surname)
 
-    new_mother = Individual(mother_surname, mother_fullname, mother_forenames)
+    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob)
     db.session.add(new_mother)
 
     db.session.commit()

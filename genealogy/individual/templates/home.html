@@ -14,11 +14,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ form.father_forenames.label }}</span>
                                 </div>
-                                {% if father_fullname %}
-                                <h3>{{ father_fullname }}</h3>
+                                {% if father %}
+                                <h3>{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} - )</h3>
                                 {% else %}
                                 {{ form.father_forenames() }}
                                 {{ form.father_surname() }}
+                                {{ form.father_dob }}
                                 <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
                                 {% endif %}
                             </div>
@@ -30,11 +31,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ form.mother_forenames.label }}</span>
                                 </div>
-                                {% if mother_fullname %}
-                                <h3>{{ mother_fullname }}</h3>
+                                {% if mother %}
+                                <h3>{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }} - )</h3>
                                 {% else %}
                                 {{ form.mother_forenames() }}
                                 {{ form.mother_surname() }}
+                                {{ form.mother_dob }}
                                 <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
                                 {% endif %}
                             </div>
@@ -53,15 +55,38 @@
                         {% if children %}
                         <ul class="list-group">
                             {% for child in children %}
-                            <li class="list-group-item"><h3>{{ child.forenames }} {{ child.surname }}</h3></li>
+                            <li class="list-group-item"><h3>{{ child.forenames }} {{ child.surname }} ({{ moment(child.dob).format('YYYY') }} - )</h3></li>
                             {% endfor %}
                         </ul>
                         <br>
                         {% endif %}
-                        <div class="input-group">
-                            {{ form.child_forenames() }}
-                            {{ form.child_surname() }}
-                            <input type="submit" class="btn btn-primary" value="Add" name="addchild"/>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Add child
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add new child</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-group">
+                                            {{ form.child_forenames() }}
+                                            {{ form.child_surname() }}
+                                            {{ form.child_gender() }}
+                                            {{ form.child_dob }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <input type="submit" class="btn btn-primary" value="Add" name="addchild"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

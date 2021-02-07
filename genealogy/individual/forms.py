@@ -1,11 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField
+from wtforms import StringField, SelectField, IntegerField, SubmitField
+from wtforms.fields.html5 import DateField
+from genealogy.models import Gender
 #
 # class AddFather(FlaskForm):
 #
 #     father_forenames = StringField("Father forenames: ")
 #     father_surname = StringField()
 #     father_fullname = StringField()
+#     father_dob = DateField()
 #     fathersubmit = SubmitField("Add")
 #
 # class AddMother(FlaskForm):
@@ -13,6 +16,7 @@ from wtforms import StringField, IntegerField, SubmitField
 #     mother_forenames = StringField("Mother forenames: ")
 #     mother_surname = StringField()
 #     mother_fullname = StringField()
+#     mother_dob = DateField()
 #     mothersubmit = SubmitField("Add")
 #
 # class AddChild(FlaskForm):
@@ -20,6 +24,8 @@ from wtforms import StringField, IntegerField, SubmitField
 #     child_forenames = StringField("Child forenames: ")
 #     child_surname = StringField()
 #     child_fullname = StringField()
+#     child_gender = SelectField()
+#     child_dob = DateField()
 #     childsubmit = SubmitField("Add")
 
 
@@ -41,11 +47,15 @@ class AddIndividual(FlaskForm):
     father_forenames = StringField("Father: ")
     father_surname = StringField()
     father_fullname = StringField()
+    father_dob = DateField('dob', format='%Y-%m-%d')
 
     mother_forenames = StringField("Mother: ")
     mother_surname = StringField()
     mother_fullname = StringField()
+    mother_dob = DateField('dob', format='%Y-%m-%d')
 
     child_forenames = StringField()
     child_surname = StringField()
     child_fullname = StringField()
+    child_gender = SelectField(u'Gender', choices=[(choice.name, choice.value) for choice in Gender])
+    child_dob = DateField('dob', format='%Y-%m-%d')
