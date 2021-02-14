@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table class="table">
+    <thead>
+    <tr class="table-info">
+        <th scope="col">ID</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Forenames</th>
+        <th scope="col">Date of birth</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for individual in individuals %}
+    <tr>
+        <th scope="row">{{ individual.id}}</th>
+        <td>{{ individual.surname }}</td>
+        <td>{{ individual.forenames }}</td>
+        <td>{{ individual.dob }}</td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+{% endblock %}
