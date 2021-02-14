@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,redirect,url_for
 from genealogy import db
 from genealogy.models import Individual, Parents
-from genealogy.individual.forms import AddIndividual
+from genealogy.individual.forms import FamilyView
 # from genealogy.individual.forms import AddFather, AddMother, AddChild
 
 genealogy_blueprint = Blueprint("individual",__name__,
