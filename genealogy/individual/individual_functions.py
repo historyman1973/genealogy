@@ -6,7 +6,7 @@ def fullname(first, last):
     return first + " " + last
 
 
-def create_partners(type, father_id=None, mother_id=None):
+def create_partners(partner_type, father_id=None, mother_id=None):
     if db.session.query(Parents).filter_by(father_id=father_id,
                                            mother_id=mother_id).scalar() is None:
         parents = Parents(father_id, mother_id)
@@ -14,17 +14,17 @@ def create_partners(type, father_id=None, mother_id=None):
         db.session.commit()
         db.session.flush()
 
-        if type == "parents":
+        if partner_type == "parents":
             session["partners.id"] = parents.id
-        elif type == "patgrandparents":
+        elif partner_type == "patgrandparents":
             session["patgrandparents.id"] = parents.id
-        elif type == "matgrandparents":
+        elif partner_type == "matgrandparents":
             session["matgrandparents.id"] = parents.id
 
         return parents.id
 
 
-def update_partners(type, partners_id, father_id=None, mother_id=None):
+def update_partners(partner_type, partners_id, father_id=None, mother_id=None):
     # If there is no father in the partner record, add the father to it:
     if db.session.query(Parents).filter_by(id=partners_id, father_id=father_id).scalar() is None:
         updated_father = db.session.query(Parents).get(partners_id)
@@ -33,11 +33,11 @@ def update_partners(type, partners_id, father_id=None, mother_id=None):
         db.session.commit()
         db.session.flush()
 
-        if type == "parents":
+        if partner_type == "parents":
             session["partners.id"] = updated_father.id
-        elif type == "patgrandparents":
+        elif partner_type == "patgrandparents":
             session["patgrandparents.id"] = updated_father.id
-        elif type == "matgrandparents":
+        elif partner_type == "matgrandparents":
             session["matgrandparents.id"] = updated_father.id
 
         return updated_father.id
@@ -50,11 +50,11 @@ def update_partners(type, partners_id, father_id=None, mother_id=None):
         db.session.commit()
         db.session.flush()
 
-        if type == "parents":
+        if partner_type == "parents":
             session["partners.id"] = updated_mother.id
-        elif type == "patgrandparents":
+        elif partner_type == "patgrandparents":
             session["patgrandparents.id"] = updated_mother.id
-        elif type == "matgrandparents":
+        elif partner_type == "matgrandparents":
             session["matgrandparents.id"] = updated_mother.id
 
         return updated_mother.id
@@ -86,9 +86,9 @@ def add_father(form):
     session["father_fullname"] = father_fullname
 
     if session.get("mother.id") is None:
-        create_partners(type="parents", father_id=session["father.id"], mother_id=None)
+        create_partners(partner_type="parents", father_id=session["father.id"], mother_id=None)
     else:
-        update_partners(type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
+        update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
                         mother_id=session["mother.id"])
 
     return
@@ -109,9 +109,9 @@ def add_mother(form):
     session["mother.id"] = new_mother.id
 
     if session.get("father.id") is None:
-        create_partners(type="parents", father_id=None, mother_id=session["mother.id"])
+        create_partners(partner_type="parents", father_id=None, mother_id=session["mother.id"])
     else:
-        update_partners(type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
+        update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
                         mother_id=session["mother.id"])
 
     return
@@ -134,9 +134,9 @@ def add_patGrandfather(form):
     session["patGrandfather.id"] = new_patgrandfather.id
 
     if session.get("patGrandmother.id") is None:
-        create_partners(type="patgrandparents", father_id=session["patGrandfather.id"], mother_id=None)
+        create_partners(partner_type="patgrandparents", father_id=session["patGrandfather.id"], mother_id=None)
     else:
-        update_partners(type="patgrandparents", partners_id=session["patgrandparents.id"],
+        update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
                         father_id=session["patGrandfather.id"],
                         mother_id=session["patGrandmother.id"])
 
@@ -163,9 +163,9 @@ def add_patGrandmother(form):
     session["patGrandmother_fullname"] = patgrandmother_fullname
 
     if session.get("patGrandfather.id") is None:
-        create_partners(type="patgrandparents", father_id=None, mother_id=session["patGrandmother.id"])
+        create_partners(partner_type="patgrandparents", father_id=None, mother_id=session["patGrandmother.id"])
     else:
-        update_partners(type="patgrandparents", partners_id=session["patgrandparents.id"],
+        update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
                         father_id=session["patGrandfather.id"],
                         mother_id=session["patGrandmother.id"])
 
@@ -191,9 +191,9 @@ def add_matGrandfather(form):
     session["matGrandfather.id"] = new_matgrandfather.id
 
     if session.get("matGrandmother.id") is None:
-        create_partners(type="matgrandparents", father_id=session["matGrandfather.id"], mother_id=None)
+        create_partners(partner_type="matgrandparents", father_id=session["matGrandfather.id"], mother_id=None)
     else:
-        update_partners(type="matgrandparents", partners_id=session["matgrandparents.id"],
+        update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
                         father_id=session["matGrandfather.id"],
                         mother_id=session["matGrandmother.id"])
 
@@ -220,9 +220,9 @@ def add_matGrandmother(form):
     session["matGrandmother_fullname"] = matgrandmother_fullname
 
     if session.get("matGrandfather.id") is None:
-        create_partners(type="matgrandparents", father_id=None, mother_id=session["matGrandmother.id"])
+        create_partners(partner_type="matgrandparents", father_id=None, mother_id=session["matGrandmother.id"])
     else:
-        update_partners(type="matgrandparents", partners_id=session["matgrandparents.id"],
+        update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
                         father_id=session["matGrandfather.id"],
                         mother_id=session["matGrandmother.id"])
 

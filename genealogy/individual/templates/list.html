@@ -16,7 +16,7 @@
         <th scope="row">{{ individual.id}}</th>
         <td>{{ individual.surname }}</td>
         <td>{{ individual.forenames }}</td>
-        <td>{{ individual.dob }}</td>
+        <td>{{ individual.dob| datedisplay }}</td>
     </tr>
     </tbody>
     {% endfor %}
