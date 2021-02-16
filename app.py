@@ -5,8 +5,7 @@ if __name__ == "__main__":
 
 
 @app.template_filter()
-# def datetimefilter(value, format='%Y/%m/%d %H:%M'):
-def datedisplay(value, format='%d %B, %Y'):
+def datedisplay(value, format='%d %B, %Y (%a)'):
     """Convert a datetime to a different format."""
     return value.strftime(format)
 

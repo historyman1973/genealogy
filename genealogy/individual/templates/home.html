@@ -8,9 +8,9 @@
                 {{form.hidden_tag()}}
                 <div class="container">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 d-flex">
                             {% if patgrandfather %}
-                            <h3>{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</h3>
+                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" name="patgrandfatherfocus">{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addpatGrandfather">
@@ -40,9 +40,9 @@
                             </div>
                             {% endif %}
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 d-flex">
                             {% if matgrandfather %}
-                            <h3>{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</h3>
+                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" name="matgrandfatherfocus">{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">
@@ -76,9 +76,9 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col">
+                        <div class="col d-flex">
                             {% if patgrandmother %}
-                            <h3>{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</h3>
+                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" name="patgrandmotherfocus">{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addpatGrandmother">
@@ -109,9 +109,9 @@
                             </div>
                             {% endif %}
                         </div>
-                        <div class="col">
+                        <div class="col d-flex">
                             {% if matgrandmother %}
-                            <h3>{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</h3>
+                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" name="matgrandmotherfocus">{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addmatGrandmother">
@@ -147,36 +147,26 @@
                     <div class="row row-cols-2 row-cols-md-2">
                         <div class="col">
                             <div class="container">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">{{ form.father_forenames.label }}</span>
-                                    </div>
-                                    {% if father %}
-                                    <h3>{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} - )</h3>
-                                    {% else %}
-                                    {{ form.father_forenames() }}
-                                    {{ form.father_surname() }}
-                                    {{ form.father_dob }}
-                                    <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
-                                    {% endif %}
-                                </div>
+                                {% if father %}
+                                <h3 class="text-center">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} - )</h3>
+                                {% else %}
+                                {{ form.father_forenames() }}
+                                {{ form.father_surname() }}
+                                {{ form.father_dob }}
+                                <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="col">
                             <div class="container">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">{{ form.mother_forenames.label }}</span>
-                                    </div>
-                                    {% if mother %}
-                                    <h3>{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }} - )</h3>
-                                    {% else %}
-                                    {{ form.mother_forenames() }}
-                                    {{ form.mother_surname() }}
-                                    {{ form.mother_dob }}
-                                    <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
-                                    {% endif %}
-                                </div>
+                                {% if mother %}
+                                <h3 class="text-center">{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }} - )</h3>
+                                {% else %}
+                                {{ form.mother_forenames() }}
+                                {{ form.mother_surname() }}
+                                {{ form.mother_dob }}
+                                <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -190,11 +180,10 @@
                     <div class="row">
                         <div class="col col-sm-6">
                             {% if children %}
-                            <ul class="list-group">
-                                {% for child in children %}
-                                <li class="list-group-item"><h3>{{ child.forenames }} {{ child.surname }} ({{ moment(child.dob).format('YYYY') }} - )</h3></li>
-                                {% endfor %}
-                            </ul>
+                            {% for child in children %}
+                            <button type="button" class="btn btn-outline-success col-12 btn-lg" name="childfocus">{{ child.forenames }} {{ child.surname }} ({{ moment(child.dob).format('YYYY') }} - )</button>
+                            <br>
+                            {% endfor %}
                             <br>
                             {% endif %}
                             <!-- Button trigger modal -->
