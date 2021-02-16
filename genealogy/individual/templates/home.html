@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-lg p-3 mb-2 bg-light text-black">
+<div class=class="container-fluid">
     <div class="card">
         <div class="card-deck mb-3 text-center">
             <!--        <div class="card-body">-->
@@ -10,7 +10,8 @@
                     <div class="row">
                         <div class="col-6 d-flex">
                             {% if patgrandfather %}
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" name="patgrandfatherfocus">{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-primary col-2 btn-lg" name="patgrandfatheredit">Edit</button>
+                            <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="patgrandfatherfocus">{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addpatGrandfather">
@@ -42,7 +43,8 @@
                         </div>
                         <div class="col-6 d-flex">
                             {% if matgrandfather %}
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" name="matgrandfatherfocus">{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="matgrandfatherfocus">{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-primary col-2 btn-lg" name="matgrandfatheredit">Edit</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">
@@ -78,7 +80,8 @@
                     <div class="row">
                         <div class="col d-flex">
                             {% if patgrandmother %}
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" name="patgrandmotherfocus">{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-danger col-2 btn-lg" name="patgrandmotheredit">Edit</button>
+                            <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="patgrandmotherfocus">{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addpatGrandmother">
@@ -111,7 +114,8 @@
                         </div>
                         <div class="col d-flex">
                             {% if matgrandmother %}
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" name="matgrandmotherfocus">{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="matgrandmotherfocus">{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
+                            <button type="button" class="btn btn-danger col-2 btn-lg" name="matgrandmotheredit">Edit</button>
                             {% else %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addmatGrandmother">
@@ -173,21 +177,34 @@
                     <br>
                     <hr />
                     <div class="row">
-                        <div class="col col-sm-6">
+                        <div class="col-12">
                             <h4>Children</h4>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col col-sm-6">
-                            {% if children %}
-                            {% for child in children %}
-                            <button type="button" class="btn btn-outline-success col-12 btn-lg" name="childfocus">{{ child.forenames }} {{ child.surname }} ({{ moment(child.dob).format('YYYY') }} - )</button>
-                            <br>
-                            {% endfor %}
-                            <br>
-                            {% endif %}
+                    <table class="table">
+                        <thead>
+                        <tr class="table-primary">
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Date of birth</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if children %}
+                        {% for child in children %}
+                        <tr>
+                            <td><button type="button" class="btn btn-success btn-lg" name="childedit">Edit</button></td>
+                            <td><button type="button" class="btn btn-outline-success col-12 btn-lg" name="childfocus">{{ child.fullname }}</button></td>
+                            <td><p class="lead">{{ child.dob| datedisplay }}</p></td>
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+
+
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addChild">
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addChild">
                                 Add child
                             </button>
 
@@ -214,8 +231,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </form>
         </div>
