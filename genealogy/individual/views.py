@@ -12,6 +12,9 @@ genealogy_blueprint = Blueprint("individual",__name__, template_folder="template
 def index():
     form = FamilyView()
 
+    if Parents.query.get(1) is not None:
+        return redirect(url_for("show_family", parentsid=1))
+
     if request.method == "POST":
 
         if request.form.get("addfather") == "Add":
