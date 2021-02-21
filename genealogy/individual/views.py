@@ -40,6 +40,12 @@ def show_family(parentsid):
         .filter(FamilyLink.parents_id == parentsid) \
         .filter(FamilyLink.individual_id == Individual.id)
 
+    # print("Session data")
+    # print("Father's ID in session is " + str(session["father.id"]) + " (" + str(Individual.query.get(session["father.id"]).fullname) + ")")
+    # print("Mother's ID in session is " + str(session["mother.id"]) + " (" + str(
+    #     Individual.query.get(session["mother.id"]).fullname) + ")")
+    # print("Family's ID in session is " + str(session["partners.id"]))
+
     try:
         father = Individual.query.get(Parents.query.get(parentsid).father_id)
     except:
@@ -78,45 +84,62 @@ def show_family(parentsid):
 
         if request.form.get("addpatgrandfather") == "Add":
             add_patGrandfather(form)
-
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        # if request.form.get("patgrandfatheredit") == "Edit":
-        #
-        #     return redirect(url_for("edit", id=patgrandfather.id))
+        if request.form.get("patgrandfatherfocus") == "focus":
+            new_family = Parents.query.filter_by(father_id = patgrandfather.id).first()
+
+            session["partners.id"] = new_family.id
+            session["father.id"] = patgrandfather.id
+            session["mother.id"] = Parents.query.get(new_family.id).mother_id
+
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addpatgrandmother") == "Add":
             add_patGrandmother(form)
-
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        # if request.form.get("patgrandmotheredit") == "Edit":
-        #     return redirect(url_for("edit", id=patgrandmother.id))
+        if request.form.get("patgrandmotherfocus") == "focus":
+            new_family = Parents.query.filter_by(mother_id=patgrandmother.id).first()
+
+            session["partners.id"] = new_family.id
+            session["mother.id"] = patgrandmother.id
+            session["father.id"] = Parents.query.get(new_family.id).father_id
+
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandfather") == "Add":
             add_matGrandfather(form)
-
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        # if request.form.get("matgrandfatheredit") == "Edit":
-        #     return redirect(url_for("edit", id=matgrandfather.id))
+        if request.form.get("matgrandfatherfocus") == "focus":
+            new_family = Parents.query.filter_by(father_id = matgrandfather.id).first()
+
+            session["partners.id"] = new_family.id
+            session["father.id"] = matgrandfather.id
+            session["mother.id"] = Parents.query.get(new_family.id).mother_id
+
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandmother") == "Add":
             add_matGrandmother(form)
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+        if request.form.get("matgrandmotherfocus") == "focus":
+            new_family = Parents.query.filter_by(mother_id=matgrandmother.id).first()
+
+            session["partners.id"] = new_family.id
+            session["mother.id"] = matgrandmother.id
+            session["father.id"] = Parents.query.get(new_family.id).father_id
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        # if request.form.get("matgrandmotheredit") == "Edit":
-        #     return redirect(url_for("edit", id=matgrandmother.id))
-
         if request.form.get("addfather") == "Add":
             add_father(form)
-
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmother") == "Add":
             add_mother(form)
-
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addchild") == "Add":

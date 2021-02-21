@@ -10,11 +10,12 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6 d-flex">
+<!--                        ################################################################ PATERNAL GRANDFATHER ###-->
                             {% if patgrandfather %}
                             <a class="btn btn-primary btn-lg col-2" href="{{ url_for( 'edit', id=patgrandfather.id ) }}"
                                role="button">Edit</a>
-                            <button type="button" class="btn btn-outline-primary col-10 btn-lg"
-                                    name="patgrandfatherfocus">{{ patgrandfather.fullname }}
+                            <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
+                                    name="patgrandfatherfocus" value="focus">{{ patgrandfather.fullname }}
                                 ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
                             {% elif father %}
                             <!-- Button trigger modal -->
@@ -51,9 +52,10 @@
                             {% endif %}
                         </div>
                         <div class="col-6 d-flex">
+<!--                        ################################################################ MATERNAL GRANDFATHER ###-->
                             {% if matgrandfather %}
-                            <button type="button" class="btn btn-outline-primary col-10 btn-lg"
-                                    name="matgrandfatherfocus">{{ matgrandfather.fullname }}
+                            <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
+                                    name="matgrandfatherfocus" value="focus">{{ matgrandfather.fullname }}
                                 ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
                             <a class="btn btn-primary btn-lg col-2" href="{{ url_for( 'edit', id=matgrandfather.id ) }}"
                                role="button">Edit</a>
@@ -96,11 +98,12 @@
                     <br>
                     <div class="row">
                         <div class="col d-flex">
+<!--                        ################################################################ PATERNAL GRANDMOTHER ###-->
                             {% if patgrandmother %}
                             <a class="btn btn-danger btn-lg col-2" href="{{ url_for( 'edit', id=patgrandmother.id ) }}"
                                role="button">Edit</a>
-                            <button type="button" class="btn btn-outline-danger col-10 btn-lg"
-                                    name="patgrandmotherfocus">{{ patgrandmother.fullname }}
+                            <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
+                                    name="patgrandmotherfocus" value="focus">{{ patgrandmother.fullname }}
                                 ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
                             {% elif father %}
                             <!-- Button trigger modal -->
@@ -138,9 +141,10 @@
                             {% endif %}
                         </div>
                         <div class="col d-flex">
+<!--                        ################################################################ MATERNAL GRANDMOTHER ###-->
                             {% if matgrandmother %}
-                            <button type="button" class="btn btn-outline-danger col-10 btn-lg"
-                                    name="matgrandmotherfocus">{{ matgrandmother.fullname }}
+                            <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
+                                    name="matgrandmotherfocus" value="focus">{{ matgrandmother.fullname }}
                                 ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
                             <a class="btn btn-danger btn-lg col-2" href="{{ url_for( 'edit', id=matgrandmother.id ) }}"
                                role="button">Edit</a>
@@ -183,6 +187,7 @@
                     <br>
                     <div class="row">
                         <div class="col d-flex">
+<!--                        ############################################################################## FATHER ###-->
                             {% if father %}
                             <a class="btn btn-secondary btn-lg col-2" href="{{ url_for( 'edit', id=father.id ) }}"
                                role="button">Edit</a>
@@ -223,6 +228,7 @@
                             {% endif %}
                         </div>
                         <div class="col d-flex">
+<!--                        ############################################################################## MOTHER ###-->
                             {% if mother %}
                             <p class="display-6 col-10">{{ mother.fullname }}
                                 ({{ moment(mother.dob).format('YYYY') }} - )</p>
@@ -266,6 +272,7 @@
                     <br>
                     <hr />
                     <div class="row">
+<!--                        ############################################################################ CHILDREN ###-->
                         <div class="col-12">
                             <p class="lead">Children</p>
                         </div>
@@ -297,6 +304,10 @@
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addChild">
                         Add child
+                    </button>
+
+                    <button type="button" class="btn btn-dark" value="Print" name="currentpeople">
+                        Print current people's IDs and data
                     </button>
 
                     <!-- Modal -->
