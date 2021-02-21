@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, SubmitField
 from wtforms.fields.html5 import DateField
-from genealogy.models import Gender
+from genealogy.models import genders
 
 
 class FamilyView(FlaskForm):
@@ -30,5 +30,12 @@ class FamilyView(FlaskForm):
 
     child_forenames = StringField()
     child_surname = StringField()
-    child_gender = SelectField(u'Gender', choices=[(choice.name, choice.value) for choice in Gender])
+    child_gender = SelectField(u'Gender', choices=[choice for choice in genders])
     child_dob = DateField('dob', format='%Y-%m-%d')
+
+
+class IndividualView(FlaskForm):
+    individual_forenames = StringField("Father: ")
+    individual_surname = StringField()
+    individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
+    individual_dob = DateField('dob', format='%Y-%m-%d')

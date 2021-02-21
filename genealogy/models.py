@@ -1,10 +1,7 @@
 from genealogy import db
 import enum
 
-class Gender(enum.Enum):
-    male = 'Male'
-    female = 'Female'
-    unknown = 'Unknown'
+genders = ["Male", "Female", "Unknown"]
 
 class FamilyLink(db.Model):
     __tablename__ = "family_link"
@@ -24,12 +21,12 @@ class Individual(db.Model):
     forenames = db.Column(db.Text)
     surname = db.Column(db.Text)
     fullname = db.Column(db.Text)
-    gender = db.Column(db.Enum(Gender), default=Gender.unknown, nullable=False)
+    gender = db.Column(db.Text)
     dob = db.Column(db.Date)
 
     parents = db.relationship("Parents", secondary=FamilyLink.__table__)
 
-    def __init__(self, surname, fullname=None, forenames=None, gender=Gender.unknown, dob=None):
+    def __init__(self, surname, fullname=None, forenames=None, gender="Unknown", dob=None):
         self.forenames = forenames
         self.surname = surname
         self.gender = gender

@@ -1,10 +1,11 @@
 from app import app
 from flask import Blueprint,render_template,redirect,url_for,session,request
 from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink
-from genealogy.individual.forms import FamilyView
+from genealogy.models import Individual, Parents, FamilyLink, genders
+from genealogy.individual.forms import FamilyView, IndividualView
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patGrandfather,\
     add_patGrandmother, add_matGrandfather, add_matGrandmother
+from datetime import datetime
 
 genealogy_blueprint = Blueprint("individual",__name__, template_folder="templates")
 
@@ -80,20 +81,33 @@ def show_family(parentsid):
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
+        if request.form.get("patgrandfatheredit") == "Edit":
+            
+            return redirect(url_for("edit", id=patgrandfather.id))
+
         if request.form.get("addpatgrandmother") == "Add":
             add_patGrandmother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+        if request.form.get("patgrandmotheredit") == "Edit":
+            return redirect(url_for("edit", id=patgrandmother.id))
 
         if request.form.get("addmatgrandfather") == "Add":
             add_matGrandfather(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
+        if request.form.get("matgrandfatheredit") == "Edit":
+            return redirect(url_for("edit", id=matgrandfather.id))
+
         if request.form.get("addmatgrandmother") == "Add":
             add_matGrandmother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+        if request.form.get("matgrandmotheredit") == "Edit":
+            return redirect(url_for("edit", id=matgrandmother.id))
 
         if request.form.get("addfather") == "Add":
             add_father(form)
@@ -144,3 +158,24 @@ def individual_list():
     individuals = Individual.query.all()
 
     return render_template("list.html", individuals=individuals)
+
+
+@app.route("/edit/<id>", methods=["GET", "POST"])
+def edit(id):
+    form = IndividualView()
+
+    individual = Individual.query.get_or_404(id)
+
+    if request.form.get("saveindividual") == "Save":
+        individual.forenames = request.form["individual_forenames"]
+        individual.surname = request.form["individual_surname"]
+        individual.gender = request.form["individual_gender"]
+        individual.dob = datetime.strptime(request.form["individual_dob"], "%Y-%m-%d").date()
+
+        individual.fullname = fullname(individual.forenames, individual.surname)
+
+        db.session.commit()
+
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("edit_individual.html", form=form, individual=individual, genders=genders)

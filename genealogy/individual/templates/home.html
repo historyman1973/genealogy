@@ -11,9 +11,9 @@
                     <div class="row">
                         <div class="col-6 d-flex">
                             {% if patgrandfather %}
-                            <button type="button" class="btn btn-primary col-2 btn-lg" value="{{ patgrandfather.id }}" name="patgrandfatheredit" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">Edit</button>
+                            <button type="submit" class="btn btn-primary col-2 btn-lg" value="Edit" name="patgrandfatheredit" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">Edit</button>
                             <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="patgrandfatherfocus">{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
-                            {% else %}
+                            {% elif father %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addpatGrandfather">
                                 Add father's father
@@ -45,8 +45,8 @@
                         <div class="col-6 d-flex">
                             {% if matgrandfather %}
                             <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="matgrandfatherfocus">{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
-                            <button type="button" class="btn btn-primary col-2 btn-lg" value="{{ matgrandfather.id }}" name="matgrandfatheredit">Edit</button>
-                            {% else %}
+                            <button type="submit" class="btn btn-primary col-2 btn-lg" value="Edit" name="matgrandfatheredit">Edit</button>
+                            {% elif mother %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">
                                 Add mother's father
@@ -81,9 +81,9 @@
                     <div class="row">
                         <div class="col d-flex">
                             {% if patgrandmother %}
-                            <button type="button" class="btn btn-danger col-2 btn-lg" value="{{ patgrandmother.id }}" name="patgrandmotheredit">Edit</button>
+                            <button type="submit" class="btn btn-danger col-2 btn-lg" value="Edit" name="patgrandmotheredit">Edit</button>
                             <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="patgrandmotherfocus">{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
-                            {% else %}
+                            {% elif father %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addpatGrandmother">
                                 Add father's mother
@@ -116,8 +116,8 @@
                         <div class="col d-flex">
                             {% if matgrandmother %}
                             <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="matgrandmotherfocus">{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
-                            <button type="button" class="btn btn-danger col-2 btn-lg" value="{{ matgrandmother.id }}" name="matgrandmotheredit">Edit</button>
-                            {% else %}
+                            <button type="submit" class="btn btn-danger col-2 btn-lg" value="Edit" name="matgrandmotheredit">Edit</button>
+                            {% elif mother %}
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addmatGrandmother">
                                 Add mother's mother

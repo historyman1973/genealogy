@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" class="col-md-12">
+    {{form.hidden_tag()}}
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-sm-2">Forenames</div>
+            <div class="col-sm-4">
+                <input type="text" autocomplete="off" name="individual_forenames" class="form-control" value="{{ individual.forenames }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">Surname</div>
+            <div class="col-sm-4">
+                <input type="text" autocomplete="off" name="individual_surname" class="form-control" value="{{ individual.surname }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">Date of birth</div>
+            <div class="col-sm-4">
+                <input type="date" name="individual_dob" class="form-control" value="{{ individual.dob }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">Gender</div>
+            <div class="col-sm-4">
+                <select name="individual_gender" class="form-select" aria-label="Default select example">
+                    {% for gender in genders %}
+                    {% if individual.gender == gender %}
+                    <option selected value="{{ gender }}">{{ gender }}</option>
+                    {% else %}
+                    <option value="{{ gender }}">{{ gender }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary mx-auto" type="submit" name="saveindividual" value="Save">Save</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask import session
 from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink, Gender
+from genealogy.models import Individual, Parents, FamilyLink, genders
 
 def fullname(first, last):
     return first + " " + last
@@ -72,7 +72,7 @@ def link_child(individual_id, parents_id):
 def add_father(form):
     father_forenames = form.father_forenames.data
     father_surname = form.father_surname.data
-    father_gender = Gender.male
+    father_gender = "Male"
     father_dob = form.father_dob.data
     father_fullname = fullname(father_forenames, father_surname)
 
@@ -97,7 +97,7 @@ def add_father(form):
 def add_mother(form):
     mother_forenames = form.mother_forenames.data
     mother_surname = form.mother_surname.data
-    mother_gender = Gender.female
+    mother_gender = "Female"
     mother_dob = form.mother_dob.data
     mother_fullname = fullname(mother_forenames, mother_surname)
 
@@ -120,7 +120,7 @@ def add_mother(form):
 def add_patGrandfather(form):
     pat_grandfather_forenames = form.patgrandfather_forenames.data
     pat_grandfather_surname = form.patgrandfather_surname.data
-    pat_grandfather_gender = Gender.male
+    pat_grandfather_gender = "Male"
     pat_grandfather_dob = form.patgrandfather_dob.data
     patGrandfather_fullname = fullname(pat_grandfather_forenames, pat_grandfather_surname)
 
@@ -148,7 +148,7 @@ def add_patGrandfather(form):
 def add_patGrandmother(form):
     patgrandmother_forenames = form.patgrandmother_forenames.data
     patgrandmother_surname = form.patgrandmother_surname.data
-    patgrandmother_gender = Gender.female
+    patgrandmother_gender = "Female"
     patgrandmother_dob = form.patgrandmother_dob.data
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
 
@@ -177,7 +177,7 @@ def add_patGrandmother(form):
 def add_matGrandfather(form):
     mat_grandfather_forenames = form.matgrandfather_forenames.data
     mat_grandfather_surname = form.matgrandfather_surname.data
-    mat_grandfather_gender = Gender.male
+    mat_grandfather_gender = "Male"
     mat_grandfather_dob = form.matgrandfather_dob.data
     matgrandfather_fullname = fullname(mat_grandfather_forenames, mat_grandfather_surname)
 
@@ -205,7 +205,7 @@ def add_matGrandfather(form):
 def add_matGrandmother(form):
     matgrandmother_forenames = form.matgrandmother_forenames.data
     matgrandmother_surname = form.matgrandmother_surname.data
-    matgrandmother_gender = Gender.female
+    matgrandmother_gender = "Male"
     matgrandmother_dob = form.matgrandmother_dob.data
     matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
 
