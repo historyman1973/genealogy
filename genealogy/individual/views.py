@@ -81,33 +81,33 @@ def show_family(parentsid):
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        if request.form.get("patgrandfatheredit") == "Edit":
-            
-            return redirect(url_for("edit", id=patgrandfather.id))
+        # if request.form.get("patgrandfatheredit") == "Edit":
+        #
+        #     return redirect(url_for("edit", id=patgrandfather.id))
 
         if request.form.get("addpatgrandmother") == "Add":
             add_patGrandmother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        if request.form.get("patgrandmotheredit") == "Edit":
-            return redirect(url_for("edit", id=patgrandmother.id))
+        # if request.form.get("patgrandmotheredit") == "Edit":
+        #     return redirect(url_for("edit", id=patgrandmother.id))
 
         if request.form.get("addmatgrandfather") == "Add":
             add_matGrandfather(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        if request.form.get("matgrandfatheredit") == "Edit":
-            return redirect(url_for("edit", id=matgrandfather.id))
+        # if request.form.get("matgrandfatheredit") == "Edit":
+        #     return redirect(url_for("edit", id=matgrandfather.id))
 
         if request.form.get("addmatgrandmother") == "Add":
             add_matGrandmother(form)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-        if request.form.get("matgrandmotheredit") == "Edit":
-            return redirect(url_for("edit", id=matgrandmother.id))
+        # if request.form.get("matgrandmotheredit") == "Edit":
+        #     return redirect(url_for("edit", id=matgrandmother.id))
 
         if request.form.get("addfather") == "Add":
             add_father(form)
@@ -140,8 +140,6 @@ def show_family(parentsid):
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parentsid) \
                 .filter(FamilyLink.individual_id == Individual.id)
-
-            form.child_forenames.data = ""
 
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
                                     mother=mother,

@@ -11,20 +11,26 @@
                     <div class="row">
                         <div class="col-6 d-flex">
                             {% if patgrandfather %}
-                            <button type="submit" class="btn btn-primary col-2 btn-lg" value="Edit" name="patgrandfatheredit" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">Edit</button>
-                            <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="patgrandfatherfocus">{{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
+                            <a class="btn btn-primary btn-lg col-2" href="{{ url_for( 'edit', id=patgrandfather.id ) }}"
+                               role="button">Edit</a>
+                            <button type="button" class="btn btn-outline-primary col-10 btn-lg"
+                                    name="patgrandfatherfocus">{{ patgrandfather.fullname }}
+                                ({{ moment(patgrandfather.dob).format('YYYY') }} - )</button>
                             {% elif father %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addpatGrandfather">
+                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#addpatGrandfather">
                                 Add father's father
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="addpatGrandfather" tabindex="-1" aria-labelledby="addpatGrandfatherLabel" aria-hidden="true">
+                            <div class="modal fade" id="addpatGrandfather" tabindex="-1"
+                                 aria-labelledby="addpatGrandfatherLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="addpatGrandfatherLabel">Add grandfather</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="input-group">
@@ -34,8 +40,10 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addpatgrandfather"/>
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add"
+                                                   name="addpatgrandfather"/>
                                         </div>
                                     </div>
                                 </div>
@@ -44,21 +52,27 @@
                         </div>
                         <div class="col-6 d-flex">
                             {% if matgrandfather %}
-                            <button type="button" class="btn btn-outline-primary col-10 btn-lg" name="matgrandfatherfocus">{{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
-                            <button type="submit" class="btn btn-primary col-2 btn-lg" value="Edit" name="matgrandfatheredit">Edit</button>
+                            <button type="button" class="btn btn-outline-primary col-10 btn-lg"
+                                    name="matgrandfatherfocus">{{ matgrandfather.fullname }}
+                                ({{ moment(matgrandfather.dob).format('YYYY') }} - )</button>
+                            <a class="btn btn-primary btn-lg col-2" href="{{ url_for( 'edit', id=matgrandfather.id ) }}"
+                               role="button">Edit</a>
                             {% elif mother %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addmatGrandfather">
+                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#addmatGrandfather">
                                 Add mother's father
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="addmatGrandfather" tabindex="-1" aria-labelledby="addmatGrandfatherLabel" aria-hidden="true">
+                            <div class="modal fade" id="addmatGrandfather" tabindex="-1"
+                                 aria-labelledby="addmatGrandfatherLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="addmatGrandfatherLabel">Add grandfather</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="input-group">
@@ -68,8 +82,10 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addmatgrandfather"/>
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add"
+                                                   name="addmatgrandfather"/>
                                         </div>
                                     </div>
                                 </div>
@@ -81,21 +97,27 @@
                     <div class="row">
                         <div class="col d-flex">
                             {% if patgrandmother %}
-                            <button type="submit" class="btn btn-danger col-2 btn-lg" value="Edit" name="patgrandmotheredit">Edit</button>
-                            <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="patgrandmotherfocus">{{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
+                            <a class="btn btn-danger btn-lg col-2" href="{{ url_for( 'edit', id=patgrandmother.id ) }}"
+                               role="button">Edit</a>
+                            <button type="button" class="btn btn-outline-danger col-10 btn-lg"
+                                    name="patgrandmotherfocus">{{ patgrandmother.fullname }}
+                                ({{ moment(patgrandmother.dob).format('YYYY') }} - )</button>
                             {% elif father %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addpatGrandmother">
+                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#addpatGrandmother">
                                 Add father's mother
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="addpatGrandmother" tabindex="-1" aria-labelledby="addpatGrandmotherLabel" aria-hidden="true">
+                            <div class="modal fade" id="addpatGrandmother" tabindex="-1"
+                                 aria-labelledby="addpatGrandmotherLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="addpatGrandmotherLabel">Add grandmother</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="input-group">
@@ -105,8 +127,10 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addpatgrandmother"/>
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add"
+                                                   name="addpatgrandmother"/>
                                         </div>
                                     </div>
                                 </div>
@@ -115,21 +139,27 @@
                         </div>
                         <div class="col d-flex">
                             {% if matgrandmother %}
-                            <button type="button" class="btn btn-outline-danger col-10 btn-lg" name="matgrandmotherfocus">{{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
-                            <button type="submit" class="btn btn-danger col-2 btn-lg" value="Edit" name="matgrandmotheredit">Edit</button>
+                            <button type="button" class="btn btn-outline-danger col-10 btn-lg"
+                                    name="matgrandmotherfocus">{{ matgrandmother.fullname }}
+                                ({{ moment(matgrandmother.dob).format('YYYY') }} - )</button>
+                            <a class="btn btn-danger btn-lg col-2" href="{{ url_for( 'edit', id=matgrandmother.id ) }}"
+                               role="button">Edit</a>
                             {% elif mother %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addmatGrandmother">
+                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#addmatGrandmother">
                                 Add mother's mother
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="addmatGrandmother" tabindex="-1" aria-labelledby="addmatGrandmotherLabel" aria-hidden="true">
+                            <div class="modal fade" id="addmatGrandmother" tabindex="-1"
+                                 aria-labelledby="addmatGrandmotherLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="addmatGrandmotherLabel">Add grandmother</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="input-group">
@@ -139,8 +169,10 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addmatgrandmother"/>
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add"
+                                                   name="addmatgrandmother"/>
                                         </div>
                                     </div>
                                 </div>
@@ -149,76 +181,86 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row row-cols-2 row-cols-md-2">
-                        <div class="col">
-                            <div class="container">
-                                {% if father %}
-                                <p class="display-6">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} - )</p>
-                                {% else %}
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-secondary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addfather">
-                                    Add father
-                                </button>
+                    <div class="row">
+                        <div class="col d-flex">
+                            {% if father %}
+                            <a class="btn btn-secondary btn-lg col-2" href="{{ url_for( 'edit', id=father.id ) }}"
+                               role="button">Edit</a>
+                            <p class="display-6 col-10">{{ father.fullname }}
+                                ({{ moment(father.dob).format('YYYY') }} - )</p>
+                            {% else %}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary col-12 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#addfather">
+                                Add father
+                            </button>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="addfather" tabindex="-1" aria-labelledby="addfatherLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addfatherLabel">Add father</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="addfather" tabindex="-1" aria-labelledby="addfatherLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addfatherLabel">Add father</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group">
+                                                {{ form.father_forenames() }}
+                                                {{ form.father_surname() }}
+                                                {{ form.father_dob() }}
                                             </div>
-                                            <div class="modal-body">
-                                                <div class="input-group">
-                                                    {{ form.father_forenames() }}
-                                                    {{ form.father_surname() }}
-                                                    {{ form.father_dob() }}
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
-                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
                                         </div>
                                     </div>
                                 </div>
-                                {% endif %}
                             </div>
+                            {% endif %}
                         </div>
-                        <div class="col">
-                            <div class="container">
-                                {% if mother %}
-                                <p class="display-6">{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }} - )</p>
-                                {% else %}
-                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-secondary col-12 btn-lg" data-bs-toggle="modal" data-bs-target="#addmother">
-                                    Add mother
-                                </button>
+                        <div class="col d-flex">
+                            {% if mother %}
+                            <p class="display-6 col-10">{{ mother.fullname }}
+                                ({{ moment(mother.dob).format('YYYY') }} - )</p>
+                            <a class="btn btn-secondary btn-lg col-2" href="{{ url_for( 'edit', id=mother.id ) }}"
+                               role="button">Edit</a>
+                            {% else %}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary col-12 btn-lg"
+                                    data-bs-toggle="modal" data-bs-target="#addmother">
+                                Add mother
+                            </button>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="addmother" tabindex="-1" aria-labelledby="addmotherLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addmotherLabel">Add mother</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="addmother" tabindex="-1" aria-labelledby="addmotherLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addmotherLabel">Add mother</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group">
+                                                {{ form.mother_forenames() }}
+                                                {{ form.mother_surname() }}
+                                                {{ form.mother_dob() }}
                                             </div>
-                                            <div class="modal-body">
-                                                <div class="input-group">
-                                                    {{ form.mother_forenames() }}
-                                                    {{ form.mother_surname() }}
-                                                    {{ form.mother_dob() }}
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
-                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
                                         </div>
                                     </div>
                                 </div>
-                                {% endif %}
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                     <br>
@@ -240,8 +282,10 @@
                         {% if children %}
                         {% for child in children %}
                         <tr>
-                            <td><button type="button" class="btn btn-success btn-lg" name="childedit">Edit</button></td>
-                            <td><button type="button" class="btn btn-outline-success col-12 btn-lg" name="childfocus">{{ child.fullname }}</button></td>
+                            <td><a class="btn btn-success btn-lg" href="{{ url_for( 'edit', id=child.id ) }}"
+                                   role="button">Edit</a></td>
+                            <td><button type="button" class="btn btn-outline-success col-12 btn-lg"
+                                        name="childfocus">{{ child.fullname }}</button></td>
                             <td><p class="lead">{{ child.dob| datedisplay }}</p></td>
                         </tr>
                         </tbody>
@@ -256,12 +300,14 @@
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="addChild" tabindex="-1" aria-labelledby="addChildLabel" aria-hidden="true">
+                    <div class="modal fade" id="addChild" tabindex="-1" aria-labelledby="addChildLabel"
+                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addChildLabel">Add new child</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="input-group">
@@ -272,7 +318,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                     <input type="submit" class="btn btn-primary" value="Add" name="addchild"/>
                                 </div>
                             </div>

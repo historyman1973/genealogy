@@ -7,6 +7,7 @@
         <th scope="col">ID</th>
         <th scope="col">Surname</th>
         <th scope="col">Forenames</th>
+        <th scope="col">Gender</th>
         <th scope="col">Date of birth</th>
     </tr>
     </thead>
@@ -16,6 +17,7 @@
         <th scope="row">{{ individual.id}}</th>
         <td>{{ individual.surname }}</td>
         <td>{{ individual.forenames }}</td>
+        <td>{{ individual.gender }}</td>
         <td>{{ individual.dob| datedisplay }}</td>
     </tr>
     </tbody>
