@@ -291,8 +291,8 @@
                         <tr>
                             <td><a class="btn btn-success btn-lg" href="{{ url_for( 'edit', id=child.id ) }}"
                                    role="button">Edit</a></td>
-                            <td><button type="button" class="btn btn-outline-success col-12 btn-lg"
-                                        name="childfocus">{{ child.fullname }}</button></td>
+                            <td><button type="submit" class="btn btn-outline-success col-12 btn-lg"
+                                        name="childfocus" value="{{ child.id }}">{{ child.fullname }}</button></td>
                             <td><p class="lead">{{ child.dob| datedisplay }}</p></td>
                         </tr>
                         </tbody>

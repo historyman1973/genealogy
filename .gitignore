@@ -35,3 +35,4 @@
 /Lib/site-packages/toml/tz.py
 /Lib/site-packages/pycodestyle-2.6.0.dist-info/WHEEL
 /Lib/site-packages/toml-0.10.1.dist-info/WHEEL
+/migrations/versions/d911856e9621_changed_gender_to_be_text_field_based_.py
