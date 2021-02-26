@@ -1,5 +1,4 @@
 from genealogy import db
-import enum
 
 genders = ["Male", "Female", "Unknown"]
 
@@ -23,15 +22,19 @@ class Individual(db.Model):
     fullname = db.Column(db.Text)
     gender = db.Column(db.Text)
     dob = db.Column(db.Date)
+    dod = db.Column(db.Date)
+    age = db.Column(db.Integer)
 
     parents = db.relationship("Parents", secondary=FamilyLink.__table__)
 
-    def __init__(self, surname, fullname=None, forenames=None, gender="Unknown", dob=None):
+    def __init__(self, surname, fullname=None, forenames=None, gender="Unknown", dob=None, dod=None, age=None):
         self.forenames = forenames
         self.surname = surname
         self.gender = gender
         self.dob = dob
+        self.dod = dod
         self.fullname = fullname
+        self.age = age
 
     # def __repr__(self):
     #     return (str(self.fullname))
@@ -52,18 +55,6 @@ class Parents(db.Model):
 
     # def __repr__ (self):
     #     return f"Father ID: {self.father_id} Mother ID: {self.mother_id}"
-
-
-class FocusPeople(db.Model):
-    __tablename__ = "focuspeople"
-
-    id = db.Column(db.Integer, primary_key=True)
-    focus_father = db.Column(db.Integer, db.ForeignKey("individual.id"))
-    focus_mother = db.Column(db.Integer, db.ForeignKey("individual.id"))
-
-    def __init__(self, focus_father=None, focus_mother=None):
-        self.focus_father = focus_father
-        self.focus_mother = focus_mother
 
 
 db.create_all()

@@ -4,7 +4,8 @@ from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders
 from genealogy.individual.forms import FamilyView, IndividualView
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patGrandfather, \
-    add_patGrandmother, add_matGrandfather, add_matGrandmother, create_partners, create_child_partnership
+    add_patGrandmother, add_matGrandfather, add_matGrandmother, session_pop_grandparents, create_child_partnership, \
+    calculate_period
 from datetime import datetime
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
@@ -82,10 +83,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("patgrandfatherfocus") == "focus":
-            session.pop("patgrandfather.id", None)
-            session.pop("patgrandmother.id", None)
-            session.pop("matgrandfather.id", None)
-            session.pop("matgrandmother.id", None)
+            session_pop_grandparents()
 
             new_family = Parents.query.filter_by(father_id=patgrandfather.id).first()
 
@@ -100,10 +98,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("patgrandmotherfocus") == "focus":
-            session.pop("patgrandfather.id", None)
-            session.pop("patgrandmother.id", None)
-            session.pop("matgrandfather.id", None)
-            session.pop("matgrandmother.id", None)
+            session_pop_grandparents()
 
             new_family = Parents.query.filter_by(mother_id=patgrandmother.id).first()
 
@@ -118,10 +113,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("matgrandfatherfocus") == "focus":
-            session.pop("patgrandfather.id", None)
-            session.pop("patgrandmother.id", None)
-            session.pop("matgrandfather.id", None)
-            session.pop("matgrandmother.id", None)
+            session_pop_grandparents()
 
             new_family = Parents.query.filter_by(father_id=matgrandfather.id).first()
 
@@ -136,10 +128,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("matgrandmotherfocus") == "focus":
-            session.pop("patgrandfather.id", None)
-            session.pop("patgrandmother.id", None)
-            session.pop("matgrandfather.id", None)
-            session.pop("matgrandmother.id", None)
+            session_pop_grandparents()
 
             new_family = Parents.query.filter_by(mother_id=matgrandmother.id).first()
 
@@ -162,9 +151,12 @@ def show_family(parentsid):
             child_surname = form.child_surname.data
             child_gender = form.child_gender.data
             child_dob = form.child_dob.data
+            child_dod = form.child_dod.data
+            child_age = calculate_period("years", form.child_dob, form.child_dod)
             child_fullname = fullname(child_forenames, child_surname)
 
-            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob)
+            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob, child_dod,
+                                   child_age)
             db.session.add(new_child)
 
             db.session.commit()
@@ -232,6 +224,9 @@ def edit(id):
         individual.surname = request.form["individual_surname"]
         individual.gender = request.form["individual_gender"]
         individual.dob = datetime.strptime(request.form["individual_dob"], "%Y-%m-%d").date()
+        individual.dod = datetime.strptime(request.form["individual_dod"], "%Y-%m-%d").date()
+        individual.age = calculate_period("years", individual.dob, individual.dod)
+
 
         individual.fullname = fullname(individual.forenames, individual.surname)
 
