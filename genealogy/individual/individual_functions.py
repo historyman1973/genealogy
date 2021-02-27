@@ -1,7 +1,8 @@
 from flask import session
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink
-from datetime import date
+from dateutil import relativedelta
+from datetime import datetime
 
 
 def fullname(first, last):
@@ -102,8 +103,10 @@ def add_father(form):
     father_dob = form.father_dob.data
     father_dod = form.father_dod.data
     father_fullname = fullname(father_forenames, father_surname)
+    father_age = calculate_period(father_dob, father_dod)
 
-    new_father = Individual(father_surname, father_fullname, father_forenames, father_gender, father_dob, father_dod)
+    new_father = Individual(father_surname, father_fullname, father_forenames, father_gender, father_dob, father_dod,
+                            father_age)
     db.session.add(new_father)
 
     db.session.commit()
@@ -128,8 +131,9 @@ def add_mother(form):
     mother_dob = form.mother_dob.data
     mother_dod = form.mother_dod.data
     mother_fullname = fullname(mother_forenames, mother_surname)
+    mother_age = calculate_period(mother_dob, mother_dod)
 
-    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob, mother_dod)
+    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob, mother_dod, mother_age)
     db.session.add(new_mother)
 
     db.session.commit()
@@ -152,9 +156,10 @@ def add_patGrandfather(form):
     pat_grandfather_dob = form.patgrandfather_dob.data
     pat_grandfather_dod = form.patgrandfather_dod.data
     patgrandfather_fullname = fullname(pat_grandfather_forenames, pat_grandfather_surname)
+    pat_grandfather_age = calculate_period(pat_grandfather_dob, pat_grandfather_dod)
 
     new_patgrandfather = Individual(pat_grandfather_surname, patgrandfather_fullname, pat_grandfather_forenames,
-                                    pat_grandfather_gender, pat_grandfather_dob, pat_grandfather_dod)
+                                    pat_grandfather_gender, pat_grandfather_dob, pat_grandfather_dod, pat_grandfather_age)
     db.session.add(new_patgrandfather)
 
     db.session.commit()
@@ -181,9 +186,10 @@ def add_patGrandmother(form):
     patgrandmother_dob = form.patgrandmother_dob.data
     patgrandmother_dod = form.patgrandmother_dod.data
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
+    pat_grandmother_age = calculate_period(patgrandmother_dob, patgrandmother_dod)
 
     new_patgrandmother = Individual(patgrandmother_surname, patgrandmother_fullname, patgrandmother_forenames,
-                                    patgrandmother_gender, patgrandmother_dob, patgrandmother_dod)
+                                    patgrandmother_gender, patgrandmother_dob, patgrandmother_dod, pat_grandmother_age)
     db.session.add(new_patgrandmother)
 
     db.session.commit()
@@ -211,9 +217,10 @@ def add_matGrandfather(form):
     mat_grandfather_dob = form.matgrandfather_dob.data
     mat_grandfather_dod = form.matgrandfather_dod.data
     matgrandfather_fullname = fullname(mat_grandfather_forenames, mat_grandfather_surname)
+    mat_grandfather_age = calculate_period(mat_grandfather_dob, mat_grandfather_dod)
 
     new_matgrandfather = Individual(mat_grandfather_surname, matgrandfather_fullname, mat_grandfather_forenames,
-                                    mat_grandfather_gender, mat_grandfather_dob, mat_grandfather_dod)
+                                    mat_grandfather_gender, mat_grandfather_dob, mat_grandfather_dod, mat_grandfather_age)
     db.session.add(new_matgrandfather)
 
     db.session.commit()
@@ -240,9 +247,10 @@ def add_matGrandmother(form):
     matgrandmother_dob = form.matgrandmother_dob.data
     matgrandmother_dod = form.matgrandmother_dod.data
     matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
+    matgrandmother_age = calculate_period(matgrandmother_dob, matgrandmother_dod)
 
     new_matgrandmother = Individual(matgrandmother_surname, matgrandmother_fullname, matgrandmother_forenames,
-                                    matgrandmother_gender, matgrandmother_dob, matgrandmother_dod)
+                                    matgrandmother_gender, matgrandmother_dob, matgrandmother_dod, matgrandmother_age)
     db.session.add(new_matgrandmother)
 
     db.session.commit()
@@ -264,22 +272,27 @@ def add_matGrandmother(form):
 
 
 def calculate_period(born, died):
-    def calculateAge(born):
-        today = date.today()
-        try:
-            birthday = born.replace(year=today.year)
 
-            # raised when birth date is February 29
-        # and the current year is not a leap year
-        except ValueError:
-            birthday = born.replace(year=today.year,
-                                    month=born.month + 1, day=1)
+    # If there are known birth and death dates, calculate the age
+    if born and died:
 
-        if birthday > today:
-            return today.year - born.year - 1
-        else:
-            return today.year - born.year
+        age = relativedelta.relativedelta(died, born)
+        return int(age.years)
 
-            # Driver code
+    # If the person was born over 100 years ago, don't calculate the age
+    elif relativedelta.relativedelta(datetime.today(), born).years > 100:
+        return None
 
-    print(calculateAge(date(1997, 2, 3)), "years")
+    # If the person has no birth or death dates, don't calculate the age
+    elif born is None and died is None:
+        return None
+
+    # If there is just no birth date, don't calculate the age
+    elif born is None:
+        return None
+
+    # If the person was born less than 100 years ago and there's no death date, calculate current age
+    elif relativedelta.relativedelta(datetime.today(), born).years < 100 and died is None:
+
+        age = relativedelta.relativedelta(datetime.today(), born)
+        return int(age.years)

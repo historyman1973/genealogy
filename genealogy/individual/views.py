@@ -152,11 +152,10 @@ def show_family(parentsid):
             child_gender = form.child_gender.data
             child_dob = form.child_dob.data
             child_dod = form.child_dod.data
-            child_age = calculate_period("years", form.child_dob, form.child_dod)
+            child_age = calculate_period(child_dob, child_dod)
             child_fullname = fullname(child_forenames, child_surname)
 
-            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob, child_dod,
-                                   child_age)
+            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob, child_dod, child_age)
             db.session.add(new_child)
 
             db.session.commit()
@@ -223,10 +222,11 @@ def edit(id):
         individual.forenames = request.form["individual_forenames"]
         individual.surname = request.form["individual_surname"]
         individual.gender = request.form["individual_gender"]
-        individual.dob = datetime.strptime(request.form["individual_dob"], "%Y-%m-%d").date()
-        individual.dod = datetime.strptime(request.form["individual_dod"], "%Y-%m-%d").date()
-        individual.age = calculate_period("years", individual.dob, individual.dod)
-
+        individual.dob = form.individual_dob.data
+        individual.dod = form.individual_dod.data
+        # individual.dob = datetime.strptime(request.form["individual_dob"], "%Y-%m-%d").date()
+        # individual.dod = datetime.strptime(request.form["individual_dod"], "%Y-%m-%d").date()
+        individual.age = calculate_period(individual.dob, individual.dod)
 
         individual.fullname = fullname(individual.forenames, individual.surname)
 

@@ -328,6 +328,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Date of birth</th>
                             <th scope="col">Date of death</th>
+                            <th scope="col">Age</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -348,6 +349,7 @@
                             {% else %}
                             <td></td>
                             {% endif %}
+                            <td><p class="lead">{{ child.age }} years</p></td>
                         </tr>
                         </tbody>
                         {% endfor %}
@@ -371,12 +373,22 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="input-group">
-                                        {{ form.child_forenames() }}
-                                        {{ form.child_surname() }}
-                                        {{ form.child_gender() }}
-                                        {{ form.child_dob() }}
-                                        {{ form.child_dod() }}
+                                    <div class="form">
+                                        <div class="row mb-3">
+                                            {{ wtf.form_field(form.child_forenames, class='form-control', placeholder='Forenames') }}
+                                            {{ wtf.form_field(form.child_surname, class='form-control', placeholder='Surname') }}
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <div class="col-4">
+                                                <div>{{ form.child_gender(class='form-select w-auto') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            {{ wtf.form_field(form.child_dob, class='form-control w-auto') }}
+                                        </div>
+                                        <div class="input-group">
+                                            {{ wtf.form_field(form.child_dod, class='form-control w-auto') }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

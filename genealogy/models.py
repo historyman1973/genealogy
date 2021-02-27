@@ -1,4 +1,6 @@
 from genealogy import db
+from datetime import datetime
+from dateutil import relativedelta
 
 genders = ["Male", "Female", "Unknown"]
 
@@ -35,6 +37,7 @@ class Individual(db.Model):
         self.dod = dod
         self.fullname = fullname
         self.age = age
+
 
     # def __repr__(self):
     #     return (str(self.fullname))

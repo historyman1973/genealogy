@@ -10,6 +10,7 @@
         <th scope="col">Gender</th>
         <th scope="col">Date of birth</th>
         <th scope="col">Date of death</th>
+        <th scope="col">Age</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +29,9 @@
         <td>{{ individual.dod | datedisplay }}</td>
         {% else %}
         <td></td>
+        {% endif %}
+        {% if individual.age %}
+        <td>{{ individual.age }}</td>
         {% endif %}
     </tr>
     </tbody>

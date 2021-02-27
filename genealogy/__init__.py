@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_session.__init__ import Session
 from flask_moment import Moment
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 
@@ -32,6 +33,8 @@ sess = Session(app)
 Migrate(app, db, render_as_batch=True)
 
 Moment(app)
+
+Bootstrap(app)
 
 from genealogy.individual.views import genealogy_blueprint
 
