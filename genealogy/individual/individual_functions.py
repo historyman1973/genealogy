@@ -24,7 +24,7 @@ def add_father(form):
     session["father.id"] = new_father.id
     session["father_fullname"] = father_fullname
 
-    if session.get("mother.id") is None:
+    if session.get_or_404("mother.id") is None:
         create_partners(partner_type="parents", father_id=session["father.id"], mother_id=None)
     else:
         update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
@@ -42,14 +42,15 @@ def add_mother(form):
     mother_fullname = fullname(mother_forenames, mother_surname)
     mother_age = calculate_period(mother_dob, mother_dod)
 
-    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob, mother_dod, mother_age)
+    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob, mother_dod,
+                            mother_age)
     db.session.add(new_mother)
 
     db.session.commit()
     db.session.flush()
     session["mother.id"] = new_mother.id
 
-    if session.get("father.id") is None:
+    if session.get_or_404("father.id") is None:
         create_partners(partner_type="parents", father_id=None, mother_id=session["mother.id"])
     else:
         update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
@@ -68,7 +69,8 @@ def add_matgrandfather(form):
     mat_grandfather_age = calculate_period(mat_grandfather_dob, mat_grandfather_dod)
 
     new_matgrandfather = Individual(mat_grandfather_surname, matgrandfather_fullname, mat_grandfather_forenames,
-                                    mat_grandfather_gender, mat_grandfather_dob, mat_grandfather_dod, mat_grandfather_age)
+                                    mat_grandfather_gender, mat_grandfather_dob, mat_grandfather_dod,
+                                    mat_grandfather_age)
     db.session.add(new_matgrandfather)
 
     db.session.commit()
@@ -76,7 +78,7 @@ def add_matgrandfather(form):
 
     session["matgrandfather.id"] = new_matgrandfather.id
 
-    if session.get("matgrandmother.id") is None:
+    if session.get_or_404("matgrandmother.id") is None:
         create_partners(partner_type="matgrandparents", father_id=session["matgrandfather.id"], mother_id=None)
     else:
         update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
@@ -107,7 +109,7 @@ def add_matgrandmother(form):
     session["matgrandmother.id"] = new_matgrandmother.id
     session["matgrandmother_fullname"] = matgrandmother_fullname
 
-    if session.get("matgrandfather.id") is None:
+    if session.get_or_404("matgrandfather.id") is None:
         create_partners(partner_type="matgrandparents", father_id=None, mother_id=session["matgrandmother.id"])
     else:
         update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
@@ -129,7 +131,8 @@ def add_patgrandfather(form):
     pat_grandfather_age = calculate_period(pat_grandfather_dob, pat_grandfather_dod)
 
     new_patgrandfather = Individual(pat_grandfather_surname, patgrandfather_fullname, pat_grandfather_forenames,
-                                    pat_grandfather_gender, pat_grandfather_dob, pat_grandfather_dod, pat_grandfather_age)
+                                    pat_grandfather_gender, pat_grandfather_dob, pat_grandfather_dod,
+                                    pat_grandfather_age)
     db.session.add(new_patgrandfather)
 
     db.session.commit()
@@ -137,7 +140,7 @@ def add_patgrandfather(form):
 
     session["patgrandfather.id"] = new_patgrandfather.id
 
-    if session.get("patgrandmother.id") is None:
+    if session.get_or_404("patgrandmother.id") is None:
         create_partners(partner_type="patgrandparents", father_id=session["patgrandfather.id"], mother_id=None)
     else:
         update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
@@ -168,7 +171,7 @@ def add_patgrandmother(form):
     session["patgrandmother.id"] = new_patgrandmother.id
     session["patGrandmother_fullname"] = patgrandmother_fullname
 
-    if session.get("patgrandfather.id") is None:
+    if session.get_or_404("patgrandfather.id") is None:
         create_partners(partner_type="patgrandparents", father_id=None, mother_id=session["patgrandmother.id"])
     else:
         update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
@@ -244,32 +247,29 @@ def delete_individual(id):
 
     # Find all parent records for the individual.  If partner present, remove the deleted individual from the record
     # but if there will be no-one left in the parent record once the individual is deleted, remove the whole record
-    if Individual.query.get(id).gender == "Male":
+    if Individual.query.get_or_404(id).gender == "Male":
         parentrecords = Parents.query.filter(Parents.father_id == id)
-        print("This is a male, parent id is " + str(parentrecords[0]))
 
         for parentrecord in parentrecords:
             if parentrecord.mother_id is not None:
                 parentrecord.father_id = None
                 db.session.commit()
             else:
-                print("Deleting parent ID " + str(parentrecord.id))
                 db.session.delete(parentrecord)
                 db.session.commit()
 
-    elif Individual.query.get(id).gender == "Female":
+    elif Individual.query.get_or_404(id).gender == "Female":
         parentrecords = Parents.query.filter(Parents.mother_id == id)
-        print("This is a female, parent id is " + str(parentrecords[0]))
 
         for parentrecord in parentrecords:
             if parentrecord.father_id is not None:
                 parentrecord.mother_id = None
                 db.session.commit()
             else:
-                print("Deleting parent ID " + str(parentrecord.id))
                 db.session.delete(parentrecord)
                 db.session.commit()
 
+    # Remove the individual's session data if they're the current grandparent or parent
     if id == session["patgrandfather.id"]:
         session.pop("patgrandfather.id", None)
     elif id == session["patgrandmother.id"]:
@@ -284,7 +284,8 @@ def delete_individual(id):
         session.pop("father.id", None)
     elif id == session["mother.id"]:
         session.pop("mother.id", None)
-    print("Deleting individual ID " + str(id))
+
+    # When all of the other links are removed, delete the individual
     db.session.delete(Individual.query.get_or_404(id))
     db.session.commit()
 
@@ -320,7 +321,7 @@ def session_pop_grandparents():
 def update_partners(partner_type, partners_id, father_id=None, mother_id=None):
     # If there is no father in the partner record, add the father to it:
     if db.session.query(Parents).filter_by(id=partners_id, father_id=father_id).scalar() is None:
-        updated_father = db.session.query(Parents).get(partners_id)
+        updated_father = db.session.query(Parents).get_or_404(partners_id)
 
         updated_father.father_id = father_id
         db.session.commit()
@@ -337,7 +338,7 @@ def update_partners(partner_type, partners_id, father_id=None, mother_id=None):
 
     # Else if there is no mother in the partner record, add the mother to it:
     elif db.session.query(Parents).filter_by(id=partners_id, mother_id=mother_id).scalar() is None:
-        updated_mother = db.session.query(Parents).get(partners_id)
+        updated_mother = db.session.query(Parents).get_or_404(partners_id)
         # parentsid = session["partners.id"]
         updated_mother.mother_id = mother_id
         db.session.commit()
