@@ -3,10 +3,9 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders
 from genealogy.individual.forms import FamilyView, IndividualView
-from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patGrandfather, \
-    add_patGrandmother, add_matGrandfather, add_matGrandmother, session_pop_grandparents, create_child_partnership, \
-    calculate_period
-from datetime import datetime
+from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
+    add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
+    calculate_period, delete_individual
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
@@ -40,7 +39,7 @@ def show_family(parentsid):
     children = db.session.query(Individual) \
         .join(FamilyLink) \
         .filter(FamilyLink.parents_id == parentsid) \
-        .filter(FamilyLink.individual_id == Individual.id)
+        .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
 
     try:
         father = Individual.query.get(Parents.query.get(parentsid).father_id)
@@ -79,7 +78,7 @@ def show_family(parentsid):
     if request.method == "POST":
 
         if request.form.get("addpatgrandfather") == "Add":
-            add_patGrandfather(form)
+            add_patgrandfather(form)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("patgrandfatherfocus") == "focus":
@@ -94,7 +93,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addpatgrandmother") == "Add":
-            add_patGrandmother(form)
+            add_patgrandmother(form)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("patgrandmotherfocus") == "focus":
@@ -109,7 +108,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandfather") == "Add":
-            add_matGrandfather(form)
+            add_matgrandfather(form)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("matgrandfatherfocus") == "focus":
@@ -124,7 +123,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandmother") == "Add":
-            add_matGrandmother(form)
+            add_matgrandmother(form)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("matgrandmotherfocus") == "focus":
@@ -172,7 +171,7 @@ def show_family(parentsid):
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parentsid) \
-                .filter(FamilyLink.individual_id == Individual.id)
+                .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
 
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
                                     mother=mother,
@@ -224,8 +223,6 @@ def edit(id):
         individual.gender = request.form["individual_gender"]
         individual.dob = form.individual_dob.data
         individual.dod = form.individual_dod.data
-        # individual.dob = datetime.strptime(request.form["individual_dob"], "%Y-%m-%d").date()
-        # individual.dod = datetime.strptime(request.form["individual_dod"], "%Y-%m-%d").date()
         individual.age = calculate_period(individual.dob, individual.dod)
 
         individual.fullname = fullname(individual.forenames, individual.surname)
@@ -238,3 +235,16 @@ def edit(id):
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("edit_individual.html", form=form, individual=individual, genders=genders)
+
+
+@app.route("/delete/<id>", methods=["GET", "POST"])
+def delete(id):
+
+    individual = Individual.query.get_or_404(id)
+
+    if request.form.get("deleteindividual") == "Delete":
+        delete_individual(id)
+
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("delete_individual.html", individual=individual)

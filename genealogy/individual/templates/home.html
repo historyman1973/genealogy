@@ -21,7 +21,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=patgrandfather.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandfather.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
@@ -93,7 +93,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=matgrandfather.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandfather.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             {% elif mother %}
@@ -147,7 +147,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=patgrandmother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandmother.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
@@ -220,7 +220,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=matgrandmother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandmother.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             {% elif mother %}
@@ -274,7 +274,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=father.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             {% if father.dob and father.dod %}
@@ -348,7 +348,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=mother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             {% else %}
@@ -392,7 +392,7 @@
                     <div class="row">
                         <!--                        #################################################### CHILDREN ###-->
                         <div class="col-12">
-                            <p class="lead">Children</p>
+                            <h2>Children</h2>
                         </div>
                     </div>
                     <table class="table">
@@ -418,7 +418,7 @@
                                     <li><a class="dropdown-item"
                                            href="{{ url_for( 'edit', id=child.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">Delete</a></li>
                                 </ul>
                             </div>
                             </td>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" class="col-md-12">
+    <div class="container">
+        <p>Are you sure you want to permanently delete {{ individual.forenames }} {{ individual.surname }}?</p>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-danger mx-auto" type="submit" name="deleteindividual" value="Delete">Delete</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -10,7 +10,7 @@
         <th scope="col">Gender</th>
         <th scope="col">Date of birth</th>
         <th scope="col">Date of death</th>
-        <th scope="col">Age</th>
+        <th style="text-align: center">Age</th>
     </tr>
     </thead>
     <tbody>
@@ -31,7 +31,9 @@
         <td></td>
         {% endif %}
         {% if individual.age %}
-        <td>{{ individual.age }}</td>
+        <td align="center">{{ individual.age }}</td>
+        {% elif individual.age == 0 %}
+        <td style="text-align: center">0</td>
         {% endif %}
     </tr>
     </tbody>

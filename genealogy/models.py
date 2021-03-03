@@ -1,6 +1,4 @@
 from genealogy import db
-from datetime import datetime
-from dateutil import relativedelta
 
 genders = ["Male", "Female", "Unknown"]
 
