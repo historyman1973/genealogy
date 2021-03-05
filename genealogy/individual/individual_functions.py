@@ -24,7 +24,7 @@ def add_father(form):
     session["father.id"] = new_father.id
     session["father_fullname"] = father_fullname
 
-    if session.get_or_404("mother.id") is None:
+    if session.get("mother.id") is None:
         create_partners(partner_type="parents", father_id=session["father.id"], mother_id=None)
     else:
         update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
@@ -50,7 +50,7 @@ def add_mother(form):
     db.session.flush()
     session["mother.id"] = new_mother.id
 
-    if session.get_or_404("father.id") is None:
+    if session.get("father.id") is None:
         create_partners(partner_type="parents", father_id=None, mother_id=session["mother.id"])
     else:
         update_partners(partner_type="parents", partners_id=session["partners.id"], father_id=session["father.id"],
@@ -78,7 +78,7 @@ def add_matgrandfather(form):
 
     session["matgrandfather.id"] = new_matgrandfather.id
 
-    if session.get_or_404("matgrandmother.id") is None:
+    if session.get("matgrandmother.id") is None:
         create_partners(partner_type="matgrandparents", father_id=session["matgrandfather.id"], mother_id=None)
     else:
         update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
@@ -109,7 +109,7 @@ def add_matgrandmother(form):
     session["matgrandmother.id"] = new_matgrandmother.id
     session["matgrandmother_fullname"] = matgrandmother_fullname
 
-    if session.get_or_404("matgrandfather.id") is None:
+    if session.get("matgrandfather.id") is None:
         create_partners(partner_type="matgrandparents", father_id=None, mother_id=session["matgrandmother.id"])
     else:
         update_partners(partner_type="matgrandparents", partners_id=session["matgrandparents.id"],
@@ -140,7 +140,7 @@ def add_patgrandfather(form):
 
     session["patgrandfather.id"] = new_patgrandfather.id
 
-    if session.get_or_404("patgrandmother.id") is None:
+    if session.get("patgrandmother.id") is None:
         create_partners(partner_type="patgrandparents", father_id=session["patgrandfather.id"], mother_id=None)
     else:
         update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
@@ -171,7 +171,7 @@ def add_patgrandmother(form):
     session["patgrandmother.id"] = new_patgrandmother.id
     session["patGrandmother_fullname"] = patgrandmother_fullname
 
-    if session.get_or_404("patgrandfather.id") is None:
+    if session.get("patgrandfather.id") is None:
         create_partners(partner_type="patgrandparents", father_id=None, mother_id=session["patgrandmother.id"])
     else:
         update_partners(partner_type="patgrandparents", partners_id=session["patgrandparents.id"],
