@@ -14,8 +14,8 @@ def add_father(form):
     father_fullname = fullname(father_forenames, father_surname)
     father_age = calculate_period(father_dob, father_dod)
 
-    new_father = Individual(father_surname, father_fullname, father_forenames, father_gender, father_dob, father_dod,
-                            father_age)
+    new_father = Individual(surname=father_surname, fullname=father_fullname, forenames=father_forenames,
+                            gender=father_gender, dob=father_dob, dod=father_dod, age=father_age)
     db.session.add(new_father)
 
     db.session.commit()
@@ -42,8 +42,8 @@ def add_mother(form):
     mother_fullname = fullname(mother_forenames, mother_surname)
     mother_age = calculate_period(mother_dob, mother_dod)
 
-    new_mother = Individual(mother_surname, mother_fullname, mother_forenames, mother_gender, mother_dob, mother_dod,
-                            mother_age)
+    new_mother = Individual(surname=mother_surname, fullname=mother_fullname, forenames=mother_forenames,
+                            gender=mother_gender, dob=mother_dob, dod=mother_dod, age=mother_age)
     db.session.add(new_mother)
 
     db.session.commit()
@@ -68,9 +68,9 @@ def add_matgrandfather(form):
     matgrandfather_fullname = fullname(mat_grandfather_forenames, mat_grandfather_surname)
     mat_grandfather_age = calculate_period(mat_grandfather_dob, mat_grandfather_dod)
 
-    new_matgrandfather = Individual(mat_grandfather_surname, matgrandfather_fullname, mat_grandfather_forenames,
-                                    mat_grandfather_gender, mat_grandfather_dob, mat_grandfather_dod,
-                                    mat_grandfather_age)
+    new_matgrandfather = Individual(surname=mat_grandfather_surname, fullname=matgrandfather_fullname,
+                                    forenames=mat_grandfather_forenames, gender=mat_grandfather_gender,
+                                    dob=mat_grandfather_dob, dod=mat_grandfather_dod, age=mat_grandfather_age)
     db.session.add(new_matgrandfather)
 
     db.session.commit()
@@ -99,8 +99,9 @@ def add_matgrandmother(form):
     matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
     matgrandmother_age = calculate_period(matgrandmother_dob, matgrandmother_dod)
 
-    new_matgrandmother = Individual(matgrandmother_surname, matgrandmother_fullname, matgrandmother_forenames,
-                                    matgrandmother_gender, matgrandmother_dob, matgrandmother_dod, matgrandmother_age)
+    new_matgrandmother = Individual(surname=matgrandmother_surname, fullname=matgrandmother_fullname,
+                                    forenames=matgrandmother_forenames, gender=matgrandmother_gender,
+                                    dob=matgrandmother_dob, dod=matgrandmother_dod, age=matgrandmother_age)
     db.session.add(new_matgrandmother)
 
     db.session.commit()
@@ -130,9 +131,9 @@ def add_patgrandfather(form):
     patgrandfather_fullname = fullname(pat_grandfather_forenames, pat_grandfather_surname)
     pat_grandfather_age = calculate_period(pat_grandfather_dob, pat_grandfather_dod)
 
-    new_patgrandfather = Individual(pat_grandfather_surname, patgrandfather_fullname, pat_grandfather_forenames,
-                                    pat_grandfather_gender, pat_grandfather_dob, pat_grandfather_dod,
-                                    pat_grandfather_age)
+    new_patgrandfather = Individual(surname=pat_grandfather_surname, fullname=patgrandfather_fullname,
+                                    forenames=pat_grandfather_forenames, gender=pat_grandfather_gender,
+                                    dob=pat_grandfather_dob, dod=pat_grandfather_dod, age=pat_grandfather_age)
     db.session.add(new_patgrandfather)
 
     db.session.commit()
@@ -161,15 +162,16 @@ def add_patgrandmother(form):
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
     pat_grandmother_age = calculate_period(patgrandmother_dob, patgrandmother_dod)
 
-    new_patgrandmother = Individual(patgrandmother_surname, patgrandmother_fullname, patgrandmother_forenames,
-                                    patgrandmother_gender, patgrandmother_dob, patgrandmother_dod, pat_grandmother_age)
+    new_patgrandmother = Individual(surname=patgrandmother_surname, fullname=patgrandmother_fullname,
+                                    forenames=patgrandmother_forenames, gender=patgrandmother_gender,
+                                    dob=patgrandmother_dob, dod=patgrandmother_dod, age=pat_grandmother_age)
     db.session.add(new_patgrandmother)
 
     db.session.commit()
     db.session.flush()
 
     session["patgrandmother.id"] = new_patgrandmother.id
-    session["patGrandmother_fullname"] = patgrandmother_fullname
+    session["patgrandmother_fullname"] = patgrandmother_fullname
 
     if session.get("patgrandfather.id") is None:
         create_partners(partner_type="patgrandparents", father_id=None, mother_id=session["patgrandmother.id"])
@@ -270,16 +272,21 @@ def delete_individual(id):
                 db.session.commit()
 
     # Remove the individual's session data if they're the current grandparent or parent
-    if id == session["patgrandfather.id"]:
-        session.pop("patgrandfather.id", None)
-    elif id == session["patgrandmother.id"]:
-        session.pop("patgrandmother.id", None)
-    elif id == session["matgrandfather.id"]:
-        session.pop("matgrandfather.id", None)
-    elif id == session["matgrandmother.id"]:
-        session.pop("matgrandmother.id", None)
-    elif id == session["patgrandmother.id"]:
-        session.pop("patgrandmother.id", None)
+    if session.get("patgrandfather.id") is not None:
+        if id == session["patgrandfather.id"]:
+            session.pop("patgrandfather.id", None)
+    elif session.get("patgrandmother.id") is not None:
+        if id == session["patgrandmother.id"]:
+            print("Removing individual: " + str(session["patgrandmother.id"]))
+            session.pop("patgrandmother.id", None)
+    elif session.get("matgrandfather.id") is not None:
+        if id == session["matgrandfather.id"]:
+            print("Removing individual: " + str(session["matgrandfather.id"]))
+            session.pop("matgrandfather.id", None)
+    elif session.get("matgrandmother.id") is not None:
+        if id == session["matgrandmother.id"]:
+            print("Removing individual: " + str(session["matgrandmother.id"]))
+            session.pop("matgrandmother.id", None)
     elif id == session["father.id"]:
         session.pop("father.id", None)
     elif id == session["mother.id"]:

@@ -154,7 +154,8 @@ def show_family(parentsid):
             child_age = calculate_period(child_dob, child_dod)
             child_fullname = fullname(child_forenames, child_surname)
 
-            new_child = Individual(child_surname, child_fullname, child_forenames, child_gender, child_dob, child_dod, child_age)
+            new_child = Individual(surname=child_surname, fullname=child_fullname, forenames=child_forenames,
+                                   gender=child_gender, dob=child_dob, dod=child_dod, age=child_age)
             db.session.add(new_child)
 
             db.session.commit()

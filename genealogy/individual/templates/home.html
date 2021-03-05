@@ -355,16 +355,16 @@
                                 </ul>
                             </div>
                             {% if father.dob and father.dod %}
-                            <p class="display-6 col-10">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} -
+                            <p class="display-6 col-10 text-center">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} -
                                 {{ moment(father.dod).format('YYYY') }})</p>
                             {% elif father.dob and father.dod is none %}
-                            <p class="display-6 col-10">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }}
+                            <p class="display-6 col-10 text-center">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }}
                                 - )</p>
                             {% elif father.dob is none and father.dod %}
-                            <p class="display-6 col-10">{{ father.fullname }}
+                            <p class="display-6 col-10 text-center">{{ father.fullname }}
                                 ( - {{ moment(father.dod).format('YYYY') }})</p>
                             {% elif father.dob is none and father.dod is none %}
-                            <p class="display-6 col-10">{{ father.fullname }} (    -    )</p>
+                            <p class="display-6 col-10 text-center">{{ father.fullname }} (    -    )</p>
                             {% endif %}
                             {% else %}
                             <!-- Button trigger modal -->
@@ -423,16 +423,16 @@
                             <!--                        ################################################## MOTHER ###-->
                             {% if mother %}
                             {% if mother.dob and mother.dod %}
-                            <p class="display-6 col-10">{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }}
+                            <p class="display-6 col-10 text-center">{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }}
                                 - {{ moment(mother.dod).format('YYYY') }})</p>
                             {% elif mother.dob and mother.dod is none %}
-                            <p class="display-6 col-10">{{ mother.fullname }}
+                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
                                 ({{ moment(mother.dob).format('YYYY') }} - )</p>
                             {% elif mother.dob is none and mother.dod %}
-                            <p class="display-6 col-10">{{ mother.fullname }}
+                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
                                 ( - {{ moment(mother.dod).format('YYYY') }})</p>
                             {% elif mother.dob is none and mother.dod is none %}
-                            <p class="display-6 col-10">{{ mother.fullname }} (    -    )</p>
+                            <p class="display-6 col-10 text-center">{{ mother.fullname }} (    -    )</p>
                             {% endif %}
                             <div class="btn-group">
                                 <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
