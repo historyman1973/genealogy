@@ -27,18 +27,8 @@ class Individual(db.Model):
 
     parents = db.relationship("Parents", secondary=FamilyLink.__table__)
 
-    def __init__(self, surname, fullname=None, forenames=None, gender="Unknown", dob=None, dod=None, age=None):
-        self.forenames = forenames
-        self.surname = surname
-        self.gender = gender
-        self.dob = dob
-        self.dod = dod
-        self.fullname = fullname
-        self.age = age
-
-
-    # def __repr__(self):
-    #     return (str(self.fullname))
+    def __init__(self, **kwargs):
+        super(Individual, self).__init__(**kwargs)
 
 
 class Parents(db.Model):
