@@ -19,7 +19,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=patgrandfather.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=patgrandfather.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandfather.id ) }}">
                                         Delete</a></li>
@@ -110,7 +110,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=matgrandfather.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=matgrandfather.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandfather.id ) }}">
                                         Delete</a></li>
@@ -183,7 +183,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=patgrandmother.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=patgrandmother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandmother.id ) }}">
                                         Delete</a></li>
@@ -275,7 +275,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=matgrandmother.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=matgrandmother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandmother.id ) }}">
                                         Delete</a></li>
@@ -348,17 +348,19 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=father.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=father.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
                                         Delete</a></li>
                                 </ul>
                             </div>
                             {% if father.dob and father.dod %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }} -
+                            <p class="display-6 col-10 text-center">{{ father.fullname }}
+                                ({{ moment(father.dob).format('YYYY') }} -
                                 {{ moment(father.dod).format('YYYY') }})</p>
                             {% elif father.dob and father.dod is none %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }} ({{ moment(father.dob).format('YYYY') }}
+                            <p class="display-6 col-10 text-center">{{ father.fullname }}
+                                ({{ moment(father.dob).format('YYYY') }}
                                 - )</p>
                             {% elif father.dob is none and father.dod %}
                             <p class="display-6 col-10 text-center">{{ father.fullname }}
@@ -423,7 +425,8 @@
                             <!--                        ################################################## MOTHER ###-->
                             {% if mother %}
                             {% if mother.dob and mother.dod %}
-                            <p class="display-6 col-10 text-center">{{ mother.fullname }} ({{ moment(mother.dob).format('YYYY') }}
+                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
+                                ({{ moment(mother.dob).format('YYYY') }}
                                 - {{ moment(mother.dod).format('YYYY') }})</p>
                             {% elif mother.dob and mother.dod is none %}
                             <p class="display-6 col-10 text-center">{{ mother.fullname }}
@@ -441,7 +444,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=mother.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=mother.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
                                         Delete</a></li>
@@ -501,12 +504,65 @@
                             {% endif %}
                         </div>
                     </div>
+                    <hr>
+                    <div class="container">
+
+                        <div class="row justify-content-center">
+                            {% if parents.dom %}
+                            <div class = "col-lg-4 text-end">
+                                <label class="lead">Married: </label>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <span class="lead">{{ parents.dom | datedisplay }}</span>
+                            </div>
+                            <div class="col-lg-4 justify-content-center">
+                                <a class="btn btn-primary btn-lg mx-auto"
+                                   href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
+                            </div>
+                            {% else %}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-dark w-auto" data-bs-toggle="modal" data-bs-target="#addrelationship">
+                                Add relationship
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="addrelationship" tabindex="-1" aria-labelledby="addChildLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addrelationshiplabel">Add relationship</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="form">
+                                                    <div class="row mb-3">
+                                                        <div class=col-md-12" id="marriage_date">
+                                                            {{ wtf.form_field(form.parents_dom, class='form-control w-auto', ) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" class="btn btn-primary" value="Add" name="addrelationship"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
                     <br>
-                    <hr />
+                    <hr>
                     <div class="row">
                         <!--                        #################################################### CHILDREN ###-->
                         <div class="col-12">
-                            <h2 class="text-center">Children</h2>
+                            <h2 class="text-center">Children ({{ number_children }})</h2>
                         </div>
                     </div>
                     <table class="table">
@@ -530,7 +586,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit', id=child.id ) }}">Edit</a></li>
+                                           href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
                                         Delete</a></li>
@@ -576,8 +632,8 @@
                                     <div class="container-fluid">
                                         <div class="form">
                                             <div class="row mb-3">
-                                                <div class=col-md-12">
-                                                    {{ wtf.form_field(form.child_forenames, class='form-control') }}
+                                                <div class=col-md-12" id="child_forenames">
+                                                    {{ wtf.form_field(form.child_forenames, class='form-control', ) }}
                                                 </div>
                                             </div>
                                             <div class="row">

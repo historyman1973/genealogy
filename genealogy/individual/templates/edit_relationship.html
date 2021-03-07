@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" class="col-md-12">
+    {{form.hidden_tag()}}
+    <div class="container">
+        <br>
+        <div class="row py-2">
+            <div class="col-sm-3">Date of marriage</div>
+            <div class="col-sm-4 w-auto">
+                <input type="date" name="marriage_date" class="form-control" value="{{ relationship.dom }}">
+            </div>
+        </div>
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary mx-auto" type="submit" name="saverelationship" value="Save">Save</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

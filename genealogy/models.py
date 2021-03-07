@@ -37,15 +37,13 @@ class Parents(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     father_id = db.Column(db.Integer, db.ForeignKey("individual.id"))
     mother_id = db.Column(db.Integer, db.ForeignKey("individual.id"))
+    dom = db.Column(db.Date)
 
     children = db.relationship("Individual", secondary=FamilyLink.__table__)
 
-    def __init__(self, father_id=None, mother_id=None):
-        self.father_id = father_id
-        self.mother_id = mother_id
+    def __init__(self, **kwargs):
+        super(Parents, self).__init__(**kwargs)
 
-    # def __repr__ (self):
-    #     return f"Father ID: {self.father_id} Mother ID: {self.mother_id}"
 
 
 db.create_all()

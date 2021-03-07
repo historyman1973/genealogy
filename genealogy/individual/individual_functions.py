@@ -223,7 +223,7 @@ def create_child_partnership(new_child):
 def create_partners(partner_type, father_id=None, mother_id=None):
     if db.session.query(Parents).filter_by(father_id=father_id,
                                            mother_id=mother_id).scalar() is None:
-        parents = Parents(father_id, mother_id)
+        parents = Parents(father_id=father_id, mother_id=mother_id)
         db.session.add(parents)
         db.session.commit()
         db.session.flush()

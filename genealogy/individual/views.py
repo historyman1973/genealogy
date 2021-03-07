@@ -2,7 +2,7 @@ from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders
-from genealogy.individual.forms import FamilyView, IndividualView
+from genealogy.individual.forms import FamilyView, IndividualView, RelationshipView
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
     calculate_period, delete_individual
@@ -36,10 +36,14 @@ def index():
 def show_family(parentsid):
     form = FamilyView()
 
+    parents = Parents.query.get(parentsid)
+
     children = db.session.query(Individual) \
         .join(FamilyLink) \
         .filter(FamilyLink.parents_id == parentsid) \
         .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
+
+    number_children = children.count()
 
     try:
         father = Individual.query.get(Parents.query.get(parentsid).father_id)
@@ -145,6 +149,21 @@ def show_family(parentsid):
             add_mother(form)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
+        if request.form.get("savemarriage") == "Save":
+            parents = Parents.query.get(parentsid)
+
+            parents.dom = form.parents_dom.data
+            db.session.commit()
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+        if request.form.get("addrelationship") == "Add":
+            parents.dom = form.parents_dom.data
+
+            db.session.commit()
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+
+
         if request.form.get("addchild") == "Add":
             child_forenames = form.child_forenames.data
             child_surname = form.child_surname.data
@@ -167,18 +186,18 @@ def show_family(parentsid):
 
             # Handles male and female children only
             create_child_partnership(new_child)
-        
 
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parentsid) \
                 .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
 
+            number_children = children.count()
+
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
-                                    mother=mother,
-                                    patgrandfather=patgrandfather, patgrandmother=patgrandmother,
-                                    matgrandfather=matgrandfather,
-                                    matgrandmother=matgrandmother))
+                                    mother=mother, patgrandfather=patgrandfather, patgrandmother=patgrandmother,
+                                    matgrandfather=matgrandfather, matgrandmother=matgrandmother,
+                                    number_children=number_children, parents=parents))
 
         if request.form.get("childfocus"):
             child_id = request.form.get('childfocus')
@@ -200,7 +219,7 @@ def show_family(parentsid):
 
     return render_template("home.html", form=form, father=father, mother=mother, children=children,
                            patgrandfather=patgrandfather, patgrandmother=patgrandmother, matgrandfather=matgrandfather,
-                           matgrandmother=matgrandmother)
+                           matgrandmother=matgrandmother, number_children=number_children, parents=parents)
 
 
 @app.route("/list", methods=["GET", "POST"])
@@ -211,7 +230,7 @@ def individual_list():
 
 
 @app.route("/edit/<id>", methods=["GET", "POST"])
-def edit(id):
+def edit_individual(id):
     form = IndividualView()
 
     individual = Individual.query.get_or_404(id)
@@ -249,3 +268,19 @@ def delete(id):
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("delete_individual.html", individual=individual)
+
+
+@app.route("/editrelationship/<id>", methods=["GET", "POST"])
+def edit_relationship(id):
+    form = RelationshipView()
+
+    relationship = Parents.query.get_or_404(id)
+
+    if request.form.get("saverelationship") == "Save":
+        relationship.dom = form.marriage_date.data
+
+        db.session.commit()
+
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("edit_relationship.html", form=form, relationship=relationship)
