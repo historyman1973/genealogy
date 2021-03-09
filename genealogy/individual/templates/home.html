@@ -8,7 +8,7 @@
                 {{form.hidden_tag()}}
                 <br>
                 <div class="container">
-                    <div class="row">
+                    <div class="row mt-5">
                         <div class="col-6 d-flex">
                             <!--                        #################################### PATERNAL GRANDFATHER ###-->
                             {% if patgrandfather %}
@@ -508,20 +508,25 @@
                     <div class="container">
 
                         <div class="row justify-content-center">
+                            {% if parents %}
                             {% if parents.dom %}
-                            <div class = "col-lg-4 text-end">
+                            <div class = "col-lg-3 text-end">
                                 <label class="lead">Married: </label>
                             </div>
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-3 text-center">
                                 <span class="lead">{{ parents.dom | datedisplay }}</span>
                             </div>
-                            <div class="col-lg-4 justify-content-center">
-                                <a class="btn btn-primary btn-lg mx-auto"
+                            <div class="col-lg-3 text-start">
+                                <span class="lead">{{ marriage_location.short_location }}</span>
+                            </div>
+                            <div class="col-lg-3 justify-content-center">
+                                <a class="btn btn-secondary btn-lg mx-auto"
                                    href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
                             </div>
                             {% else %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-dark w-auto" data-bs-toggle="modal" data-bs-target="#addrelationship">
+                            <button type="button" class="btn btn-dark w-auto" data-bs-toggle="modal"
+                                    data-bs-target="#addrelationship">
                                 Add relationship
                             </button>
 
@@ -556,6 +561,7 @@
                             </div>
                         </div>
                         {% endif %}
+                        {% endif %}
                     </div>
                     <br>
                     <hr>
@@ -567,7 +573,7 @@
                     </div>
                     <table class="table">
                         <thead>
-                        <tr class="table-primary">
+                        <tr class="table-success">
                             <th scope="col"></th>
                             <th scope="col">Name</th>
                             <th scope="col">Date of birth</th>

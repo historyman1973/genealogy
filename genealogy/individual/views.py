@@ -1,11 +1,12 @@
 from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink, genders
-from genealogy.individual.forms import FamilyView, IndividualView, RelationshipView
+from genealogy.models import Individual, Parents, FamilyLink, genders, Location
+from genealogy.individual.forms import FamilyView, IndividualView, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
     calculate_period, delete_individual
+from ..master_lists.locations import location_formats
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
@@ -37,6 +38,8 @@ def show_family(parentsid):
     form = FamilyView()
 
     parents = Parents.query.get(parentsid)
+
+    marriage_location = Location.query.get(parents.marriage_location)
 
     children = db.session.query(Individual) \
         .join(FamilyLink) \
@@ -162,8 +165,6 @@ def show_family(parentsid):
             db.session.commit()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-
-
         if request.form.get("addchild") == "Add":
             child_forenames = form.child_forenames.data
             child_surname = form.child_surname.data
@@ -219,7 +220,8 @@ def show_family(parentsid):
 
     return render_template("home.html", form=form, father=father, mother=mother, children=children,
                            patgrandfather=patgrandfather, patgrandmother=patgrandmother, matgrandfather=matgrandfather,
-                           matgrandmother=matgrandmother, number_children=number_children, parents=parents)
+                           matgrandmother=matgrandmother, number_children=number_children, parents=parents,
+                           marriage_location=marriage_location)
 
 
 @app.route("/list", methods=["GET", "POST"])
@@ -272,15 +274,43 @@ def delete(id):
 
 @app.route("/editrelationship/<id>", methods=["GET", "POST"])
 def edit_relationship(id):
-    form = RelationshipView()
 
+    # Grab the Parents object being edited
     relationship = Parents.query.get_or_404(id)
+
+    # Create the RelationshipView form within a function which sets the default location based on the current parents'
+    # marriage location (if it's set) and assign the form to a variable called relationshipview
+    relationshipview = relationshipview_form(id)
+
+    # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
+    # the relevant default value selected.
+    form = relationshipview()
 
     if request.form.get("saverelationship") == "Save":
         relationship.dom = form.marriage_date.data
+        if form.marriage_location.data:
+            relationship.marriage_location = form.marriage_location.data.id
+            print("Printing the location ID to be saved: " + str(relationship.marriage_location))
+        else:
+            relationship.marriage_location = form.marriage_location.data
 
         db.session.commit()
 
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    if request.form.get("addlocation") == "Add":
+        address = form.location_address.data
+        parish = form.location_parish.data
+        townorcity = form.location_townorcity.data
+        county = form.location_county.data
+        country = form.location_country.data
+        full_location = location_formats("long", address, parish, townorcity, county, country)
+        short_location = location_formats("short", parish, townorcity, county)
+
+        new_location = Location(address=address, parish=parish, townorcity=townorcity, county=county, country=country,
+                                full_location=full_location, short_location=short_location)
+
+        db.session.add(new_location)
+        db.session.commit()
 
     return render_template("edit_relationship.html", form=form, relationship=relationship)

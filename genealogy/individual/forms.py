@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.fields.html5 import DateField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from genealogy.models import genders
+from ..models import Parents, Location
 
 
 class FamilyView(FlaskForm):
@@ -51,5 +53,22 @@ class IndividualView(FlaskForm):
     individual_dod = DateField('dob', format='%Y-%m-%d', default=None)
 
 
-class RelationshipView(FlaskForm):
-    marriage_date = DateField('Date of marriage', format='%Y-%m-%d', default=None)
+def location_query():
+    return Location.query
+
+
+def relationshipview_form(relationship_id):
+    class RelationshipView(FlaskForm):
+        marriage_date = DateField('Date of marriage', format='%Y-%m-%d', default=None)
+
+        # Set the default option of the QuerySelectField to be the current parent's marriage location.
+        marriage_location = QuerySelectField(query_factory=location_query, allow_blank=True, get_label="full_location",
+                                             default=Location.query.filter_by(id=Parents.query.get(relationship_id).
+                                                                              marriage_location).scalar())
+        location_address = StringField(label="Address")
+        location_parish = StringField(label="Parish")
+        location_townorcity = StringField(label="Town or City")
+        location_county = StringField(label="County")
+        location_country = StringField(label="Country")
+
+    return RelationshipView

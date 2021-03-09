@@ -3,19 +3,81 @@
 
 <form method="POST" class="col-md-12">
     {{form.hidden_tag()}}
-    <div class="container">
+    <div class="container mt-5">
         <br>
         <div class="row py-2">
             <div class="col-sm-3">Date of marriage</div>
             <div class="col-sm-4 w-auto">
                 <input type="date" name="marriage_date" class="form-control" value="{{ relationship.dom }}">
             </div>
+            </div>
+        <div class="row py-2">
+            <div class="col-sm-12">
+                {{ wtf.form_field(form.marriage_location, class='form-select w-auto') }}
+            </div>
         </div>
         <br>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-primary mx-auto" type="submit" name="saverelationship" value="Save">Save</button>
         </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark w-auto" data-bs-toggle="modal" data-bs-target="#addlocation">
+            Add new location
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addlocation" tabindex="-1" aria-labelledby="addLocationLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addLocationLabel">Add location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="form">
+                                <div class="row mb-3">
+                                    <div class=col-md-12" id="address">
+                                        {{ wtf.form_field(form.location_address, class='form-control', ) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mb-2">
+                                        {{ wtf.form_field(form.location_parish, class='form-control') }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mb-2">
+                                        {{ wtf.form_field(form.location_townorcity, class='form-control') }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mb-2">
+                                        {{ wtf.form_field(form.location_county, class='form-control') }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mb-2">
+                                        {{ wtf.form_field(form.location_country, class='form-control') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Add" name="addlocation"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
+
+
 
 {% endblock %}
