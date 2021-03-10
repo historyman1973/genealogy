@@ -6,43 +6,52 @@ from genealogy.models import genders
 from ..models import Parents, Location
 
 
-class FamilyView(FlaskForm):
+def location_query():
+    return Location.query
 
-    patgrandfather_forenames = StringField(label="Forenames")
-    patgrandfather_surname = StringField(label="Surname")
-    patgrandfather_dob = DateField('Born', format='%Y-%m-%d', default=None)
-    patgrandfather_dod = DateField('Died', format='%Y-%m-%d', default=None)
-    patgrandmother_forenames = StringField(label="Forenames")
-    patgrandmother_surname = StringField(label="Surname")
-    patgrandmother_dob = DateField('Born', format='%Y-%m-%d', default=None)
-    patgrandmother_dod = DateField('Died', format='%Y-%m-%d', default=None)
+def familyview_form(relationship_id):
+    class FamilyView(FlaskForm):
 
-    matgrandfather_forenames = StringField(label="Forenames")
-    matgrandfather_surname = StringField(label="Surname")
-    matgrandfather_dob = DateField('Born', format='%Y-%m-%d', default=None)
-    matgrandfather_dod = DateField('Died', format='%Y-%m-%d', default=None)
-    matgrandmother_forenames = StringField(label="Forenames")
-    matgrandmother_surname = StringField(label="Surname")
-    matgrandmother_dob = DateField('Born', format='%Y-%m-%d', default=None)
-    matgrandmother_dod = DateField('Died', format='%Y-%m-%d', default=None)
+        patgrandfather_forenames = StringField(label="Forenames")
+        patgrandfather_surname = StringField(label="Surname")
+        patgrandfather_dob = DateField('Born', format='%Y-%m-%d', default=None)
+        patgrandfather_dod = DateField('Died', format='%Y-%m-%d', default=None)
+        patgrandmother_forenames = StringField(label="Forenames")
+        patgrandmother_surname = StringField(label="Surname")
+        patgrandmother_dob = DateField('Born', format='%Y-%m-%d', default=None)
+        patgrandmother_dod = DateField('Died', format='%Y-%m-%d', default=None)
 
-    father_forenames = StringField(label="Forenames")
-    father_surname = StringField(label="Surname")
-    father_dob = DateField('Born', format='%Y-%m-%d', default="")
-    father_dod = DateField('Died', format='%Y-%m-%d', default="")
+        matgrandfather_forenames = StringField(label="Forenames")
+        matgrandfather_surname = StringField(label="Surname")
+        matgrandfather_dob = DateField('Born', format='%Y-%m-%d', default=None)
+        matgrandfather_dod = DateField('Died', format='%Y-%m-%d', default=None)
+        matgrandmother_forenames = StringField(label="Forenames")
+        matgrandmother_surname = StringField(label="Surname")
+        matgrandmother_dob = DateField('Born', format='%Y-%m-%d', default=None)
+        matgrandmother_dod = DateField('Died', format='%Y-%m-%d', default=None)
 
-    mother_forenames = StringField(label="Forenames")
-    mother_surname = StringField(label="Surname")
-    mother_dob = DateField('Born', format='%Y-%m-%d', default=None)
-    mother_dod = DateField('Died', format='%Y-%m-%d', default=None)
+        father_forenames = StringField(label="Forenames")
+        father_surname = StringField(label="Surname")
+        father_dob = DateField('Born', format='%Y-%m-%d', default="")
+        father_dod = DateField('Died', format='%Y-%m-%d', default="")
 
-    parents_dom = DateField("Married", format='%Y-%m-%d', default=None)
+        mother_forenames = StringField(label="Forenames")
+        mother_surname = StringField(label="Surname")
+        mother_dob = DateField('Born', format='%Y-%m-%d', default=None)
+        mother_dod = DateField('Died', format='%Y-%m-%d', default=None)
 
-    child_forenames = StringField(label="Forenames")
-    child_surname = StringField(label="Surname")
-    child_gender = SelectField(label='Gender', choices=[choice for choice in genders])
-    child_dob = DateField(label='Born', format='%Y-%m-%d', default=None)
-    child_dod = DateField(label='Died', format='%Y-%m-%d', default=None)
+        parents_dom = DateField("Married", format='%Y-%m-%d', default=None)
+        parents_marriage_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True, get_label="full_location",
+                                                 default=Location.query.filter_by(id=Parents.query.get(relationship_id).
+                                                                                  marriage_location).scalar())
+
+        child_forenames = StringField(label="Forenames")
+        child_surname = StringField(label="Surname")
+        child_gender = SelectField(label='Gender', choices=[choice for choice in genders])
+        child_dob = DateField(label='Born', format='%Y-%m-%d', default=None)
+        child_dod = DateField(label='Died', format='%Y-%m-%d', default=None)
+
+    return FamilyView
 
 
 class IndividualView(FlaskForm):
@@ -51,10 +60,6 @@ class IndividualView(FlaskForm):
     individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
     individual_dob = DateField('dob', format='%Y-%m-%d', default=None)
     individual_dod = DateField('dob', format='%Y-%m-%d', default=None)
-
-
-def location_query():
-    return Location.query
 
 
 def relationshipview_form(relationship_id):

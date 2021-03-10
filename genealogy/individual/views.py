@@ -2,7 +2,7 @@ from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
-from genealogy.individual.forms import FamilyView, IndividualView, relationshipview_form
+from genealogy.individual.forms import familyview_form, IndividualView, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
     calculate_period, delete_individual
@@ -13,31 +13,38 @@ genealogy_blueprint = Blueprint("individual", __name__, template_folder="templat
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    form = FamilyView()
+    # form = FamilyView()
 
     if Parents.query.get(1) is not None:
         return redirect(url_for("show_family", parentsid=1))
-
-    if request.method == "POST":
-
-        if request.form.get("addfather") == "Add":
-            add_father(form)
-
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
-
-        if request.form.get("addmother") == "Add":
-            add_mother(form)
-
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
-
-    return render_template("home.html", form=form)
+    #
+    # if request.method == "POST":
+    #
+    #     if request.form.get("addfather") == "Add":
+    #         add_father(form)
+    #
+    #         return redirect(url_for("show_family", parentsid=session["partners.id"]))
+    #
+    #     if request.form.get("addmother") == "Add":
+    #         add_mother(form)
+    #
+    #         return redirect(url_for("show_family", parentsid=session["partners.id"]))
+    #
+    return render_template("home.html")
 
 
 @app.route("/family/<parentsid>", methods=["GET", "POST"])
 def show_family(parentsid):
-    form = FamilyView()
-
+    # Grab the Parents object being edited
     parents = Parents.query.get(parentsid)
+
+    # Create the RelationshipView form within a function which sets the default location based on the current parents'
+    # marriage location (if it's set) and assign the form to a variable called relationshipview
+    familyview = familyview_form(parentsid)
+
+    # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
+    # the relevant default value selected.
+    form = familyview()
 
     marriage_location = Location.query.get(parents.marriage_location)
 
@@ -161,6 +168,10 @@ def show_family(parentsid):
 
         if request.form.get("addrelationship") == "Add":
             parents.dom = form.parents_dom.data
+            if form.parents_marriage_location.data:
+                parents.marriage_location = form.parents_marriage_location.data.id
+            else:
+                parents.marriage_location = form.parents_marriage_location.data
 
             db.session.commit()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))

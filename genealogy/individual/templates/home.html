@@ -509,13 +509,15 @@
 
                         <div class="row justify-content-center">
                             {% if parents %}
-                            {% if parents.dom %}
+                            {% if parents.dom or parents.marriage_location %}
                             <div class = "col-lg-3 text-end">
                                 <label class="lead">Married: </label>
                             </div>
+                            {% if parents.dom %}
                             <div class="col-lg-3 text-center">
                                 <span class="lead">{{ parents.dom | datedisplay }}</span>
                             </div>
+                            {% endif %}
                             <div class="col-lg-3 text-start">
                                 <span class="lead">{{ marriage_location.short_location }}</span>
                             </div>
@@ -544,8 +546,11 @@
                                             <div class="container-fluid">
                                                 <div class="form">
                                                     <div class="row mb-3">
-                                                        <div class=col-md-12" id="marriage_date">
+                                                        <div class=col-md-3" id="marriage_date">
                                                             {{ wtf.form_field(form.parents_dom, class='form-control w-auto', ) }}
+                                                        </div>
+                                                        <div class=col-md-9" id="marriage_location">
+                                                            {{ wtf.form_field(form.parents_marriage_location, class='form-select w-auto', ) }}
                                                         </div>
                                                     </div>
                                                 </div>
