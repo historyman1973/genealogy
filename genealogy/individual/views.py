@@ -2,7 +2,7 @@ from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
-from genealogy.individual.forms import familyview_form, IndividualView, relationshipview_form
+from genealogy.individual.forms import familyview_form, individualview_form, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
     calculate_period, delete_individual
@@ -181,12 +181,22 @@ def show_family(parentsid):
             child_surname = form.child_surname.data
             child_gender = form.child_gender.data
             child_dob = form.child_dob.data
+            if form.child_birth_location.data:
+                child_birth_location = form.child_birth_location.data.id
+            else:
+                child_birth_location = form.child_birth_location.data
             child_dod = form.child_dod.data
+            if form.child_death_location.data:
+                child_death_location = form.child_death_location.data.id
+            else:
+                child_death_location = form.child_death_location.data
+
             child_age = calculate_period(child_dob, child_dod)
             child_fullname = fullname(child_forenames, child_surname)
 
             new_child = Individual(surname=child_surname, fullname=child_fullname, forenames=child_forenames,
-                                   gender=child_gender, dob=child_dob, dod=child_dod, age=child_age)
+                                   gender=child_gender, dob=child_dob, dod=child_dod, age=child_age,
+                                   birth_location=child_birth_location, death_location=child_death_location)
             db.session.add(new_child)
 
             db.session.commit()
@@ -244,9 +254,17 @@ def individual_list():
 
 @app.route("/edit/<id>", methods=["GET", "POST"])
 def edit_individual(id):
-    form = IndividualView()
 
+    # Grab the Individual object being edited
     individual = Individual.query.get_or_404(id)
+
+    # Create the IndividualView form within a function which sets the default locations based on the current individual's
+    # birth and death locations (if they're set) and assign the form to a variable called individualview
+    individualview = individualview_form(id)
+
+    # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
+    # the relevant default value selected.
+    form = individualview()
 
     original_gender = individual.gender
 
@@ -255,7 +273,15 @@ def edit_individual(id):
         individual.surname = request.form["individual_surname"]
         individual.gender = request.form["individual_gender"]
         individual.dob = form.individual_dob.data
+        if form.individual_birth_location.data:
+            individual.birth_location = form.individual_birth_location.data.id
+        else:
+            individual.birth_location = form.individual_birth_location.data
         individual.dod = form.individual_dod.data
+        if form.individual_death_location.data:
+            individual.death_location = form.individual_death_location.data.id
+        else:
+            individual.death_location = form.individual_death_location.data
         individual.age = calculate_period(individual.dob, individual.dod)
 
         individual.fullname = fullname(individual.forenames, individual.surname)
@@ -301,7 +327,6 @@ def edit_relationship(id):
         relationship.dom = form.marriage_date.data
         if form.marriage_location.data:
             relationship.marriage_location = form.marriage_location.data.id
-            print("Printing the location ID to be saved: " + str(relationship.marriage_location))
         else:
             relationship.marriage_location = form.marriage_location.data
 
