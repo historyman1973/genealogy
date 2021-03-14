@@ -2,7 +2,7 @@ from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
-from genealogy.individual.forms import familyview_form, individualview_form, relationshipview_form
+from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
     calculate_period, delete_individual
@@ -35,6 +35,7 @@ def index():
 
 @app.route("/family/<parentsid>", methods=["GET", "POST"])
 def show_family(parentsid):
+
     # Grab the Parents object being edited
     parents = Parents.query.get(parentsid)
 
@@ -255,23 +256,18 @@ def individual_list():
 @app.route("/edit/<id>", methods=["GET", "POST"])
 def edit_individual(id):
 
-    # Grab the Individual object being edited
     individual = Individual.query.get_or_404(id)
 
-    # Create the IndividualView form within a function which sets the default locations based on the current individual's
-    # birth and death locations (if they're set) and assign the form to a variable called individualview
     individualview = individualview_form(id)
 
-    # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
-    # the relevant default value selected.
     form = individualview()
 
     original_gender = individual.gender
 
     if request.form.get("saveindividual") == "Save":
-        individual.forenames = request.form["individual_forenames"]
-        individual.surname = request.form["individual_surname"]
-        individual.gender = request.form["individual_gender"]
+        individual.forenames = form.individual_forenames.data
+        individual.surname = form.individual_surname.data
+        individual.gender = form.individual_gender.data
         individual.dob = form.individual_dob.data
         if form.individual_birth_location.data:
             individual.birth_location = form.individual_birth_location.data.id
@@ -294,6 +290,52 @@ def edit_individual(id):
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("edit_individual.html", form=form, individual=individual, genders=genders)
+
+
+# @app.route("/edit/<id>", methods=["GET", "POST"])
+# def edit_individual(id):
+#
+#     # add_individual = False
+#
+#     # Grab the Individual object being edited
+#     individual = Individual.query.get_or_404(id)
+#
+#     # Create the IndividualView form within a function which sets the default locations based on the current individual's
+#     # birth and death locations (if they're set) and assign the form to a variable called individualview
+#     individualview = individualview_form(id)
+#
+#     # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
+#     # the relevant default value selected.
+#     form = individualview()
+#
+#     original_gender = individual.gender
+#
+#     if request.form.get("saveindividual") == "Save":
+#         individual.forenames = request.form["individual_forenames"]
+#         individual.surname = request.form["individual_surname"]
+#         individual.gender = request.form["individual_gender"]
+#         individual.dob = form.individual_dob.data
+#         if form.individual_birth_location.data:
+#             individual.birth_location = form.individual_birth_location.data.id
+#         else:
+#             individual.birth_location = form.individual_birth_location.data
+#         individual.dod = form.individual_dod.data
+#         if form.individual_death_location.data:
+#             individual.death_location = form.individual_death_location.data.id
+#         else:
+#             individual.death_location = form.individual_death_location.data
+#         individual.age = calculate_period(individual.dob, individual.dod)
+#
+#         individual.fullname = fullname(individual.forenames, individual.surname)
+#
+#         if original_gender == "Unknown" and individual.gender != "Unknown":
+#             create_child_partnership(individual)
+#
+#         db.session.commit()
+#
+#         return redirect(url_for("show_family", parentsid=session["partners.id"]))
+#
+#     return render_template("edit_individual.html", form=form, individual=individual, genders=genders)
 
 
 @app.route("/delete/<id>", methods=["GET", "POST"])

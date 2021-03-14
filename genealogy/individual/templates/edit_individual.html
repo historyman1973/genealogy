@@ -17,6 +17,7 @@
         <div class="col-sm-1">Gender</div>
         <div class="col-sm-4  w-auto">
             <select name="individual_gender" class="form-select" aria-label="Default select example">
+                {% if edit_individual %}
                 {% for gender in genders %}
                 {% if individual.gender == gender %}
                 <option selected value="{{ gender }}">{{ gender }}</option>
@@ -24,6 +25,9 @@
                 <option value="{{ gender }}">{{ gender }}</option>
                 {% endif %}
                 {% endfor %}
+                {% else %}
+                <option value="{{ gender }}">{{ gender }}</option>
+                {% endif %}
             </select>
         </div>
     </div>

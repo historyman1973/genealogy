@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" class="col-md-12">
+    {{form.hidden_tag()}}
+
+    <div class="container-fluid">
+        <div class="form">
+            <div class="row mb-3">
+                <div class=col-md-12" id="address">
+                    {{ wtf.form_field(form.location_address, class='form-control', ) }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 mb-2">
+                    {{ wtf.form_field(form.location_parish, class='form-control') }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 mb-2">
+                    {{ wtf.form_field(form.location_townorcity, class='form-control') }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 mb-2">
+                    {{ wtf.form_field(form.location_county, class='form-control') }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 mb-2">
+                    {{ wtf.form_field(form.location_country, class='form-control') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

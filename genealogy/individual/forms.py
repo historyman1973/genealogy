@@ -100,6 +100,19 @@ def individualview_form(individual_id):
 
     return IndividualView
 
+
+class IndividualView(FlaskForm):
+    individual_forenames = StringField(label="Forenames")
+    individual_surname = StringField(label="Surname")
+    individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
+    individual_dob = DateField('Born', format='%Y-%m-%d')
+    individual_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
+                                                     get_label="full_location")
+    individual_dod = DateField('Died', format='%Y-%m-%d')
+    individual_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
+                                                     get_label="full_location")
+
+
 def relationshipview_form(relationship_id):
     class RelationshipView(FlaskForm):
         marriage_date = DateField('Date of marriage', format='%Y-%m-%d', default=None)
