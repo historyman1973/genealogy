@@ -9,6 +9,7 @@ from ..models import Individual, Parents, Location
 def location_query():
     return Location.query
 
+
 def familyview_form(relationship_id):
     class FamilyView(FlaskForm):
 
