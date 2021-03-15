@@ -4,8 +4,8 @@ from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
 from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
-    add_patgrandmother, add_matgrandfather, add_matgrandmother, session_pop_grandparents, create_child_partnership, \
-    calculate_period, delete_individual
+    add_patgrandmother, add_matgrandfather, add_matgrandmother, add_child, session_pop_grandparents, \
+    create_child_partnership, calculate_period, delete_individual
 from ..master_lists.locations import location_formats
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
@@ -13,24 +13,20 @@ genealogy_blueprint = Blueprint("individual", __name__, template_folder="templat
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    # form = FamilyView()
 
     if Parents.query.get(1) is not None:
         return redirect(url_for("show_family", parentsid=1))
-    #
-    # if request.method == "POST":
-    #
-    #     if request.form.get("addfather") == "Add":
-    #         add_father(form)
-    #
-    #         return redirect(url_for("show_family", parentsid=session["partners.id"]))
-    #
-    #     if request.form.get("addmother") == "Add":
-    #         add_mother(form)
-    #
-    #         return redirect(url_for("show_family", parentsid=session["partners.id"]))
-    #
-    return render_template("home.html")
+
+    form = IndividualView()    
+
+    if request.form.get("individual_gender") == "Male":
+        add_father(form)
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+    elif request.form.get("individual_gender") == "Female":
+        add_mother(form)
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("new_family.html", form=form, genders=genders)
 
 
 @app.route("/family/<parentsid>", methods=["GET", "POST"])
@@ -45,7 +41,7 @@ def show_family(parentsid):
 
     # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
     # the relevant default value selected.
-    form = familyview()
+    familyform = familyview()
 
     marriage_location = Location.query.get(parents.marriage_location)
 
@@ -93,8 +89,7 @@ def show_family(parentsid):
     if request.method == "POST":
 
         if request.form.get("addpatgrandfather") == "Add":
-            add_patgrandfather(form)
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+            return redirect(url_for("add_individual"))
 
         if request.form.get("patgrandfatherfocus") == "focus":
             session_pop_grandparents()
@@ -108,8 +103,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addpatgrandmother") == "Add":
-            add_patgrandmother(form)
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+            return redirect(url_for("add_individual"))
 
         if request.form.get("patgrandmotherfocus") == "focus":
             session_pop_grandparents()
@@ -123,8 +117,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandfather") == "Add":
-            add_matgrandfather(form)
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+            return redirect(url_for("add_individual"))
 
         if request.form.get("matgrandfatherfocus") == "focus":
             session_pop_grandparents()
@@ -138,8 +131,7 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmatgrandmother") == "Add":
-            add_matgrandmother(form)
-            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+            return redirect(url_for("add_individual"))
 
         if request.form.get("matgrandmotherfocus") == "focus":
             session_pop_grandparents()
@@ -153,44 +145,59 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addfather") == "Add":
-            add_father(form)
+            add_father(familyform)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmother") == "Add":
-            add_mother(form)
+            add_mother(familyform)
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+        if request.form.get("addchild") == "Add":
+            add_child(familyform)
+
+            children = db.session.query(Individual) \
+                .join(FamilyLink) \
+                .filter(FamilyLink.parents_id == session["partners.id"]) \
+                .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
+
+            number_children = children.count()
+
+            return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
+                                    mother=mother, patgrandfather=patgrandfather, patgrandmother=patgrandmother,
+                                    matgrandfather=matgrandfather, matgrandmother=matgrandmother,
+                                    number_children=number_children, parents=parents))
 
         if request.form.get("savemarriage") == "Save":
             parents = Parents.query.get(parentsid)
 
-            parents.dom = form.parents_dom.data
+            parents.dom = familyform.parents_dom.data
             db.session.commit()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addrelationship") == "Add":
-            parents.dom = form.parents_dom.data
-            if form.parents_marriage_location.data:
-                parents.marriage_location = form.parents_marriage_location.data.id
+            parents.dom = familyform.parents_dom.data
+            if familyform.parents_marriage_location.data:
+                parents.marriage_location = familyform.parents_marriage_location.data.id
             else:
-                parents.marriage_location = form.parents_marriage_location.data
+                parents.marriage_location = familyform.parents_marriage_location.data
 
             db.session.commit()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addchild") == "Add":
-            child_forenames = form.child_forenames.data
-            child_surname = form.child_surname.data
-            child_gender = form.child_gender.data
-            child_dob = form.child_dob.data
-            if form.child_birth_location.data:
-                child_birth_location = form.child_birth_location.data.id
+            child_forenames = familyform.child_forenames.data
+            child_surname = familyform.child_surname.data
+            child_gender = familyform.child_gender.data
+            child_dob = familyform.child_dob.data
+            if familyform.child_birth_location.data:
+                child_birth_location = familyform.child_birth_location.data.id
             else:
-                child_birth_location = form.child_birth_location.data
-            child_dod = form.child_dod.data
-            if form.child_death_location.data:
-                child_death_location = form.child_death_location.data.id
+                child_birth_location = familyform.child_birth_location.data
+            child_dod = familyform.child_dod.data
+            if familyform.child_death_location.data:
+                child_death_location = familyform.child_death_location.data.id
             else:
-                child_death_location = form.child_death_location.data
+                child_death_location = familyform.child_death_location.data
 
             child_age = calculate_period(child_dob, child_dod)
             child_fullname = fullname(child_forenames, child_surname)
@@ -240,7 +247,7 @@ def show_family(parentsid):
 
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-    return render_template("home.html", form=form, father=father, mother=mother, children=children,
+    return render_template("home.html", form=familyform, father=father, mother=mother, children=children,
                            patgrandfather=patgrandfather, patgrandmother=patgrandmother, matgrandfather=matgrandfather,
                            matgrandmother=matgrandmother, number_children=number_children, parents=parents,
                            marriage_location=marriage_location)
@@ -253,8 +260,39 @@ def individual_list():
     return render_template("list.html", individuals=individuals)
 
 
+@app.route("/add/<role>", methods=["GET", "POST"])
+def add_individual(role):
+
+    edit_individual = False
+
+    form = IndividualView()
+
+    if request.form.get("saveindividual") == "Save":
+        if role == "patgrandfather":
+            add_patgrandfather(form)
+        elif role == "patgrandmother":
+            add_patgrandmother(form)
+        elif role == "matgrandfather":
+            add_matgrandfather(form)
+        elif role == "matgrandmother":
+            add_matgrandmother(form)
+        elif role == "father":
+            add_father(form)
+        elif role == "mother":
+            add_mother(form)
+        elif role == "child":
+            add_child(form)
+
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    return render_template("edit_individual.html", form=form, genders=genders, edit_individual=edit_individual,
+                           role=role)
+
+
 @app.route("/edit/<id>", methods=["GET", "POST"])
 def edit_individual(id):
+
+    edit_individual = True
 
     individual = Individual.query.get_or_404(id)
 
@@ -289,53 +327,8 @@ def edit_individual(id):
 
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
-    return render_template("edit_individual.html", form=form, individual=individual, genders=genders)
-
-
-# @app.route("/edit/<id>", methods=["GET", "POST"])
-# def edit_individual(id):
-#
-#     # add_individual = False
-#
-#     # Grab the Individual object being edited
-#     individual = Individual.query.get_or_404(id)
-#
-#     # Create the IndividualView form within a function which sets the default locations based on the current individual's
-#     # birth and death locations (if they're set) and assign the form to a variable called individualview
-#     individualview = individualview_form(id)
-#
-#     # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
-#     # the relevant default value selected.
-#     form = individualview()
-#
-#     original_gender = individual.gender
-#
-#     if request.form.get("saveindividual") == "Save":
-#         individual.forenames = request.form["individual_forenames"]
-#         individual.surname = request.form["individual_surname"]
-#         individual.gender = request.form["individual_gender"]
-#         individual.dob = form.individual_dob.data
-#         if form.individual_birth_location.data:
-#             individual.birth_location = form.individual_birth_location.data.id
-#         else:
-#             individual.birth_location = form.individual_birth_location.data
-#         individual.dod = form.individual_dod.data
-#         if form.individual_death_location.data:
-#             individual.death_location = form.individual_death_location.data.id
-#         else:
-#             individual.death_location = form.individual_death_location.data
-#         individual.age = calculate_period(individual.dob, individual.dod)
-#
-#         individual.fullname = fullname(individual.forenames, individual.surname)
-#
-#         if original_gender == "Unknown" and individual.gender != "Unknown":
-#             create_child_partnership(individual)
-#
-#         db.session.commit()
-#
-#         return redirect(url_for("show_family", parentsid=session["partners.id"]))
-#
-#     return render_template("edit_individual.html", form=form, individual=individual, genders=genders)
+    return render_template("edit_individual.html", form=form, individual=individual, genders=genders,
+                           edit_individual=edit_individual)
 
 
 @app.route("/delete/<id>", methods=["GET", "POST"])

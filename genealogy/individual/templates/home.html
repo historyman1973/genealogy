@@ -37,76 +37,8 @@
                                 {% elif patgrandfather.dob is none and patgrandfather.dod is none %}
                                 {{ patgrandfather.fullname }} (    -    ){% endif %}</button>
                             {% elif father %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addpatGrandfather">
-                                Add father's father
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="addpatGrandfather" tabindex="-1"
-                                 aria-labelledby="addpatGrandfatherLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addpatGrandfatherLabel">Add grandfather</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.patgrandfather_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.patgrandfather_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.patgrandfather_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.patgrandfather_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.patgrandfather_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.patgrandfather_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add"
-                                                   name="addpatgrandfather"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addpatgrandfather"
+                               href="{{ url_for( 'add_individual', role='patgrandfather') }}">Add father's father</a>
                             {% endif %}
                         </div>
                         <div class="col-6 d-flex">
@@ -137,77 +69,8 @@
                                 </ul>
                             </div>
                             {% elif mother %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-primary col-12 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addmatGrandfather">
-                                Add mother's father
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addmatGrandfather" tabindex="-1"
-                                 aria-labelledby="addmatGrandfatherLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addmatGrandfatherLabel">Add grandfather</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.matgrandfather_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.matgrandfather_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.matgrandfather_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.matgrandfather_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.matgrandfather_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.matgrandfather_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add"
-                                                   name="addmatgrandfather"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addmatgrandfather"
+                               href="{{ url_for( 'add_individual', role='matgrandfather') }}">Add mother's father</a>
                             {% endif %}
                         </div>
                     </div>
@@ -241,77 +104,8 @@
                                 {% elif patgrandmother.dob is none and patgrandmother.dod is none %}
                                 {{ patgrandmother.fullname }} (    -    ){% endif %}</button>
                             {% elif father %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addpatGrandmother">
-                                Add father's mother
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addpatGrandmother" tabindex="-1"
-                                 aria-labelledby="addpatGrandmotherLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addpatGrandmotherLabel">Add grandmother</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.patgrandmother_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.patgrandmother_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.patgrandmother_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.patgrandmother_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.patgrandmother_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.patgrandmother_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add"
-                                                   name="addpatgrandmother"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addpatgrandmother"
+                               href="{{ url_for( 'add_individual', role='patgrandmother') }}">Add father's mother</a>
                             {% endif %}
                         </div>
                         <div class="col d-flex">
@@ -342,77 +136,8 @@
                                 </ul>
                             </div>
                             {% elif mother %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-danger col-12 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addmatGrandmother">
-                                Add mother's mother
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addmatGrandmother" tabindex="-1"
-                                 aria-labelledby="addmatGrandmotherLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addmatGrandmotherLabel">Add grandmother</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.matgrandmother_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.matgrandmother_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.matgrandmother_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.matgrandmother_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.matgrandmother_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.matgrandmother_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add"
-                                                   name="addmatgrandmother"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addmatgrandmother"
+                               href="{{ url_for( 'add_individual', role='matgrandmother') }}">Add mother's mother</a>
                             {% endif %}
                         </div>
                     </div>
@@ -449,76 +174,8 @@
                             <p class="display-6 col-10 text-center">{{ father.fullname }} (    -    )</p>
                             {% endif %}
                             {% else %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-secondary col-12 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addfather">
-                                Add father
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addfather" tabindex="-1" aria-labelledby="addfatherLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addfatherLabel">Add father</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.father_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.father_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.father_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.father_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.father_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.father_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addfather"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
+                               href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
                             {% endif %}
                         </div>
                         <div class="col d-flex">
@@ -551,76 +208,8 @@
                                 </ul>
                             </div>
                             {% else %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-secondary col-12 btn-lg"
-                                    data-bs-toggle="modal" data-bs-target="#addmother">
-                                Add mother
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addmother" tabindex="-1" aria-labelledby="addmotherLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addmotherLabel">Add mother</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-12">
-                                                            {{ wtf.form_field(form.mother_forenames,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-8 mb-2">
-                                                            {{ wtf.form_field(form.mother_surname,
-                                                            class='form-control') }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.mother_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.mother_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.mother_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.mother_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addmother"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="mother"
+                               href="{{ url_for( 'add_individual', role='mother') }}">Add mother</a>
                             {% endif %}
                         </div>
                     </div>
@@ -744,79 +333,8 @@
                         {% endfor %}
                         {% endif %}
                     </table>
-
-
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addChild">
-                        Add child
-                    </button>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="addChild" tabindex="-1" aria-labelledby="addChildLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addChildLabel">Add new child</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="container-fluid">
-                                        <div class="form">
-                                            <div class="row mb-3">
-                                                <div class=col-md-12" id="child_forenames">
-                                                    {{ wtf.form_field(form.child_forenames, class='form-control', ) }}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-8 mb-2">
-                                                    {{ wtf.form_field(form.child_surname, class='form-control') }}
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Gender</label>
-                                                    <div>{{ form.child_gender(class='form-select w-auto') }}</div>
-                                                </div>
-                                            </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.child_dob,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-8">
-                                                            <div class="input-group mb-2">
-                                                                {{ wtf.form_field(form.child_birth_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.child_dod,
-                                                                class='form-control w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-8">
-                                                            <div class="input-group">
-                                                                {{ wtf.form_field(form.child_death_location,
-                                                                class='form-select w-auto') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Add" name="addchild"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <a type="submit" class="btn btn-outline-success col-12 btn-lg" name="father"
+                               href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
                 </div>
             </form>
         </div>

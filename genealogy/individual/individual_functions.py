@@ -5,12 +5,55 @@ from dateutil import relativedelta
 from datetime import datetime
 
 
+def add_child(form):
+    child_forenames = form.individual_forenames.data
+    child_surname = form.individual_surname.data
+    child_gender = form.individual_gender.data
+    child_dob = form.individual_dob.data
+    if form.individual_birth_location.data:
+        child_birth_location = form.individual_birth_location.data.id
+    else:
+        child_birth_location = form.individual_birth_location.data
+    child_dod = form.individual_dod.data
+    if form.individual_death_location.data:
+        child_death_location = form.individual_death_location.data.id
+    else:
+        child_death_location = form.individual_death_location.data
+
+    child_age = calculate_period(child_dob, child_dod)
+    child_fullname = fullname(child_forenames, child_surname)
+
+    new_child = Individual(surname=child_surname, fullname=child_fullname, forenames=child_forenames,
+                           gender=child_gender, dob=child_dob, dod=child_dod, age=child_age,
+                           birth_location=child_birth_location, death_location=child_death_location)
+    db.session.add(new_child)
+
+    db.session.commit()
+    db.session.flush()
+
+    session["child.id"] = new_child.id
+
+    link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
+
+    # Handles male and female children only
+    create_child_partnership(new_child)
+
+    # children = db.session.query(Individual) \
+    #     .join(FamilyLink) \
+    #     .filter(FamilyLink.parents_id == session["partners.id"]) \
+    #     .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
+    #
+    # number_children = children.count()
+
+    return
+
+
 def add_father(form):
-    father_forenames = form.father_forenames.data
-    father_surname = form.father_surname.data
+    father_forenames = form.individual_forenames.data
+    father_surname = form.individual_surname.data
     father_gender = "Male"
-    father_dob = form.father_dob.data
-    father_dod = form.father_dod.data
+    father_dob = form.individual_dob.data
+    father_dod = form.individual_dod.data
     father_fullname = fullname(father_forenames, father_surname)
     father_age = calculate_period(father_dob, father_dod)
 
@@ -34,11 +77,11 @@ def add_father(form):
 
 
 def add_mother(form):
-    mother_forenames = form.mother_forenames.data
-    mother_surname = form.mother_surname.data
+    mother_forenames = form.individual_forenames.data
+    mother_surname = form.individual_surname.data
     mother_gender = "Female"
-    mother_dob = form.mother_dob.data
-    mother_dod = form.mother_dod.data
+    mother_dob = form.individual_dob.data
+    mother_dod = form.individual_dod.data
     mother_fullname = fullname(mother_forenames, mother_surname)
     mother_age = calculate_period(mother_dob, mother_dod)
 
@@ -60,11 +103,11 @@ def add_mother(form):
 
 
 def add_matgrandfather(form):
-    mat_grandfather_forenames = form.matgrandfather_forenames.data
-    mat_grandfather_surname = form.matgrandfather_surname.data
+    mat_grandfather_forenames = form.individual_forenames.data
+    mat_grandfather_surname = form.individual_surname.data
     mat_grandfather_gender = "Male"
-    mat_grandfather_dob = form.matgrandfather_dob.data
-    mat_grandfather_dod = form.matgrandfather_dod.data
+    mat_grandfather_dob = form.individual_dob.data
+    mat_grandfather_dod = form.individual_dod.data
     matgrandfather_fullname = fullname(mat_grandfather_forenames, mat_grandfather_surname)
     mat_grandfather_age = calculate_period(mat_grandfather_dob, mat_grandfather_dod)
 
@@ -91,11 +134,11 @@ def add_matgrandfather(form):
 
 
 def add_matgrandmother(form):
-    matgrandmother_forenames = form.matgrandmother_forenames.data
-    matgrandmother_surname = form.matgrandmother_surname.data
+    matgrandmother_forenames = form.individual_forenames.data
+    matgrandmother_surname = form.individual_surname.data
     matgrandmother_gender = "Female"
-    matgrandmother_dob = form.matgrandmother_dob.data
-    matgrandmother_dod = form.matgrandmother_dod.data
+    matgrandmother_dob = form.individual_dob.data
+    matgrandmother_dod = form.individual_dod.data
     matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
     matgrandmother_age = calculate_period(matgrandmother_dob, matgrandmother_dod)
 
@@ -123,17 +166,22 @@ def add_matgrandmother(form):
 
 
 def add_patgrandfather(form):
-    pat_grandfather_forenames = form.patgrandfather_forenames.data
-    pat_grandfather_surname = form.patgrandfather_surname.data
+
+    pat_grandfather_forenames = form.individual_forenames.data
+    pat_grandfather_surname = form.individual_surname.data
     pat_grandfather_gender = "Male"
-    pat_grandfather_dob = form.patgrandfather_dob.data
-    pat_grandfather_dod = form.patgrandfather_dod.data
+    pat_grandfather_dob = form.individual_dob.data
+    pat_grandfather_birth_location = form.individual_birth_location.data
+    pat_grandfather_dod = form.individual_dod.data
+    pat_grandfather_death_location = form.individual_death_location.data
     patgrandfather_fullname = fullname(pat_grandfather_forenames, pat_grandfather_surname)
     pat_grandfather_age = calculate_period(pat_grandfather_dob, pat_grandfather_dod)
 
     new_patgrandfather = Individual(surname=pat_grandfather_surname, fullname=patgrandfather_fullname,
                                     forenames=pat_grandfather_forenames, gender=pat_grandfather_gender,
-                                    dob=pat_grandfather_dob, dod=pat_grandfather_dod, age=pat_grandfather_age)
+                                    dob=pat_grandfather_dob, dod=pat_grandfather_dod, age=pat_grandfather_age,
+                                    birth_location=pat_grandfather_birth_location,
+                                    death_location=pat_grandfather_death_location)
     db.session.add(new_patgrandfather)
 
     db.session.commit()
@@ -154,11 +202,11 @@ def add_patgrandfather(form):
 
 
 def add_patgrandmother(form):
-    patgrandmother_forenames = form.patgrandmother_forenames.data
-    patgrandmother_surname = form.patgrandmother_surname.data
+    patgrandmother_forenames = form.individual_forenames.data
+    patgrandmother_surname = form.individual_surname.data
     patgrandmother_gender = "Female"
-    patgrandmother_dob = form.patgrandmother_dob.data
-    patgrandmother_dod = form.patgrandmother_dod.data
+    patgrandmother_dob = form.individual_dob.data
+    patgrandmother_dod = form.individual_dod.data
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
     pat_grandmother_age = calculate_period(patgrandmother_dob, patgrandmother_dod)
 

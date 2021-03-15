@@ -18,21 +18,17 @@
         <div class="col-sm-4  w-auto">
             <select name="individual_gender" class="form-select" aria-label="Default select example">
                 {% if edit_individual %}
-                    {% for gender in genders %}
-                        {% if individual.gender == gender %}
-                            <option selected value="{{ gender }}">{{ gender }}</option>
-                        {% else %}
-                            <option value="{{ gender }}">{{ gender }}</option>
-                        {% endif %}
-                    {% endfor %}
-                {% elif (role == "patgrandfather" or role == "matgrandfather" or role == "father") %}
-                    <option selected value="{{ gender }}">Male</option>
-                {% elif (role == "patgrandmother" or role == "matgrandmother" or role == "mother") %}
-                    <option selected value="{{ gender }}">Female</option>
+                {% for gender in genders %}
+                {% if individual.gender == gender %}
+                <option selected value="{{ gender }}">{{ gender }}</option>
                 {% else %}
-                    {% for gender in genders %}
-                        <option value="{{ gender }}">{{ gender }}</option>
-                    {% endfor %}
+                <option value="{{ gender }}">{{ gender }}</option>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                {% for gender in genders %}
+                <option value="{{ gender }}">{{ gender }}</option>
+                {% endfor %}
                 {% endif %}
             </select>
         </div>
