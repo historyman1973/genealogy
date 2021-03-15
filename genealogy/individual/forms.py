@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField
+from wtforms import StringField, SelectField, HiddenField
 from wtforms.fields.html5 import DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from genealogy.models import genders
@@ -87,6 +87,7 @@ def familyview_form(relationship_id):
 
 def individualview_form(individual_id):
     class IndividualView(FlaskForm):
+
         individual_forenames = StringField(label="Forenames", default=Individual.query.get(individual_id).forenames)
         individual_surname = StringField(label="Surname", default=Individual.query.get(individual_id).surname)
         individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
@@ -103,6 +104,7 @@ def individualview_form(individual_id):
 
 
 class IndividualView(FlaskForm):
+
     individual_forenames = StringField(label="Forenames")
     individual_surname = StringField(label="Surname")
     individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
