@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, HiddenField
+from wtforms import StringField, SelectField
 from wtforms.fields.html5 import DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from genealogy.models import genders
@@ -100,6 +100,13 @@ def individualview_form(individual_id):
                                                          get_label="full_location", default=Location.query.filter_by
             (id=Individual.query.get(individual_id).death_location).scalar())
 
+        location_address = StringField(label="Address")
+        location_parish = StringField(label="Parish (Church)")
+        location_district = StringField(label="District or Area")
+        location_townorcity = StringField(label="Town or City")
+        location_county = StringField(label="County")
+        location_country = StringField(label="Country")
+
     return IndividualView
 
 
@@ -115,6 +122,13 @@ class IndividualView(FlaskForm):
     individual_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
                                                      get_label="full_location")
 
+    location_address = StringField(label="Address")
+    location_parish = StringField(label="Parish (Church)")
+    location_district = StringField(label="District or Area")
+    location_townorcity = StringField(label="Town or City")
+    location_county = StringField(label="County")
+    location_country = StringField(label="Country")
+
 
 def relationshipview_form(relationship_id):
     class RelationshipView(FlaskForm):
@@ -125,7 +139,8 @@ def relationshipview_form(relationship_id):
                                              default=Location.query.filter_by(id=Parents.query.get(relationship_id).
                                                                               marriage_location).scalar())
         location_address = StringField(label="Address")
-        location_parish = StringField(label="Parish")
+        location_parish = StringField(label="Parish (Church)")
+        location_district = StringField(label="District or Area")
         location_townorcity = StringField(label="Town or City")
         location_county = StringField(label="County")
         location_country = StringField(label="Country")

@@ -236,7 +236,7 @@
                             </div>
                             {% else %}
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-dark w-auto" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-dark w-auto btn-lg" data-bs-toggle="modal"
                                     data-bs-target="#addrelationship">
                                 Add relationship
                             </button>
@@ -333,7 +333,7 @@
                         {% endfor %}
                         {% endif %}
                     </table>
-                            <a type="submit" class="btn btn-outline-success col-12 btn-lg" name="father"
+                            <a type="submit" class="btn btn-dark w-auto btn-lg" name="father"
                                href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
                 </div>
             </form>

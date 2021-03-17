@@ -6,7 +6,7 @@ from genealogy.individual.forms import familyview_form, IndividualView, individu
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual
-from ..master_lists.locations import location_formats
+from ..master_lists.locations import location_formats, add_location
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
@@ -285,6 +285,9 @@ def add_individual(role):
 
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
+    if request.form.get("addlocation") == "Add":
+        add_location(form)
+
     return render_template("edit_individual.html", form=form, genders=genders, edit_individual=edit_individual,
                            role=role)
 
@@ -326,6 +329,9 @@ def edit_individual(id):
         db.session.commit()
 
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    if request.form.get("addlocation") == "Add":
+        add_location(form)
 
     return render_template("edit_individual.html", form=form, individual=individual, genders=genders,
                            edit_individual=edit_individual)
@@ -370,18 +376,22 @@ def edit_relationship(id):
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     if request.form.get("addlocation") == "Add":
-        address = form.location_address.data
-        parish = form.location_parish.data
-        townorcity = form.location_townorcity.data
-        county = form.location_county.data
-        country = form.location_country.data
-        full_location = location_formats("long", address, parish, townorcity, county, country)
-        short_location = location_formats("short", parish, townorcity, county)
-
-        new_location = Location(address=address, parish=parish, townorcity=townorcity, county=county, country=country,
-                                full_location=full_location, short_location=short_location)
-
-        db.session.add(new_location)
-        db.session.commit()
+        add_location(form)
+        
+        # address = form.location_address.data
+        # parish = form.location_parish.data
+        # district = form.location_district.data
+        # townorcity = form.location_townorcity.data
+        # county = form.location_county.data
+        # country = form.location_country.data
+        # full_location = location_formats("long", address, parish, district, townorcity, county, country)
+        # short_location = location_formats("short", parish, townorcity, county)
+        # 
+        # new_location = Location(address=address, parish=parish, district=district, townorcity=townorcity,
+        #                         county=county, country=country, full_location=full_location,
+        #                         short_location=short_location)
+        # 
+        # db.session.add(new_location)
+        # db.session.commit()
 
     return render_template("edit_relationship.html", form=form, relationship=relationship)

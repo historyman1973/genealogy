@@ -40,6 +40,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.Text)
     parish = db.Column(db.Text)
+    district = db.Column(db.Text)
     townorcity = db.Column(db.Text)
     county = db.Column(db.Text)
     country = db.Column(db.Text)

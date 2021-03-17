@@ -1,4 +1,7 @@
-def location_formats(type, address="", parish="", townorcity="", county="", country=""):
+from genealogy import db
+from ..models import Location
+
+def location_formats(type, address="", parish="", district = "", townorcity="", county="", country=""):
 
     if type == "long":
         long_location = ""
@@ -11,20 +14,26 @@ def location_formats(type, address="", parish="", townorcity="", county="", coun
             else:
                 long_location += parish
 
-        if townorcity:
+        if district:
             if address or parish:
+                long_location += ", " + district
+            else:
+                long_location += district
+
+        if townorcity:
+            if address or parish or district:
                 long_location += ", " + townorcity
             else:
                 long_location += townorcity
 
         if county:
-            if address or parish or townorcity:
+            if address or parish or district or townorcity:
                 long_location += ", " + county
             else:
                 long_location += county
 
         if country:
-            if address or parish or townorcity or county:
+            if address or parish or district or townorcity or county:
                 long_location += ", " + country
             else:
                 long_location += country
@@ -50,3 +59,23 @@ def location_formats(type, address="", parish="", townorcity="", county="", coun
                 short_location += county
 
         return short_location
+
+
+def add_location(form):
+    address = form.location_address.data
+    parish = form.location_parish.data
+    district = form.location_district.data
+    townorcity = form.location_townorcity.data
+    county = form.location_county.data
+    country = form.location_country.data
+    full_location = location_formats("long", address, parish, district, townorcity, county, country)
+    short_location = location_formats("short", parish, townorcity, county)
+
+    new_location = Location(address=address, parish=parish, district=district, townorcity=townorcity,
+                            county=county, country=country, full_location=full_location,
+                            short_location=short_location)
+
+    db.session.add(new_location)
+    db.session.commit()
+
+    return
