@@ -53,9 +53,15 @@ def add_father(form):
     father_surname = form.individual_surname.data
     father_gender = "Male"
     father_dob = form.individual_dob.data
-    father_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        father_birth_location = form.individual_birth_location.data.id
+    else:
+        father_birth_location = form.individual_birth_location.data
     father_dod = form.individual_dod.data
-    father_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        father_death_location = form.individual_death_location.data.id
+    else:
+        father_death_location = form.individual_death_location.data
     father_fullname = fullname(father_forenames, father_surname)
     father_age = calculate_period(father_dob, father_dod)
 
@@ -85,9 +91,15 @@ def add_mother(form):
     mother_surname = form.individual_surname.data
     mother_gender = "Female"
     mother_dob = form.individual_dob.data
-    mother_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        mother_birth_location = form.individual_birth_location.data.id
+    else:
+        mother_birth_location = form.individual_birth_location.data
     mother_dod = form.individual_dod.data
-    mother_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        mother_death_location = form.individual_death_location.data.id
+    else:
+        mother_death_location = form.individual_death_location.data
     mother_fullname = fullname(mother_forenames, mother_surname)
     mother_age = calculate_period(mother_dob, mother_dod)
 
@@ -115,9 +127,15 @@ def add_matgrandfather(form):
     matgrandfather_surname = form.individual_surname.data
     matgrandfather_gender = "Male"
     matgrandfather_dob = form.individual_dob.data
-    matgrandfather_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        matgrandfather_birth_location = form.individual_birth_location.data.id
+    else:
+        matgrandfather_birth_location = form.individual_birth_location.data
     matgrandfather_dod = form.individual_dod.data
-    matgrandfather_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        matgrandfather_death_location = form.individual_death_location.data.id
+    else:
+        matgrandfather_death_location = form.individual_death_location.data
     matgrandfather_fullname = fullname(matgrandfather_forenames, matgrandfather_surname)
     mat_grandfather_age = calculate_period(matgrandfather_dob, matgrandfather_dod)
 
@@ -150,9 +168,15 @@ def add_matgrandmother(form):
     matgrandmother_surname = form.individual_surname.data
     matgrandmother_gender = "Female"
     matgrandmother_dob = form.individual_dob.data
-    matgrandmother_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        matgrandmother_birth_location = form.individual_birth_location.data.id
+    else:
+        matgrandmother_birth_location = form.individual_birth_location.data
     matgrandmother_dod = form.individual_dod.data
-    matgrandmother_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        matgrandmother_death_location = form.individual_death_location.data.id
+    else:
+        matgrandmother_death_location = form.individual_death_location.data
     matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
     matgrandmother_age = calculate_period(matgrandmother_dob, matgrandmother_dod)
 
@@ -187,9 +211,15 @@ def add_patgrandfather(form):
     patgrandfather_surname = form.individual_surname.data
     patgrandfather_gender = "Male"
     patgrandfather_dob = form.individual_dob.data
-    patgrandfather_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        patgrandfather_birth_location = form.individual_birth_location.data.id
+    else:
+        patgrandfather_birth_location = form.individual_birth_location.data
     patgrandfather_dod = form.individual_dod.data
-    patgrandfather_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        patgrandfather_death_location = form.individual_death_location.data.id
+    else:
+        patgrandfather_death_location = form.individual_death_location.data
     patgrandfather_fullname = fullname(patgrandfather_forenames, patgrandfather_surname)
     patgrandfather_age = calculate_period(patgrandfather_dob, patgrandfather_dod)
 
@@ -222,7 +252,10 @@ def add_patgrandmother(form):
     patgrandmother_surname = form.individual_surname.data
     patgrandmother_gender = "Female"
     patgrandmother_dob = form.individual_dob.data
-    patgrandmother_birth_location = form.individual_birth_location.data.id
+    if form.individual_birth_location.data:
+        patgrandmother_birth_location = form.individual_birth_location.data.id
+    else:
+        patgrandmother_birth_location = form.individual_birth_location.data
     patgrandmother_dod = form.individual_dod.data
     patgrandmother_death_location = form.individual_death_location.data.id
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)

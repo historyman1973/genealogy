@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-
-<table class="table mt-5">
+<table class="table">
     <thead>
     <tr class="table-info">
         <th scope="col">ID</th>
+        <th scope="col">ID</th>>
         <th scope="col">Surname</th>
         <th scope="col">Forenames</th>
         <th scope="col">Gender</th>
@@ -16,7 +16,7 @@
     <tbody>
     {% for individual in individuals %}
     <tr>
-        <th scope="row">{{ individual.id}}</th>
+        <th>{{ individual.id}}</th>
         <td>{{ individual.surname }}</td>
         <td>{{ individual.forenames }}</td>
         <td>{{ individual.gender }}</td>

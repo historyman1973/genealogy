@@ -1,6 +1,7 @@
 from genealogy import db
 from ..models import Location
 
+
 def location_formats(type, address="", parish="", district = "", townorcity="", county="", country=""):
 
     if type == "long":
@@ -22,9 +23,9 @@ def location_formats(type, address="", parish="", district = "", townorcity="", 
 
         if townorcity:
             if address or parish or district:
-                long_location += ", " + townorcity
+                long_location += ", " + townorcity.upper()
             else:
-                long_location += townorcity
+                long_location += townorcity.upper()
 
         if county:
             if address or parish or district or townorcity:
@@ -48,9 +49,9 @@ def location_formats(type, address="", parish="", district = "", townorcity="", 
 
         if townorcity:
             if parish:
-                short_location += ", " + townorcity
+                short_location += ", " + townorcity.upper()
             else:
-                short_location += townorcity
+                short_location += townorcity.upper()
 
         if county:
             if parish or townorcity:

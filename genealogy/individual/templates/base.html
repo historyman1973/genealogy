@@ -8,11 +8,19 @@
   {% import "bootstrap/wtf.html" as wtf %}
   {{ moment.include_jquery() }}
   {{ moment.include_moment() }}
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Poppins">
+  <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+      }
+    </style>
   <title>The Genealogy App</title>
 
 </head>
 <body>
-
+<div style="height:68px; width:100%; clear:both;"></div>
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 <div class="alert alert-warning alert-dismissible" role="alert">  <ul class=flashes>
@@ -26,7 +34,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
 
   <div class="navbar-nav">
-    <a class="nav-item nav-link" href="{{ url_for('show_family', parentsid='1') }}">Home</a>
+    <a class="nav-item nav-link" href="{{ url_for('show_family', parentsid=session['partners.id']) }}">Home</a>
     <a class="nav-item nav-link" href="{{ url_for('individual_list') }}">List</a>
   </div>
 

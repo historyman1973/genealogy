@@ -1,343 +1,341 @@
 {% extends "base.html" %}
 {% block content %}
-<div class=class="container-fluid">
-    <div class="card">
-        <div class="card-deck mb-3">
-            <!--        <div class="card-body">-->
-            <form method="POST" class="col-md-12">
-                {{form.hidden_tag()}}
-                <br>
-                <div class="container">
-                    <div class="row mt-5">
-                        <div class="col-6 d-flex">
-                            <!--                        #################################### PATERNAL GRANDFATHER ###-->
-                            {% if patgrandfather %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=patgrandfather.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandfather.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
-                                    name="patgrandfatherfocus" value="focus">
-                                {% if patgrandfather.dob and patgrandfather.dod %}
-                                {{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} -
-                                {{ moment(patgrandfather.dod).format('YYYY') }})
-                                {% elif patgrandfather.dob and patgrandfather.dod is none %}
-                                {{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )
-                                {% elif patgrandfather.dob is none and patgrandfather.dod %}
-                                {{ patgrandfather.fullname }} ( - {{ moment(patgrandfather.dod).format('YYYY') }})
-                                {% elif patgrandfather.dob is none and patgrandfather.dod is none %}
-                                {{ patgrandfather.fullname }} (    -    ){% endif %}</button>
-                            {% elif father %}
-                            <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addpatgrandfather"
-                               href="{{ url_for( 'add_individual', role='patgrandfather') }}">Add father's father</a>
-                            {% endif %}
-                        </div>
-                        <div class="col-6 d-flex">
-                            <!--                        #################################### MATERNAL GRANDFATHER ###-->
-                            {% if matgrandfather %}
-                            <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
-                                    name="matgrandfatherfocus" value="focus">
-                                {% if matgrandfather.dob and matgrandfather.dod %}
-                                {{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} -
-                                {{ moment(matgrandfather.dod).format('YYYY') }})
-                                {% elif matgrandfather.dob and matgrandfather.dod is none %}
-                                {{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )
-                                {% elif matgrandfather.dob is none and matgrandfather.dod %}
-                                {{ matgrandfather.fullname }} ( - {{ moment(matgrandfather.dod).format('YYYY') }})
-                                {% elif matgrandfather.dob is none and matgrandfather.dod is none %}
-                                {{ matgrandfather.fullname }} (    -    ){% endif %}</button>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=matgrandfather.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandfather.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            {% elif mother %}
-                            <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addmatgrandfather"
-                               href="{{ url_for( 'add_individual', role='matgrandfather') }}">Add mother's father</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col d-flex">
-                            <!--                        #################################### PATERNAL GRANDMOTHER ###-->
-                            {% if patgrandmother %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-danger dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=patgrandmother.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandmother.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
-                                    name="patgrandmotherfocus" value="focus">
-                                {% if patgrandmother.dob and patgrandmother.dod %}
-                                {{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} -
-                                {{ moment(patgrandmother.dod).format('YYYY') }})
-                                {% elif patgrandmother.dob and patgrandmother.dod is none %}
-                                {{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )
-                                {% elif patgrandmother.dob is none and patgrandmother.dod %}
-                                {{ patgrandmother.fullname }} ( - {{ moment(patgrandmother.dod).format('YYYY') }})
-                                {% elif patgrandmother.dob is none and patgrandmother.dod is none %}
-                                {{ patgrandmother.fullname }} (    -    ){% endif %}</button>
-                            {% elif father %}
-                            <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addpatgrandmother"
-                               href="{{ url_for( 'add_individual', role='patgrandmother') }}">Add father's mother</a>
-                            {% endif %}
-                        </div>
-                        <div class="col d-flex">
-                            <!--                        #################################### MATERNAL GRANDMOTHER ###-->
-                            {% if matgrandmother %}
-                            <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
-                                    name="matgrandmotherfocus" value="focus">
-                                {% if matgrandmother.dob and matgrandmother.dod %}
-                                {{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} -
-                                {{ moment(matgrandmother.dod).format('YYYY') }})
-                                {% elif matgrandmother.dob and matgrandmother.dod is none %}
-                                {{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )
-                                {% elif matgrandmother.dob is none and matgrandmother.dod %}
-                                {{ matgrandmother.fullname }} ( - {{ moment(matgrandmother.dod).format('YYYY') }})
-                                {% elif matgrandmother.dob is none and matgrandmother.dod is none %}
-                                {{ matgrandmother.fullname }} (    -    ){% endif %}</button>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-danger dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=matgrandmother.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandmother.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            {% elif mother %}
-                            <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addmatgrandmother"
-                               href="{{ url_for( 'add_individual', role='matgrandmother') }}">Add mother's mother</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col d-flex">
-                            <!--                        ################################################## FATHER ###-->
-                            {% if father %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=father.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            {% if father.dob and father.dod %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }}
-                                ({{ moment(father.dob).format('YYYY') }} -
-                                {{ moment(father.dod).format('YYYY') }})</p>
-                            {% elif father.dob and father.dod is none %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }}
-                                ({{ moment(father.dob).format('YYYY') }}
-                                - )</p>
-                            {% elif father.dob is none and father.dod %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }}
-                                ( - {{ moment(father.dod).format('YYYY') }})</p>
-                            {% elif father.dob is none and father.dod is none %}
-                            <p class="display-6 col-10 text-center">{{ father.fullname }} (    -    )</p>
-                            {% endif %}
-                            {% else %}
-                            <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
-                               href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
-                            {% endif %}
-                        </div>
-                        <div class="col d-flex">
-                            <!--                        ################################################## MOTHER ###-->
-                            {% if mother %}
-                            {% if mother.dob and mother.dod %}
-                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                                ({{ moment(mother.dob).format('YYYY') }}
-                                - {{ moment(mother.dod).format('YYYY') }})</p>
-                            {% elif mother.dob and mother.dod is none %}
-                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                                ({{ moment(mother.dob).format('YYYY') }} - )</p>
-                            {% elif mother.dob is none and mother.dod %}
-                            <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                                ( - {{ moment(mother.dod).format('YYYY') }})</p>
-                            {% elif mother.dob is none and mother.dod is none %}
-                            <p class="display-6 col-10 text-center">{{ mother.fullname }} (    -    )</p>
-                            {% endif %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=mother.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            {% else %}
-                            <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="mother"
-                               href="{{ url_for( 'add_individual', role='mother') }}">Add mother</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="container">
-
-                        <div class="row justify-content-center">
-                            {% if parents %}
-                            {% if parents.dom or parents.marriage_location %}
-                            <div class = "col-lg-3 text-end">
-                                <label class="lead">Married: </label>
-                            </div>
-                            {% if parents.dom %}
-                            <div class="col-lg-3 text-center">
-                                <span class="lead">{{ parents.dom | datedisplay }}</span>
-                            </div>
-                            {% endif %}
-                            <div class="col-lg-3 text-start">
-                                <span class="lead">{{ marriage_location.short_location }}</span>
-                            </div>
-                            <div class="col-lg-3 justify-content-center">
-                                <a class="btn btn-secondary btn-lg mx-auto"
-                                   href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
-                            </div>
-                            {% else %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-dark w-auto btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#addrelationship">
-                                Add relationship
+<div class="card">
+    <div class="card-deck mb-3">
+        <!--        <div class="card-body">-->
+        <form method="POST" class="col-md-12">
+            {{form.hidden_tag()}}
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 d-flex">
+                        <!--                        #################################### PATERNAL GRANDFATHER ###-->
+                        {% if patgrandfather %}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
                             </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=patgrandfather.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandfather.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
+                                name="patgrandfatherfocus" value="focus">
+                            {% if patgrandfather.dob and patgrandfather.dod %}
+                            {{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} -
+                            {{ moment(patgrandfather.dod).format('YYYY') }})
+                            {% elif patgrandfather.dob and patgrandfather.dod is none %}
+                            {{ patgrandfather.fullname }} ({{ moment(patgrandfather.dob).format('YYYY') }} - )
+                            {% elif patgrandfather.dob is none and patgrandfather.dod %}
+                            {{ patgrandfather.fullname }} ( - {{ moment(patgrandfather.dod).format('YYYY') }})
+                            {% elif patgrandfather.dob is none and patgrandfather.dod is none %}
+                            {{ patgrandfather.fullname }} (    -    ){% endif %}</button>
+                        {% elif father %}
+                        <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addpatgrandfather"
+                           href="{{ url_for( 'add_individual', role='patgrandfather') }}">Add father's father</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 d-flex">
+                        <!--                        #################################### MATERNAL GRANDFATHER ###-->
+                        {% if matgrandfather %}
+                        <button type="submit" class="btn btn-outline-primary col-10 btn-lg"
+                                name="matgrandfatherfocus" value="focus">
+                            {% if matgrandfather.dob and matgrandfather.dod %}
+                            {{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} -
+                            {{ moment(matgrandfather.dod).format('YYYY') }})
+                            {% elif matgrandfather.dob and matgrandfather.dod is none %}
+                            {{ matgrandfather.fullname }} ({{ moment(matgrandfather.dob).format('YYYY') }} - )
+                            {% elif matgrandfather.dob is none and matgrandfather.dod %}
+                            {{ matgrandfather.fullname }} ( - {{ moment(matgrandfather.dod).format('YYYY') }})
+                            {% elif matgrandfather.dob is none and matgrandfather.dod is none %}
+                            {{ matgrandfather.fullname }} (    -    ){% endif %}</button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=matgrandfather.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandfather.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        {% elif mother %}
+                        <a type="submit" class="btn btn-outline-primary col-12 btn-lg" name="addmatgrandfather"
+                           href="{{ url_for( 'add_individual', role='matgrandfather') }}">Add mother's father</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col d-flex">
+                        <!--                        #################################### PATERNAL GRANDMOTHER ###-->
+                        {% if patgrandmother %}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=patgrandmother.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandmother.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
+                                name="patgrandmotherfocus" value="focus">
+                            {% if patgrandmother.dob and patgrandmother.dod %}
+                            {{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} -
+                            {{ moment(patgrandmother.dod).format('YYYY') }})
+                            {% elif patgrandmother.dob and patgrandmother.dod is none %}
+                            {{ patgrandmother.fullname }} ({{ moment(patgrandmother.dob).format('YYYY') }} - )
+                            {% elif patgrandmother.dob is none and patgrandmother.dod %}
+                            {{ patgrandmother.fullname }} ( - {{ moment(patgrandmother.dod).format('YYYY') }})
+                            {% elif patgrandmother.dob is none and patgrandmother.dod is none %}
+                            {{ patgrandmother.fullname }} (    -    ){% endif %}</button>
+                        {% elif father %}
+                        <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addpatgrandmother"
+                           href="{{ url_for( 'add_individual', role='patgrandmother') }}">Add father's mother</a>
+                        {% endif %}
+                    </div>
+                    <div class="col d-flex">
+                        <!--                        #################################### MATERNAL GRANDMOTHER ###-->
+                        {% if matgrandmother %}
+                        <button type="submit" class="btn btn-outline-danger col-10 btn-lg"
+                                name="matgrandmotherfocus" value="focus">
+                            {% if matgrandmother.dob and matgrandmother.dod %}
+                            {{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} -
+                            {{ moment(matgrandmother.dod).format('YYYY') }})
+                            {% elif matgrandmother.dob and matgrandmother.dod is none %}
+                            {{ matgrandmother.fullname }} ({{ moment(matgrandmother.dob).format('YYYY') }} - )
+                            {% elif matgrandmother.dob is none and matgrandmother.dod %}
+                            {{ matgrandmother.fullname }} ( - {{ moment(matgrandmother.dod).format('YYYY') }})
+                            {% elif matgrandmother.dob is none and matgrandmother.dod is none %}
+                            {{ matgrandmother.fullname }} (    -    ){% endif %}</button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=matgrandmother.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandmother.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        {% elif mother %}
+                        <a type="submit" class="btn btn-outline-danger col-12 btn-lg" name="addmatgrandmother"
+                           href="{{ url_for( 'add_individual', role='matgrandmother') }}">Add mother's mother</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col d-flex">
+                        <!--                        ################################################## FATHER ###-->
+                        {% if father %}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=father.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        {% if father.dob and father.dod %}
+                        <p class="display-6 col-10 text-center">{{ father.fullname }}
+                            ({{ moment(father.dob).format('YYYY') }} -
+                            {{ moment(father.dod).format('YYYY') }})</p>
+                        {% elif father.dob and father.dod is none %}
+                        <p class="display-6 col-10 text-center">{{ father.fullname }}
+                            ({{ moment(father.dob).format('YYYY') }}
+                            - )</p>
+                        {% elif father.dob is none and father.dod %}
+                        <p class="display-6 col-10 text-center">{{ father.fullname }}
+                            ( - {{ moment(father.dod).format('YYYY') }})</p>
+                        {% elif father.dob is none and father.dod is none %}
+                        <p class="display-6 col-10 text-center">{{ father.fullname }} (    -    )</p>
+                        {% endif %}
+                        {% else %}
+                        <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
+                           href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
+                        {% endif %}
+                    </div>
+                    <div class="col d-flex">
+                        <!--                        ################################################## MOTHER ###-->
+                        {% if mother %}
+                        {% if mother.dob and mother.dod %}
+                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
+                            ({{ moment(mother.dob).format('YYYY') }}
+                            - {{ moment(mother.dod).format('YYYY') }})</p>
+                        {% elif mother.dob and mother.dod is none %}
+                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
+                            ({{ moment(mother.dob).format('YYYY') }} - )</p>
+                        {% elif mother.dob is none and mother.dod %}
+                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
+                            ( - {{ moment(mother.dod).format('YYYY') }})</p>
+                        {% elif mother.dob is none and mother.dod is none %}
+                        <p class="display-6 col-10 text-center">{{ mother.fullname }} (    -    )</p>
+                        {% endif %}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=mother.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="mother"
+                           href="{{ url_for( 'add_individual', role='mother') }}">Add mother</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+                <div class="container">
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="addrelationship" tabindex="-1" aria-labelledby="addChildLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addrelationshiplabel">Add relationship</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="form">
-                                                    <div class="row mb-3">
-                                                        <div class=col-md-3" id="marriage_date">
-                                                            {{ wtf.form_field(form.parents_dom,
-                                                            class='form-control w-auto', ) }}
-                                                        </div>
-                                                        <div class=col-md-9" id="marriage_location">
-                                                            {{ wtf.form_field(form.parents_marriage_location,
-                                                            class='form-select w-auto', ) }}
-                                                        </div>
+                    <div class="row justify-content-center">
+                        {% if parents %}
+                        {% if parents.dom or parents.marriage_location %}
+                        <div class = "col-lg-3 text-end">
+                            <label class="lead">Married: </label>
+                        </div>
+                        {% if parents.dom %}
+                        <div class="col-lg-3 text-center">
+                            <span class="lead">{{ parents.dom | datedisplay }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="col-lg-3 text-start">
+                            <span class="lead">{{ marriage_location.short_location }}</span>
+                        </div>
+                        <div class="col-lg-3 justify-content-center">
+                            <a class="btn btn-secondary btn-lg mx-auto"
+                               href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
+                        </div>
+                        {% else %}
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-dark w-auto btn-lg" data-bs-toggle="modal"
+                                data-bs-target="#addrelationship">
+                            Add relationship
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="addrelationship" tabindex="-1" aria-labelledby="addChildLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addrelationshiplabel">Add relationship</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="form">
+                                                <div class="row mb-3">
+                                                    <div class=col-md-3" id="marriage_date">
+                                                        {{ wtf.form_field(form.parents_dom,
+                                                        class='form-control w-auto', ) }}
+                                                    </div>
+                                                    <div class=col-md-9" id="marriage_location">
+                                                        {{ wtf.form_field(form.parents_marriage_location,
+                                                        class='form-select w-auto', ) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Add" name="addrelationship"/>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        <input type="submit" class="btn btn-primary" value="Add"
+                                               name="addrelationship"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
-                        {% endif %}
                     </div>
-                    <br>
-                    <hr>
-                    <div class="row">
-                        <!--                        #################################################### CHILDREN ###-->
-                        <div class="col-12">
-                            <h2 class="text-center">Children ({{ number_children }})</h2>
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                        <tr class="table-success">
-                            <th scope="col"></th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Date of birth</th>
-                            <th scope="col">Date of death</th>
-                            <th scope="col">Age</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if children %}
-                        {% for child in children %}
-                        <tr>
-                            <td><div class="btn-group">
-                                <button type="button" class="btn btn-success dropdown-toggle btn-lg"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    More
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item"
-                                           href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
-                                        Delete</a></li>
-                                </ul>
-                            </div>
-                            </td>
-                            <td><button type="submit" class="btn btn-outline-success col-12 btn-lg"
-                                        name="childfocus" value="{{ child.id }}">{{ child.fullname }}</button></td>
-                            {% if child.dob %}
-                            <td><p class="lead">{{ child.dob | datedisplay }}</p></td>
-                            {% else %}
-                            <td></td>
-                            {% endif %}
-                            {% if child.dod %}
-                            <td><p class="lead">{{ child.dod | datedisplay }}</p></td>
-                            {% else %}
-                            <td></td>
-                            {% endif %}
-                            <td><p class="lead">{{ child.age }} years</p></td>
-                        </tr>
-                        </tbody>
-                        {% endfor %}
-                        {% endif %}
-                    </table>
-                            <a type="submit" class="btn btn-dark w-auto btn-lg" name="father"
-                               href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
+                    {% endif %}
+                    {% endif %}
                 </div>
-            </form>
-        </div>
+                <br>
+                <hr>
+                <div class="row">
+                    <!--                        #################################################### CHILDREN ###-->
+                    <div class="col-12">
+                        <h2 class="text-center">Children ({{ number_children }})</h2>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr class="table-success">
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date of birth</th>
+                        <th scope="col">Date of death</th>
+                        <th scope="col">Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if children %}
+                    {% for child in children %}
+                    <tr>
+                        <td><div class="btn-group">
+                            <button type="button" class="btn btn-success dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        </td>
+                        <td><button type="submit" class="btn btn-outline-success col-12 btn-lg"
+                                    name="childfocus" value="{{ child.id }}">{{ child.fullname }}</button></td>
+                        {% if child.dob %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dob | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% if child.dod %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dod | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.age }} years</p></td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                    {% endif %}
+                </table>
+                <a type="submit" class="btn btn-dark w-auto btn-lg" name="father"
+                   href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

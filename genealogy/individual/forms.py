@@ -7,7 +7,7 @@ from ..models import Individual, Parents, Location
 
 
 def location_query():
-    return Location.query
+    return Location.query.order_by(Location.townorcity)
 
 
 def familyview_form(relationship_id):
