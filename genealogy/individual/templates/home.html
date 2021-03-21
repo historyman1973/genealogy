@@ -157,20 +157,7 @@
                                     Delete</a></li>
                             </ul>
                         </div>
-                        {% if father.dob and father.dod %}
-                        <p class="display-6 col-10 text-center">{{ father.fullname }}
-                            ({{ moment(father.dob).format('YYYY') }} -
-                            {{ moment(father.dod).format('YYYY') }})</p>
-                        {% elif father.dob and father.dod is none %}
-                        <p class="display-6 col-10 text-center">{{ father.fullname }}
-                            ({{ moment(father.dob).format('YYYY') }}
-                            - )</p>
-                        {% elif father.dob is none and father.dod %}
-                        <p class="display-6 col-10 text-center">{{ father.fullname }}
-                            ( - {{ moment(father.dod).format('YYYY') }})</p>
-                        {% elif father.dob is none and father.dod is none %}
-                        <p class="display-6 col-10 text-center">{{ father.fullname }} (    -    )</p>
-                        {% endif %}
+                        <p class="display-6 col-10 text-center">{{ father.fullname }}</p>
                         {% else %}
                         <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
                            href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
@@ -179,19 +166,7 @@
                     <div class="col d-flex">
                         <!--                        ################################################## MOTHER ###-->
                         {% if mother %}
-                        {% if mother.dob and mother.dod %}
-                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                            ({{ moment(mother.dob).format('YYYY') }}
-                            - {{ moment(mother.dod).format('YYYY') }})</p>
-                        {% elif mother.dob and mother.dod is none %}
-                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                            ({{ moment(mother.dob).format('YYYY') }} - )</p>
-                        {% elif mother.dob is none and mother.dod %}
-                        <p class="display-6 col-10 text-center">{{ mother.fullname }}
-                            ( - {{ moment(mother.dod).format('YYYY') }})</p>
-                        {% elif mother.dob is none and mother.dod is none %}
-                        <p class="display-6 col-10 text-center">{{ mother.fullname }} (    -    )</p>
-                        {% endif %}
+                        <p class="display-6 col-10 text-center">{{ mother.fullname }}</p>
                         <div class="btn-group">
                             <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -210,6 +185,54 @@
                            href="{{ url_for( 'add_individual', role='mother') }}">Add mother</a>
                         {% endif %}
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5 pb-0" style="font-size:0.8em">
+                        {% if father.dob and father.birth_location_rel.short_location %}
+                        <p class="col-10 text-center">b. {{ father.dob | datedisplay }} -
+                            {{ father.birth_location_rel.short_location }}</p>
+                        {% elif father.dob and father.birth_location_rel.short_location is none %}
+                        <p class="col-10 text-center">b. {{ father.dob | datedisplay }}</p>
+                        {% elif father.dob is none and father.birth_location_rel.short_location %}
+                        <p class="col-10 text-center">b. {{ father.birth_location_rel.short_location }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-5 pb-0" style="font-size:0.8em">
+                        {% if mother.dob and mother.birth_location_rel.short_location %}
+                        <p class="col-10 text-center">b. {{ mother.dob | datedisplay }} -
+                            {{ mother.birth_location_rel.short_location }}</p>
+                        {% elif mother.dob and mother.birth_location_rel.short_location is none %}
+                        <p class="col-10 text-center">b. {{ mother.dob | datedisplay }}</p>
+                        {% elif mother.dob is none and mother.birth_location_rel.short_location %}
+                        <p class="col-10 text-center">b. {{ mother.birth_location_rel.short_location }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5" style="font-size:0.8em">
+                        {% if father.dod and father.death_location_rel.short_location %}
+                        <p class="col-10 text-center  p-0">d. {{ father.dod | datedisplay }} -
+                            {{ father.death_location_rel.short_location }}</p>
+                        {% elif father.dod and father.death_location_rel.short_location is none %}
+                        <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
+                        {% elif father.dod is none and father.death_location_rel.short_location %}
+                        <p class="col-10 text-center">d. {{ father.death_location_rel.short_location }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-5 pb-0" style="font-size:0.8em">
+                        {% if mother.dod and mother.death_location_rel.short_location %}
+                        <p class="col-10 text-center">d. {{ mother.dod | datedisplay }} -
+                            {{ mother.death_location_rel.short_location }}</p>
+                        {% elif mother.dod and mother.death_location_rel.short_location is none %}
+                        <p class="col-10 text-center">d. {{ mother.dod | datedisplay }}</p>
+                        {% elif mother.dod is none and mother.death_location_rel.short_location %}
+                        <p class="col-10 text-center">d. {{ mother.death_location_rel.short_location }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-1"></div>
                 </div>
                 <hr>
                 <div class="container">

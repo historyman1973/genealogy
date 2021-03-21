@@ -49,9 +49,9 @@ def location_formats(type, address="", parish="", district = "", townorcity="", 
 
         if townorcity:
             if parish:
-                short_location += ", " + townorcity.upper()
+                short_location += ", " + townorcity
             else:
-                short_location += townorcity.upper()
+                short_location += townorcity
 
         if county:
             if parish or townorcity:
@@ -69,8 +69,9 @@ def add_location(form):
     townorcity = form.location_townorcity.data
     county = form.location_county.data
     country = form.location_country.data
-    full_location = location_formats("long", address, parish, district, townorcity, county, country)
-    short_location = location_formats("short", parish, townorcity, county)
+    full_location = location_formats("long", address=address, parish=parish, district=district, townorcity=townorcity,
+                                     county=county, country=country)
+    short_location = location_formats("short", parish=parish, townorcity=townorcity, county=county)
 
     new_location = Location(address=address, parish=parish, district=district, townorcity=townorcity,
                             county=county, country=country, full_location=full_location,

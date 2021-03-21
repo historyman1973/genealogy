@@ -24,8 +24,10 @@ class Individual(db.Model):
     gender = db.Column(db.Text)
     dob = db.Column(db.Date)
     birth_location = db.Column(db.Integer, db.ForeignKey("location.id"))
+    birth_location_rel = db.relationship("Location", foreign_keys="[Individual.birth_location]")
     dod = db.Column(db.Date)
     death_location = db.Column(db.Integer, db.ForeignKey("location.id"))
+    death_location_rel = db.relationship("Location", foreign_keys="[Individual.death_location]")
     age = db.Column(db.Integer)
 
     parents = db.relationship("Parents", secondary=FamilyLink.__table__)

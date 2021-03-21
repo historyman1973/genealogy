@@ -257,7 +257,10 @@ def add_patgrandmother(form):
     else:
         patgrandmother_birth_location = form.individual_birth_location.data
     patgrandmother_dod = form.individual_dod.data
-    patgrandmother_death_location = form.individual_death_location.data.id
+    if form.individual_death_location.data:
+        patgrandmother_death_location = form.individual_death_location.data.id
+    else:
+        patgrandmother_death_location = form.individual_death_location.data
     patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
     pat_grandmother_age = calculate_period(patgrandmother_dob, patgrandmother_dod)
 
