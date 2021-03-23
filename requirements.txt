@@ -1,6 +1,7 @@
 alembic==1.4.3
 click==7.1.2
 Flask==1.1.2
+flask-bootstrap==3.3.7.1
 Flask-Migrate==2.5.3
 flask-moment==0.11.0
 flask-session==0.3.2
