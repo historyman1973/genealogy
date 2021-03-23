@@ -2,11 +2,12 @@ from genealogy import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
-from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, RelationshipView, relationshipview_form
+from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, RelationshipView, \
+    relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual
-from ..master_lists.locations import location_formats, add_location
+from ..master_lists.locations import add_location
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
