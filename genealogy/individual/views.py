@@ -1,8 +1,8 @@
-from app import app
+from genealogy import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
-from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, relationshipview_form
+from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, RelationshipView, relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual
@@ -350,6 +350,33 @@ def delete(id):
     return render_template("delete_individual.html", individual=individual)
 
 
+@app.route("/addrelationship/<id>", methods=["GET", "POST"])
+def add_relationship(id):
+
+    # Grab the Parents object being edited
+    relationship = Parents.query.get_or_404(id)
+
+    # Create the standard 'form' variable (for convention) and assign to it the RelationshipView form which now has
+    # the relevant default value selected.
+    form = RelationshipView()
+
+    if request.form.get("saverelationship") == "Save":
+        relationship.dom = form.marriage_date.data
+        if form.marriage_location.data:
+            relationship.marriage_location = form.marriage_location.data.id
+        else:
+            relationship.marriage_location = form.marriage_location.data
+
+        db.session.commit()
+
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
+    if request.form.get("addlocation") == "Add":
+        add_location(form)
+
+    return render_template("edit_relationship.html", form=form, relationship=relationship)
+
+
 @app.route("/editrelationship/<id>", methods=["GET", "POST"])
 def edit_relationship(id):
 
@@ -377,21 +404,5 @@ def edit_relationship(id):
 
     if request.form.get("addlocation") == "Add":
         add_location(form)
-        
-        # address = form.location_address.data
-        # parish = form.location_parish.data
-        # district = form.location_district.data
-        # townorcity = form.location_townorcity.data
-        # county = form.location_county.data
-        # country = form.location_country.data
-        # full_location = location_formats("long", address, parish, district, townorcity, county, country)
-        # short_location = location_formats("short", parish, townorcity, county)
-        # 
-        # new_location = Location(address=address, parish=parish, district=district, townorcity=townorcity,
-        #                         county=county, country=country, full_location=full_location,
-        #                         short_location=short_location)
-        # 
-        # db.session.add(new_location)
-        # db.session.commit()
 
     return render_template("edit_relationship.html", form=form, relationship=relationship)
