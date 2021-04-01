@@ -1,4 +1,4 @@
-from genealogy import app
+from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from genealogy import db
 from genealogy.models import Individual, Parents, FamilyLink, genders, Location
@@ -289,6 +289,9 @@ def add_individual(role):
     if request.form.get("addlocation") == "Add":
         add_location(form)
 
+        # form.individual_birth_location.data = Location.query.get(session["new_location_id"])
+        # session.pop("new_location.id", None)
+
     return render_template("edit_individual.html", form=form, genders=genders, edit_individual=edit_individual,
                            role=role)
 
@@ -334,6 +337,9 @@ def edit_individual(id):
     if request.form.get("addlocation") == "Add":
         add_location(form)
 
+        # form.individual_birth_location.data = Location.query.get(session["new_location_id"])
+        # session.pop("new_location.id", None)
+
     return render_template("edit_individual.html", form=form, individual=individual, genders=genders,
                            edit_individual=edit_individual)
 
@@ -375,6 +381,9 @@ def add_relationship(id):
     if request.form.get("addlocation") == "Add":
         add_location(form)
 
+        form.marriage_location.data = Location.query.get(session["new_location_id"])
+        session.pop("new_location.id", None)
+
     return render_template("edit_relationship.html", form=form, relationship=relationship)
 
 
@@ -405,5 +414,8 @@ def edit_relationship(id):
 
     if request.form.get("addlocation") == "Add":
         add_location(form)
+
+        form.marriage_location.data = Location.query.get(session["new_location_id"])
+        session.pop("new_location.id", None)
 
     return render_template("edit_relationship.html", form=form, relationship=relationship)

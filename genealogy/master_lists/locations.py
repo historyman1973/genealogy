@@ -1,5 +1,6 @@
 from genealogy import db
 from ..models import Location
+from flask import session
 
 
 def location_formats(type, address="", parish="", district = "", townorcity="", county="", country=""):
@@ -79,5 +80,8 @@ def add_location(form):
 
     db.session.add(new_location)
     db.session.commit()
+    db.session.flush()
+
+    session["new_location_id"] = new_location.id
 
     return

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField
+from wtforms import StringField, SelectField, HiddenField
 from wtforms.fields.html5 import DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from genealogy.models import genders
@@ -26,10 +26,10 @@ def familyview_form(relationship_id):
         patgrandmother_surname = StringField(label="Surname")
         patgrandmother_dob = DateField('Born', format='%Y-%m-%d', default=None)
         patgrandmother_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                           get_label="full_location")
+                                                         get_label="full_location")
         patgrandmother_dod = DateField('Died', format='%Y-%m-%d', default=None)
         patgrandmother_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                           get_label="full_location")
+                                                         get_label="full_location")
         ################################################################################################################
         matgrandfather_forenames = StringField(label="Forenames")
         matgrandfather_surname = StringField(label="Surname")
@@ -53,10 +53,10 @@ def familyview_form(relationship_id):
         father_surname = StringField(label="Surname")
         father_dob = DateField('Born', format='%Y-%m-%d', default="")
         father_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                         get_label="full_location")
+                                                 get_label="full_location")
         father_dod = DateField('Died', format='%Y-%m-%d', default="")
         father_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                         get_label="full_location")
+                                                 get_label="full_location")
         ################################################################################################################
         mother_forenames = StringField(label="Forenames")
         mother_surname = StringField(label="Surname")
@@ -69,18 +69,18 @@ def familyview_form(relationship_id):
         ################################################################################################################
         parents_dom = DateField("Married", format='%Y-%m-%d', default=None)
         parents_marriage_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True, get_label="full_location",
-                                                 default=Location.query.filter_by(id=Parents.query.get(relationship_id).
-                                                                                  marriage_location).scalar())
+                                                     default=Location.query.filter_by(id=Parents.query.get(relationship_id).
+                                                                                      marriage_location).scalar())
         ################################################################################################################
         child_forenames = StringField(label="Forenames")
         child_surname = StringField(label="Surname")
         child_gender = SelectField(label='Gender', choices=[choice for choice in genders])
         child_dob = DateField(label='Born', format='%Y-%m-%d', default=None)
         child_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                 get_label="full_location")
+                                                get_label="full_location")
         child_dod = DateField(label='Died', format='%Y-%m-%d', default=None)
         child_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                 get_label="full_location")
+                                                get_label="full_location")
 
     return FamilyView
 
@@ -93,11 +93,11 @@ def individualview_form(individual_id):
         individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
         individual_dob = DateField('Born', format='%Y-%m-%d', default=Individual.query.get(individual_id).dob)
         individual_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                         get_label="full_location", default=Location.query.filter_by
+                                                     get_label="full_location", default=Location.query.filter_by
             (id=Individual.query.get(individual_id).birth_location).scalar())
         individual_dod = DateField('Died', format='%Y-%m-%d', default=Individual.query.get(individual_id).dod)
         individual_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                         get_label="full_location", default=Location.query.filter_by
+                                                     get_label="full_location", default=Location.query.filter_by
             (id=Individual.query.get(individual_id).death_location).scalar())
 
         location_address = StringField(label="Address")
@@ -117,10 +117,10 @@ class IndividualView(FlaskForm):
     individual_gender = SelectField(u'Gender', choices=[choice for choice in genders])
     individual_dob = DateField('Born', format='%Y-%m-%d')
     individual_birth_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                     get_label="full_location")
+                                                 get_label="full_location")
     individual_dod = DateField('Died', format='%Y-%m-%d')
     individual_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
-                                                     get_label="full_location")
+                                                 get_label="full_location")
 
     location_address = StringField(label="Address")
     location_parish = StringField(label="Parish (Church)")
@@ -146,3 +146,15 @@ def relationshipview_form(relationship_id):
         location_country = StringField(label="Country")
 
     return RelationshipView
+
+
+class RelationshipView(FlaskForm):
+    marriage_date = DateField('Date of marriage', format='%Y-%m-%d', default=None)
+    marriage_location = QuerySelectField(query_factory=location_query, allow_blank=True, get_label="full_location")
+
+    location_address = StringField(label="Address")
+    location_parish = StringField(label="Parish (Church)")
+    location_district = StringField(label="District or Area")
+    location_townorcity = StringField(label="Town or City")
+    location_county = StringField(label="County")
+    location_country = StringField(label="Country")

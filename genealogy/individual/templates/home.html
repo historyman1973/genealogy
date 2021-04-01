@@ -190,46 +190,46 @@
                     <div class="col-1"></div>
                     <div class="col-5 pb-0" style="font-size:0.8em">
                         {% if father.dob and father.birth_location_rel.short_location %}
-                        <p class="col-10 text-center">b. {{ father.dob | datedisplay }} -
+                        <p class="col-10 text-center text-truncate">b. {{ father.dob | datedisplay }} -
                             {{ father.birth_location_rel.short_location }}</p>
                         {% elif father.dob and father.birth_location_rel.short_location is none %}
                         <p class="col-10 text-center">b. {{ father.dob | datedisplay }}</p>
                         {% elif father.dob is none and father.birth_location_rel.short_location %}
-                        <p class="col-10 text-center">b. {{ father.birth_location_rel.short_location }}</p>
+                        <p class="col-10 text-center text-truncate">b. {{ father.birth_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
                     <div class="col-5 pb-0" style="font-size:0.8em">
                         {% if mother.dob and mother.birth_location_rel.short_location %}
-                        <p class="col-10 text-center">b. {{ mother.dob | datedisplay }} -
+                        <p class="col-10 text-center text-truncate">b. {{ mother.dob | datedisplay }} -
                             {{ mother.birth_location_rel.short_location }}</p>
                         {% elif mother.dob and mother.birth_location_rel.short_location is none %}
                         <p class="col-10 text-center">b. {{ mother.dob | datedisplay }}</p>
                         {% elif mother.dob is none and mother.birth_location_rel.short_location %}
-                        <p class="col-10 text-center">b. {{ mother.birth_location_rel.short_location }}</p>
+                        <p class="col-10 text-center text-truncate">b. {{ mother.birth_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
                     <div class="col-1"></div>
                 </div>
-                                <div class="row">
+                <div class="row">
                     <div class="col-1"></div>
                     <div class="col-5" style="font-size:0.8em">
                         {% if father.dod and father.death_location_rel.short_location %}
-                        <p class="col-10 text-center  p-0">d. {{ father.dod | datedisplay }} -
+                        <p class="col-10 text-center text-truncate p-0">d. {{ father.dod | datedisplay }} -
                             {{ father.death_location_rel.short_location }}</p>
                         {% elif father.dod and father.death_location_rel.short_location is none %}
                         <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
                         {% elif father.dod is none and father.death_location_rel.short_location %}
-                        <p class="col-10 text-center">d. {{ father.death_location_rel.short_location }}</p>
+                        <p class="col-10 text-center text-truncate">d. {{ father.death_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
                     <div class="col-5 pb-0" style="font-size:0.8em">
                         {% if mother.dod and mother.death_location_rel.short_location %}
-                        <p class="col-10 text-center">d. {{ mother.dod | datedisplay }} -
+                        <p class="col-10 text-center text-truncate">d. {{ mother.dod | datedisplay }} -
                             {{ mother.death_location_rel.short_location }}</p>
                         {% elif mother.dod and mother.death_location_rel.short_location is none %}
                         <p class="col-10 text-center">d. {{ mother.dod | datedisplay }}</p>
                         {% elif mother.dod is none and mother.death_location_rel.short_location %}
-                        <p class="col-10 text-center">d. {{ mother.death_location_rel.short_location }}</p>
+                        <p class="col-10 text-center text-truncate">d. {{ mother.death_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
                     <div class="col-1"></div>
@@ -248,55 +248,16 @@
                             <span class="lead">{{ parents.dom | datedisplay }}</span>
                         </div>
                         {% endif %}
-                        <div class="col-lg-3 text-start">
+                        <div class="col-lg-4 text-start text-truncate">
                             <span class="lead">{{ marriage_location.short_location }}</span>
                         </div>
-                        <div class="col-lg-3 justify-content-center">
+                        <div class="col-lg-2 justify-content-center">
                             <a class="btn btn-secondary btn-lg mx-auto"
                                href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
                         </div>
                         {% else %}
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-dark w-auto btn-lg" data-bs-toggle="modal"
-                                data-bs-target="#addrelationship">
-                            Add relationship
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="addrelationship" tabindex="-1" aria-labelledby="addChildLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="addrelationshiplabel">Add relationship</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="container-fluid">
-                                            <div class="form">
-                                                <div class="row mb-3">
-                                                    <div class=col-md-3" id="marriage_date">
-                                                        {{ wtf.form_field(form.parents_dom,
-                                                        class='form-control w-auto', ) }}
-                                                    </div>
-                                                    <div class=col-md-9" id="marriage_location">
-                                                        {{ wtf.form_field(form.parents_marriage_location,
-                                                        class='form-select w-auto', ) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                        <input type="submit" class="btn btn-primary" value="Add"
-                                               name="addrelationship"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <a type="submit" class="btn btn-dark col-12 btn-lg w-auto" name="addmatgrandfather"
+                           href="{{ url_for( 'add_relationship', id=parents.id) }}">Add relationship</a>
                     </div>
                     {% endif %}
                     {% endif %}
@@ -349,7 +310,11 @@
                         {% else %}
                         <td></td>
                         {% endif %}
-                        <td valign="middle"><p class="lead mb-0">{{ child.age }} years</p></td>
+                        {% if child.age %}
+                        <td align="center">{{ child.age }} years</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
                     </tr>
                     </tbody>
                     {% endfor %}

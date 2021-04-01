@@ -46,7 +46,8 @@
             </div>
             <!-- Button trigger modal -->
             <div class="col-sm-2 w-auto align-self-end mb-0">
-            <a class="link-success" href="" data-bs-toggle="modal" data-bs-target="#addlocation">Add new location</a>
+                <a class="link-success" href="" id="birth_location" data-bs-toggle="modal" data-bs-target="#addlocation">
+                    Add new location</a>
             </div>
         </div>
 
@@ -59,13 +60,19 @@
             </div>
             <!-- Button trigger modal -->
             <div class="col-sm-2 w-auto align-self-end mb-0">
-            <a class="link-success" href="" data-bs-toggle="modal" data-bs-target="#addlocation">Add new location</a>
+                <a class="link-success" href="" id="death_location" data-bs-toggle="modal" data-bs-target="#addlocation">
+                    Add new location</a>
             </div>
         </div>
     </div>
     <br>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-primary mx-auto" type="submit" name="saveindividual" value="Save">Save</button>
+    </div>
+    <br>
+    <!--    Test button-->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary mx-auto" type="submit" id="test" value="Save">Test</button>
     </div>
 
 
@@ -80,6 +87,7 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="type" id="type" value=""/>
                     <div class="container-fluid">
                         <div class="form">
                             <div class="row mb-3">
@@ -118,11 +126,49 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Add" name="addlocation"/>
+                    <input type="submit" class="btn btn-primary" id = 'btnaddlocation' value="Add" name="addlocation"/>
                 </div>
             </div>
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    var eventType = "";
+    var birthlocation = document.getElementById('individual_birth_location');
+    var deathlocation = document.getElementById('individual_death_location');
+    var len = birthlocation.length.toString();
 
+    document.getElementById('birth_location').onclick = function() {
+    eventType = "birth";
+    console.log(eventType);
+    }
+
+    document.getElementById("death_location").onclick = function() {
+    eventType = "death";
+    console.log(eventType);
+    }
+
+    document.getElementById('btnaddlocation').onclick = function() {
+    if (eventType === 'birth') {
+        console.log("Value of eventType is: " + eventType)
+        console.log("Length of birthlocation is " + document.getElementById('individual_birth_location').length.toString() + ", which is a " + typeof(document.getElementById('individual_birth_location').length.toString()))
+
+<!--        while (i < 10) {-->
+<!--            task(i);-->
+<!--            i++;-->
+<!--        }-->
+
+        document.getElementById('individual_birth_location').value = birthlocation.length;
+        console.log("Did that work?")
+    } else if (eventType === "death") {
+        deathlocation.value = "2";
+    }
+    }
+
+    document.getElementById('test').onclick = function() {
+    console.log("Test button pressed, length of options is " + len)
+    birthlocation.value = len;
+    }
+
+</script>
 {% endblock %}
