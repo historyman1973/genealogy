@@ -16,19 +16,16 @@ genealogy_blueprint = Blueprint("individual", __name__, template_folder="templat
 def index():
 
     if Parents.query.get(1) is not None:
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     form = IndividualView()    
 
     if request.form.get("individual_gender") == "Male":
         add_father(form)
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
     elif request.form.get("individual_gender") == "Female":
         add_mother(form)
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("new_family.html", form=form, genders=genders)
 
@@ -99,9 +96,15 @@ def show_family(parentsid):
     except:
         matgrandmother = None
 
-    fatherspartners = db.session.query(Parents).filter(Parents.father_id == session["father.id"])
+    if father:
+        fatherspartners = db.session.query(Parents).filter(Parents.father_id == session["father.id"])
+    else:
+        fatherspartners = None
 
-    motherspartners = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"])
+    if mother:
+        motherspartners = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"])
+    else:
+        motherspartners = None
 
     if request.method == "POST":
 
@@ -235,17 +238,15 @@ def show_family(parentsid):
             # Handles male and female children only
             create_child_partnership(new_child)
 
-            # children = db.session.query(Individual) \
-            #     .join(FamilyLink) \
-            #     .filter(FamilyLink.parents_id == parentsid) \
-            #     .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
-
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parents.id) \
                 .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
 
             number_children = children.count()
+
+            # List of list of children objects per partner id
+
 
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
                                     mother=mother, patgrandfather=patgrandfather, patgrandmother=patgrandmother,

@@ -240,11 +240,19 @@
                     <div class="row justify-content-center">
                         {% if parents %}
                         <div class = "col-2">
+                            {% if father %}
+                            {% if fatherspartners.count()-1 > 0 %}
                             <button type="button" class="btn btn-info dropdown-toggle float-left w-auto"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 Partners (+{{ fatherspartners.count()-1 }})
                             </button>
+                            {% else %}
+                            <button type="button" class="btn btn-info dropdown-toggle float-left w-auto"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Partners</button>
+                            {% endif %}
+                            {% endif %}
                             <ul class="dropdown-menu w-auto">
+                                {% if fatherspartners %}
                                 {% for partner in fatherspartners %}
                                 {% if partner.id != parents.id %}
                                 <li><a class="dropdown-item"
@@ -252,11 +260,13 @@
                                     {{ partner.mother_fullname_rel.fullname }}</a></li>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'add_individual',
                                 role='fatherspartner' ) }}">
                                     Add</a></li>
                             </ul>
+                            {% endif %}
                         </div>
                         {% if parents.dom or parents.marriage_location %}
                         <div class = "col-1 text-end">
@@ -280,13 +290,21 @@
                         <a type="submit" class="btn btn-dark col-12 btn-lg w-auto" name="addmatgrandfather"
                            href="{{ url_for( 'add_relationship', id=parents.id) }}">Add relationship</a>
                         {% endif %}
-                        {% endif %}
+                        {% if mother %}
                         <div class = "col-lg-2 float-end">
+                            {% if mother %}
+                            {% if motherspartners.count()-1 > 0 %}
                             <button type="button" class="btn btn-info dropdown-toggle w-auto float-end"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 Partners (+{{ motherspartners.count()-1 }})
                             </button>
+                            {% else %}
+                            <button type="button" class="btn btn-info dropdown-toggle w-auto float-end"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Partners</button>
+                            {% endif %}
+                            {% endif %}
                             <ul class="dropdown-menu w-auto">
+                                {% if motherspartners %}
                                 {% for partner in motherspartners %}
                                 {% if partner.id != parents.id %}
                                 <li><a class="dropdown-item"
@@ -294,12 +312,14 @@
                                     {{ partner.father_fullname_rel.fullname }}</a></li>
                                 {% endif %}
                                 {% endfor %}
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'add_individual',
                                 role='motherspartner' ) }}">
                                     Add</a></li>
                             </ul>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
