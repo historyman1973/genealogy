@@ -235,33 +235,75 @@
                     <div class="col-1"></div>
                 </div>
                 <hr>
+                <!--              #         ####################################################### RELATIONSHIPS ###-->
                 <div class="container">
-
                     <div class="row justify-content-center">
                         {% if parents %}
+                        <div class = "col-2">
+                            <button type="button" class="btn btn-info dropdown-toggle float-left w-auto"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                Partners (+{{ fatherspartners.count()-1 }})
+                            </button>
+                            <ul class="dropdown-menu w-auto">
+                                {% for partner in fatherspartners %}
+                                {% if partner.id != parents.id %}
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'show_family', parentsid=partner.id ) }}">
+                                    {{ partner.mother_fullname_rel.fullname }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'add_individual',
+                                role='fatherspartner' ) }}">
+                                    Add</a></li>
+                            </ul>
+                        </div>
                         {% if parents.dom or parents.marriage_location %}
-                        <div class = "col-lg-3 text-end">
+                        <div class = "col-1 text-end">
                             <label class="lead">Married: </label>
                         </div>
-                        {% if parents.dom %}
-                        <div class="col-lg-3 text-center">
+                        <div class="col-3 text-center">
+                            {% if parents.dom %}
                             <span class="lead">{{ parents.dom | datedisplay }}</span>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                        <div class="col-lg-4 text-start text-truncate">
+                        <div class="col-3 text-truncate">
+                            {% if parents.marriage_location %}
                             <span class="lead">{{ marriage_location.short_location }}</span>
+                            {% endif %}
                         </div>
-                        <div class="col-lg-2 justify-content-center">
-                            <a class="btn btn-secondary btn-lg mx-auto"
+                        <div class="col-1 justify-content-center">
+                            <a class="btn btn-info mx-auto"
                                href="{{ url_for( 'edit_relationship', id=parents.id ) }}">Edit</a>
                         </div>
                         {% else %}
                         <a type="submit" class="btn btn-dark col-12 btn-lg w-auto" name="addmatgrandfather"
                            href="{{ url_for( 'add_relationship', id=parents.id) }}">Add relationship</a>
+                        {% endif %}
+                        {% endif %}
+                        <div class = "col-lg-2 float-end">
+                            <button type="button" class="btn btn-info dropdown-toggle w-auto float-end"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                Partners (+{{ motherspartners.count()-1 }})
+                            </button>
+                            <ul class="dropdown-menu w-auto">
+                                {% for partner in motherspartners %}
+                                {% if partner.id != parents.id %}
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'show_family', parentsid=partner.id ) }}">
+                                    {{ partner.father_fullname_rel.fullname }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'add_individual',
+                                role='motherspartner' ) }}">
+                                    Add</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    {% endif %}
-                    {% endif %}
                 </div>
+            </div>
+            <div class = "container">
                 <br>
                 <hr>
                 <div class="row">

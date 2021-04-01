@@ -38,13 +38,6 @@ def add_child(form):
     # Handles male and female children only
     create_child_partnership(new_child)
 
-    # children = db.session.query(Individual) \
-    #     .join(FamilyLink) \
-    #     .filter(FamilyLink.parents_id == session["partners.id"]) \
-    #     .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
-    #
-    # number_children = children.count()
-
     return
 
 
@@ -204,6 +197,41 @@ def add_matgrandmother(form):
 
     return
 
+
+def add_partner(form, forwhom):
+    partner_forenames = form.individual_forenames.data
+    partner_surname = form.individual_surname.data
+    partner_gender = "Female"
+    partner_dob = form.individual_dob.data
+    if form.individual_birth_location.data:
+        partner_birth_location = form.individual_birth_location.data.id
+    else:
+        partner_birth_location = form.individual_birth_location.data
+    partner_dod = form.individual_dod.data
+    if form.individual_death_location.data:
+        partner_death_location = form.individual_death_location.data.id
+    else:
+        partner_death_location = form.individual_death_location.data
+    partner_fullname = fullname(partner_forenames, partner_surname)
+    partner_age = calculate_period(partner_dob, partner_dod)
+
+    new_partner = Individual(surname=partner_surname, fullname=partner_fullname, forenames=partner_forenames,
+                            gender=partner_gender, dob=partner_dob, birth_location=partner_birth_location,
+                            dod=partner_dod, death_location=partner_death_location,
+                            age=partner_age)
+    db.session.add(new_partner)
+
+    db.session.commit()
+    db.session.flush()
+
+    if forwhom == "father":
+        session["mother.id"] = new_partner.id
+    elif forwhom == "mother":
+        session["father.id"] = new_partner.id
+
+    create_partners(partner_type="parents", father_id=session["father.id"], mother_id=session["mother.id"])
+
+    return
 
 def add_patgrandfather(form):
 

@@ -46,8 +46,8 @@
             </div>
             <!-- Button trigger modal -->
             <div class="col-sm-2 w-auto align-self-end mb-0">
-                <a class="link-success" href="" id="birth_location" data-bs-toggle="modal" data-bs-target="#addlocation">
-                    Add new location</a>
+                <a class="link-success" href="" id="birth_location" data-bs-toggle="modal"
+                   data-bs-target="#addlocation">Add new location</a>
             </div>
         </div>
 
@@ -60,8 +60,8 @@
             </div>
             <!-- Button trigger modal -->
             <div class="col-sm-2 w-auto align-self-end mb-0">
-                <a class="link-success" href="" id="death_location" data-bs-toggle="modal" data-bs-target="#addlocation">
-                    Add new location</a>
+                <a class="link-success" href="" id="death_location" data-bs-toggle="modal"
+                   data-bs-target="#addlocation">Add new location</a>
             </div>
         </div>
     </div>
@@ -70,10 +70,6 @@
         <button class="btn btn-primary mx-auto" type="submit" name="saveindividual" value="Save">Save</button>
     </div>
     <br>
-    <!--    Test button-->
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button class="btn btn-primary mx-auto" type="submit" id="test" value="Save">Test</button>
-    </div>
 
 
     <!-- Modal -->
@@ -151,13 +147,9 @@
     document.getElementById('btnaddlocation').onclick = function() {
     if (eventType === 'birth') {
         console.log("Value of eventType is: " + eventType)
-        console.log("Length of birthlocation is " + document.getElementById('individual_birth_location').length.toString() + ", which is a " + typeof(document.getElementById('individual_birth_location').length.toString()))
-
-<!--        while (i < 10) {-->
-<!--            task(i);-->
-<!--            i++;-->
-<!--        }-->
-
+        console.log("Length of birthlocation is " +
+        document.getElementById('individual_birth_location').length.toString() + ", which is a " +
+        typeof(document.getElementById('individual_birth_location').length.toString()))
         document.getElementById('individual_birth_location').value = birthlocation.length;
         console.log("Did that work?")
     } else if (eventType === "death") {

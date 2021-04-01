@@ -61,7 +61,9 @@ class Parents(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     father_id = db.Column(db.Integer, db.ForeignKey("individual.id"))
+    father_fullname_rel = db.relationship("Individual", foreign_keys="[Parents.father_id]")
     mother_id = db.Column(db.Integer, db.ForeignKey("individual.id"))
+    mother_fullname_rel = db.relationship("Individual", foreign_keys="[Parents.mother_id]")
     dom = db.Column(db.Date)
     marriage_location = db.Column(db.Integer, db.ForeignKey("location.id"))
 
