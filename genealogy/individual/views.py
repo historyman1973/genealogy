@@ -8,6 +8,7 @@ from genealogy.individual.individual_functions import fullname, link_child, add_
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_partner, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual
 from ..master_lists.locations import add_location
+from operator import itemgetter
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
@@ -16,19 +17,16 @@ genealogy_blueprint = Blueprint("individual", __name__, template_folder="templat
 def index():
 
     if Parents.query.get(1) is not None:
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     form = IndividualView()    
 
     if request.form.get("individual_gender") == "Male":
         add_father(form)
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
     elif request.form.get("individual_gender") == "Female":
         add_mother(form)
-        # return redirect(url_for("show_family", parentsid=session["partners.id"]))
-        return redirect(url_for("show_family"))
+        return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("new_family.html", form=form, genders=genders)
 
@@ -99,9 +97,29 @@ def show_family(parentsid):
     except:
         matgrandmother = None
 
-    fatherspartners = db.session.query(Parents).filter(Parents.father_id == session["father.id"])
+    if father:
+        fatherspartners = db.session.query(Parents).filter(Parents.father_id == session["father.id"])
+    else:
+        fatherspartners = None
 
-    motherspartners = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"])
+    if mother:
+        motherspartners = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"])
+    else:
+        motherspartners = None
+
+    fatherotherfamilies = {}
+    fatherfamilies = db.session.query(Parents).filter(Parents.father_id == session["father.id"]).\
+        filter(Parents.id != parents.id).all()
+    for fatherfamily in fatherfamilies:
+        fatherotherfamilies[fatherfamily] = db.session.query(Individual).join(FamilyLink).\
+            filter(FamilyLink.parents_id == fatherfamily.id).filter(FamilyLink.individual_id).order_by(Individual.dob)
+
+    motherotherfamilies = {}
+    motherfamilies = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"]).\
+            filter(Parents.id != parents.id).all()
+    for motherfamily in motherfamilies:
+        motherotherfamilies[motherfamily] = db.session.query(Individual).join(FamilyLink).\
+            filter(FamilyLink.parents_id == motherfamily.id).filter(FamilyLink.individual_id).order_by(Individual.dob)
 
     if request.method == "POST":
 
@@ -235,11 +253,6 @@ def show_family(parentsid):
             # Handles male and female children only
             create_child_partnership(new_child)
 
-            # children = db.session.query(Individual) \
-            #     .join(FamilyLink) \
-            #     .filter(FamilyLink.parents_id == parentsid) \
-            #     .filter(FamilyLink.individual_id == Individual.id).order_by(Individual.dob)
-
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
                 .filter(FamilyLink.parents_id == parents.id) \
@@ -250,7 +263,8 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"], children=children, father=father,
                                     mother=mother, patgrandfather=patgrandfather, patgrandmother=patgrandmother,
                                     matgrandfather=matgrandfather, matgrandmother=matgrandmother,
-                                    number_children=number_children, parents=parents))
+                                    number_children=number_children, parents=parents,
+                                    fatherotherfamilies=fatherotherfamilies, motherotherfamilies=motherotherfamilies))
 
         if request.form.get("childfocus"):
             child_id = request.form.get('childfocus')
@@ -274,7 +288,8 @@ def show_family(parentsid):
                            patgrandfather=patgrandfather, patgrandmother=patgrandmother, matgrandfather=matgrandfather,
                            matgrandmother=matgrandmother, number_children=number_children, parents=parents,
                            marriage_location=marriage_location, fatherspartners=fatherspartners,
-                           motherspartners=motherspartners)
+                           motherspartners=motherspartners, fatherotherfamilies=fatherotherfamilies,
+                           motherotherfamilies=motherotherfamilies)
 
 
 @app.route("/list", methods=["GET", "POST"])
