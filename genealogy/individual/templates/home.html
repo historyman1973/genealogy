@@ -157,16 +157,16 @@
                                     Delete</a></li>
                             </ul>
                         </div>
-                        <p class="display-6 col-10 text-center">{{ father.fullname }}</p>
+                        <p class="display-6 col-10 text-center text-primary">{{ father.fullname }}</p>
                         {% else %}
                         <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
                            href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
                         {% endif %}
                     </div>
                     <div class="col d-flex">
-                        <!--                        ################################################## MOTHER ###-->
+                        <!--                        ###################################################### MOTHER ###-->
                         {% if mother %}
-                        <p class="display-6 col-10 text-center">{{ mother.fullname }}</p>
+                        <p class="display-6 col-10 text-center text-danger">{{ mother.fullname }}</p>
                         <div class="btn-group">
                             <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -189,22 +189,22 @@
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-5 pb-0" style="font-size:0.8em">
-                        {% if father.dob and father.birth_location_rel.short_location %}
+                        {% if father.dob and father.birth_location %}
                         <p class="col-10 text-center text-truncate">b. {{ father.dob | datedisplay }} -
                             {{ father.birth_location_rel.short_location }}</p>
-                        {% elif father.dob and father.birth_location_rel.short_location is none %}
+                        {% elif father.dob and father.birth_location is none %}
                         <p class="col-10 text-center">b. {{ father.dob | datedisplay }}</p>
-                        {% elif father.dob is none and father.birth_location_rel.short_location %}
+                        {% elif father.dob is none and father.birth_location %}
                         <p class="col-10 text-center text-truncate">b. {{ father.birth_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
                     <div class="col-5 pb-0" style="font-size:0.8em">
-                        {% if mother.dob and mother.birth_location_rel.short_location %}
+                        {% if mother.dob and mother.birth_location %}
                         <p class="col-10 text-center text-truncate">b. {{ mother.dob | datedisplay }} -
                             {{ mother.birth_location_rel.short_location }}</p>
-                        {% elif mother.dob and mother.birth_location_rel.short_location is none %}
+                        {% elif mother.dob and mother.birth_location is none %}
                         <p class="col-10 text-center">b. {{ mother.dob | datedisplay }}</p>
-                        {% elif mother.dob is none and mother.birth_location_rel.short_location %}
+                        {% elif mother.dob is none and mother.birth_location %}
                         <p class="col-10 text-center text-truncate">b. {{ mother.birth_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
@@ -213,12 +213,12 @@
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-5" style="font-size:0.8em">
-                        {% if father.dod and father.death_location_rel.short_location %}
+                        {% if father.dod and father.death_location %}
                         <p class="col-10 text-center text-truncate p-0">d. {{ father.dod | datedisplay }} -
-                            {{ father.death_location_rel.short_location }}</p>
+                            {{ father.death_location }}</p>
                         {% elif father.dod and father.death_location_rel.short_location is none %}
                         <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
-                        {% elif father.dod is none and father.death_location_rel.short_location %}
+                        {% elif father.dod is none and father.death_location %}
                         <p class="col-10 text-center text-truncate">d. {{ father.death_location_rel.short_location }}</p>
                         {% endif %}
                     </div>
@@ -327,7 +327,7 @@
                 <br>
                 <hr>
                 <div class="row">
-                    <!--                        #################################################### CHILDREN ###-->
+                    <!--                        ######################################################## CHILDREN ###-->
                     <div class="col-12">
                         <h2 class="text-center">Children ({{ number_children }})</h2>
                     </div>
@@ -382,8 +382,143 @@
                     {% endfor %}
                     {% endif %}
                 </table>
-                <a type="submit" class="btn btn-dark w-auto btn-lg" name="father"
-                   href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
+
+                <div class="row justify-content-center">
+                    <a type="submit" class="btn btn-dark w-auto btn-lg " name="father"
+                       href="{{ url_for( 'add_individual', role='child') }}">Add child</a>
+                </div>
+
+                <!--              #         ##################################################### FATHER PARTNERS ###-->
+                {% for family in fatherotherfamilies %}
+                {% if family.children %}
+                <div class="row mt-5">
+                    <div class="col-11">
+                        <h2 class="text-center text-primary">
+                            Children of {{ family.father_fullname_rel.fullname }} and
+                            {{ family.mother_fullname_rel.fullname }} ({{ family.children|length }})</h2>
+                    </div>
+                    <div class="col-1">
+                        <a class="btn btn-primary" href="{{ url_for( 'show_family', parentsid=family.id ) }}">Go to</a>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr class="table-success">
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date of birth</th>
+                        <th scope="col">Date of death</th>
+                        <th scope="col">Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- For each child in the values against the current dictionary key  -->
+                    {% for child in fatherotherfamilies[family] %}
+                    <tr>
+                        <td><div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        </td>
+                        <td><button type="submit" class="btn btn-outline-primary col-12 btn-lg"
+                                    name="childfocus" value="{{ child.id }}">{{ child.fullname }}</button></td>
+                        {% if child.dob %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dob | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% if child.dod %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dod | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% if child.age %}
+                        <td align="center">{{ child.age }} years</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% endfor %}
+
+                <!--              ############################################################### MOTHER PARTNERS ###-->
+
+                {% for family in motherotherfamilies %}
+                {% if family.children %}
+                <div class="row mt-5">
+                    <div class="col-11">
+                        <h2 class="text-center text-danger">
+                            Children of {{ family.mother_fullname_rel.fullname }} and
+                            {{ family.father_fullname_rel.fullname }} ({{ family.children|length }})</h2>
+                    </div>
+                    <div class="col-1">
+                        <a class="btn btn-danger" href="{{ url_for( 'show_family', parentsid=family.id ) }}">Go to</a>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr class="table-success">
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date of birth</th>
+                        <th scope="col">Date of death</th>
+                        <th scope="col">Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- For each child in the values against the current dictionary key  -->
+                    {% for child in motherotherfamilies[family] %}
+                    <tr>
+                        <td><div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle btn-lg"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                        </td>
+                        <td><button type="submit" class="btn btn-outline-danger col-12 btn-lg"
+                                    name="childfocus" value="{{ child.id }}">{{ child.fullname }}</button></td>
+                        {% if child.dob %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dob | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% if child.dod %}
+                        <td valign="middle"><p class="lead mb-0">{{ child.dod | datedisplay }}</p></td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% if child.age %}
+                        <td align="center">{{ child.age }} years</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% endfor %}
+
             </div>
         </form>
     </div>
