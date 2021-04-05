@@ -17,7 +17,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=patgrandfather.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=patgrandfather.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandfather.id ) }}">
                                     Delete</a></li>
@@ -60,7 +61,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=matgrandfather.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=matgrandfather.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandfather.id ) }}">
                                     Delete</a></li>
@@ -84,7 +86,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=patgrandmother.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=patgrandmother.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=patgrandmother.id ) }}">
                                     Delete</a></li>
@@ -127,7 +130,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=matgrandmother.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=matgrandmother.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=matgrandmother.id ) }}">
                                     Delete</a></li>
@@ -151,7 +155,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=father.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=father.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
                                     Delete</a></li>
@@ -174,7 +179,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=mother.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=mother.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
                                     Delete</a></li>
@@ -353,7 +359,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=child.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
                                     Delete</a></li>
@@ -422,7 +429,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=child.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
                                     Delete</a></li>
@@ -488,7 +496,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', id=child.id ) }}">Edit</a></li>
+                                       href="{{ url_for( 'edit_individual', context='familyview',
+                                       id=child.id ) }}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for( 'delete', id=child.id ) }}">
                                     Delete</a></li>
@@ -518,7 +527,6 @@
                 </table>
                 {% endif %}
                 {% endfor %}
-
             </div>
         </form>
     </div>

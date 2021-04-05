@@ -8,7 +8,6 @@ from genealogy.individual.individual_functions import fullname, link_child, add_
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_partner, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual
 from ..master_lists.locations import add_location
-from operator import itemgetter
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
 
@@ -56,14 +55,12 @@ def show_family(parentsid):
     number_children = children.count()
 
     try:
-        # father = Individual.query.get(Parents.query.get(parentsid).father_id)
         father = Individual.query.get(Parents.query.get(parents.id).father_id)
         session["father.id"] = father.id
     except:
         father = None
 
     try:
-        # mother = Individual.query.get(Parents.query.get(parentsid).mother_id)
         mother = Individual.query.get(Parents.query.get(parents.id).mother_id)
         session["mother.id"] = mother.id
     except:
@@ -108,18 +105,22 @@ def show_family(parentsid):
         motherspartners = None
 
     fatherotherfamilies = {}
-    fatherfamilies = db.session.query(Parents).filter(Parents.father_id == session["father.id"]).\
+    if session["father.id"] != None:
+        fatherfamilies = db.session.query(Parents).filter(Parents.father_id == session["father.id"]).\
         filter(Parents.id != parents.id).all()
-    for fatherfamily in fatherfamilies:
-        fatherotherfamilies[fatherfamily] = db.session.query(Individual).join(FamilyLink).\
+        for fatherfamily in fatherfamilies:
+            fatherotherfamilies[fatherfamily] = db.session.query(Individual).join(FamilyLink).\
             filter(FamilyLink.parents_id == fatherfamily.id).filter(FamilyLink.individual_id).order_by(Individual.dob)
+            print(fatherfamily)
 
     motherotherfamilies = {}
-    motherfamilies = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"]).\
+    if session["mother.id"] != None:
+        motherfamilies = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"]).\
             filter(Parents.id != parents.id).all()
-    for motherfamily in motherfamilies:
-        motherotherfamilies[motherfamily] = db.session.query(Individual).join(FamilyLink).\
+        for motherfamily in motherfamilies:
+            motherotherfamilies[motherfamily] = db.session.query(Individual).join(FamilyLink).\
             filter(FamilyLink.parents_id == motherfamily.id).filter(FamilyLink.individual_id).order_by(Individual.dob)
+            print(motherfamily)
 
     if request.method == "POST":
 
@@ -274,6 +275,7 @@ def show_family(parentsid):
                 session["partners.id"] = new_family.id
                 session["father.id"] = child_id
                 session["mother.id"] = Parents.query.get(new_family.id).mother_id
+                print("Session mother.id is " + str(session["mother.id"]))
             elif Individual.query.get(child_id).gender == "Female":
                 new_family = Parents.query.filter_by(mother_id=child_id).first()
                 session["partners.id"] = new_family.id
@@ -335,8 +337,8 @@ def add_individual(role):
                            role=role)
 
 
-@app.route("/edit/<id>", methods=["GET", "POST"])
-def edit_individual(id):
+@app.route("/edit/<context>/<id>", methods=["GET", "POST"])
+def edit_individual(context, id):
 
     edit_individual = True
 
@@ -371,7 +373,11 @@ def edit_individual(id):
 
         db.session.commit()
 
-        return redirect(url_for("show_family", parentsid=session["partners.id"]))
+        if context == "indlist":
+            individuals = Individual.query.all()
+            return render_template("list.html", individuals=individuals)
+        elif context == "familyview":
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     if request.form.get("addlocation") == "Add":
         add_location(form)
