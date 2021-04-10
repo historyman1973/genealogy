@@ -4,6 +4,45 @@ from genealogy.models import Individual, Parents, FamilyLink
 from dateutil import relativedelta
 from datetime import datetime
 
+########################################################################################################################
+def add_individual(form):
+    individual_forenames = form.individual_forenames.data
+    individual_surname = form.individual_surname.data
+    individual_gender = form.individual_gender.data
+    individual_dob = form.individual_dob.data
+    if form.individual_birth_location.data:
+        individual_birth_location = form.individual_birth_location.data.id
+    else:
+        individual_birth_location = form.individual_birth_location.data
+    individual_dod = form.individual_dod.data
+    if form.individual_death_location.data:
+        individual_death_location = form.individual_death_location.data.id
+    else:
+        individual_death_location = form.individual_death_location.data
+
+    individual_age = calculate_period(individual_dob, individual_dod)
+    individual_fullname = fullname(individual_forenames, individual_surname)
+
+    new_individual = Individual(surname=individual_surname, fullname=individual_fullname, forenames=individual_forenames,
+                           gender=individual_gender, dob=individual_dob, dod=individual_dod, age=individual_age,
+                           birth_location=individual_birth_location, death_location=individual_death_location)
+    db.session.add(new_individual)
+
+    db.session.commit()
+    db.session.flush()
+
+    return new_individual.id
+
+
+
+
+
+
+
+
+
+
+########################################################################################################################
 
 def add_child(form):
     child_forenames = form.individual_forenames.data

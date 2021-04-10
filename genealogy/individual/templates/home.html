@@ -221,7 +221,7 @@
                     <div class="col-5" style="font-size:0.8em">
                         {% if father.dod and father.death_location %}
                         <p class="col-10 text-center text-truncate p-0">d. {{ father.dod | datedisplay }} -
-                            {{ father.death_location }}</p>
+                            {{ father.death_location_rel.short_location }}</p>
                         {% elif father.dod and father.death_location_rel.short_location is none %}
                         <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
                         {% elif father.dod is none and father.death_location %}

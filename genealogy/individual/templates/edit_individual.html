@@ -79,8 +79,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addLocationLabel">Add location</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+<!--                            aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="type" id="type" value=""/>
@@ -120,9 +120,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" id = 'btnaddlocation' value="Add" name="addlocation"/>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" id = "btnaddlocation" value="Add" name="addlocation"/>
                 </div>
             </div>
         </div>
@@ -145,21 +144,17 @@
     }
 
     document.getElementById('btnaddlocation').onclick = function() {
-    if (eventType === 'birth') {
-        console.log("Value of eventType is: " + eventType)
-        console.log("Length of birthlocation is " +
-        document.getElementById('individual_birth_location').length.toString() + ", which is a " +
-        typeof(document.getElementById('individual_birth_location').length.toString()))
-        document.getElementById('individual_birth_location').value = birthlocation.length;
-        console.log("Did that work?")
-    } else if (eventType === "death") {
-        deathlocation.value = "2";
-    }
-    }
 
-    document.getElementById('test').onclick = function() {
-    console.log("Test button pressed, length of options is " + len)
-    birthlocation.value = len;
+    if (eventType === 'birth') {
+        console.log("Trying to set birth location to " + birthlocation.options.length.toString());
+        document.getElementById('individual_birth_location').value = birthlocation.options.length.toString();
+        console.log("Done");
+    } else if (eventType === "death") {
+        document.getElementById('individual_death_location').value = deathlocation.options.length;
+    }
+    console.log("Script has executed, but trying again....")
+    document.getElementById('individual_birth_location').value = birthlocation.options.length.toString();
+    console.log("Tried again")
     }
 
 </script>

@@ -105,7 +105,7 @@ def show_family(parentsid):
         motherspartners = None
 
     fatherotherfamilies = {}
-    if session["father.id"] != None:
+    if session.get("father.id"):
         fatherfamilies = db.session.query(Parents).filter(Parents.father_id == session["father.id"]).\
         filter(Parents.id != parents.id).all()
         for fatherfamily in fatherfamilies:
@@ -114,7 +114,7 @@ def show_family(parentsid):
             print(fatherfamily)
 
     motherotherfamilies = {}
-    if session["mother.id"] != None:
+    if session.get("mother.id"):
         motherfamilies = db.session.query(Parents).filter(Parents.mother_id == session["mother.id"]).\
             filter(Parents.id != parents.id).all()
         for motherfamily in motherfamilies:
@@ -294,11 +294,18 @@ def show_family(parentsid):
                            motherotherfamilies=motherotherfamilies)
 
 
-@app.route("/list", methods=["GET", "POST"])
+@app.route("/individuals", methods=["GET", "POST"])
 def individual_list():
     individuals = Individual.query.all()
 
-    return render_template("list.html", individuals=individuals)
+    return render_template("individuals.html", individuals=individuals)
+
+
+@app.route("/locations", methods=["GET", "POST"])
+def location_list():
+    locations = db.session.query(Location).order_by(Location.townorcity)
+
+    return render_template("locations.html", locations=locations)
 
 
 @app.route("/add/<role>", methods=["GET", "POST"])
@@ -309,8 +316,27 @@ def add_individual(role):
     form = IndividualView()
 
     if request.form.get("saveindividual") == "Save":
+        # if role == "patgrandfather":
+        #     add_patgrandfather(form)
+        # elif role == "patgrandmother":
+        #     add_patgrandmother(form)
+        # elif role == "matgrandfather":
+        #     add_matgrandfather(form)
+        # elif role == "matgrandmother":
+        #     add_matgrandmother(form)
+        # elif role == "father":
+        #     add_father(form)
+        # elif role == "mother":
+        #     add_mother(form)
+        # elif role == "fatherspartner":
+        #     add_partner(form, "father")
+        # elif role == "motherspartner":
+        #     add_partner(form, "mother")
+        # elif role == "child":
+        #     add_child(form)
+
         if role == "patgrandfather":
-            add_patgrandfather(form)
+            add_individual(form)
         elif role == "patgrandmother":
             add_patgrandmother(form)
         elif role == "matgrandfather":
@@ -375,7 +401,7 @@ def edit_individual(context, id):
 
         if context == "indlist":
             individuals = Individual.query.all()
-            return render_template("list.html", individuals=individuals)
+            return render_template("individuals.html", individuals=individuals)
         elif context == "familyview":
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 

@@ -1,6 +1,6 @@
 from genealogy import db
 from ..models import Location
-from flask import session
+from flask import session, flash
 
 
 def location_formats(type, address="", parish="", district = "", townorcity="", county="", country=""):
@@ -78,9 +78,12 @@ def add_location(form):
                             county=county, country=country, full_location=full_location,
                             short_location=short_location)
 
-    db.session.add(new_location)
-    db.session.commit()
-    db.session.flush()
+    if db.session.query(Location).filter_by(full_location=new_location.full_location).first() is None:
+        db.session.add(new_location)
+        db.session.commit()
+        db.session.flush()
+    else:
+        flash("Location already exists", "error")
 
     session["new_location_id"] = new_location.id
 
