@@ -25,9 +25,11 @@
                     <option value="{{ gender }}">{{ gender }}</option>
                     {% endif %}
                     {% endfor %}
-                    {% elif (role == "patgrandfather" or role == "matgrandfather" or role == "father") %}
+                    {% elif (role == "patgrandfather" or role == "matgrandfather" or role == "father" or
+                        role == "motherspartner") %}
                     <option selected value="{{ gender }}">Male</option>
-                    {% elif (role == "patgrandmother" or role == "matgrandmother" or role == "mother") %}
+                    {% elif (role == "patgrandmother" or role == "matgrandmother" or role == "mother" or
+                        role == "fatherspartner") %}
                     <option selected value="{{ gender }}">Female</option>
                     {% else %}
                     {% for gender in genders %}
@@ -131,7 +133,6 @@
     var eventType = "";
     var birthlocation = document.getElementById('individual_birth_location');
     var deathlocation = document.getElementById('individual_death_location');
-    var len = birthlocation.length.toString();
 
     document.getElementById('birth_location').onclick = function() {
     eventType = "birth";
@@ -146,8 +147,9 @@
     document.getElementById('btnaddlocation').onclick = function() {
 
     if (eventType === 'birth') {
-        console.log("Trying to set birth location to " + birthlocation.options.length.toString());
-        document.getElementById('individual_birth_location').value = birthlocation.options.length.toString();
+        len = document.getElementById('individual_birth_location').options.length
+        console.log("Trying to set birth location to " + len.toString());
+        document.getElementById('individual_birth_location').value = len.toString();
         console.log("Done");
     } else if (eventType === "death") {
         document.getElementById('individual_death_location').value = deathlocation.options.length;

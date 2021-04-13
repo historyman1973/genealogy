@@ -4,10 +4,15 @@ from genealogy.models import Individual, Parents, FamilyLink
 from dateutil import relativedelta
 from datetime import datetime
 
-########################################################################################################################
-def add_individual(form):
+
+def add_person(form, role):
     individual_forenames = form.individual_forenames.data
     individual_surname = form.individual_surname.data
+    # Override gender if the role in the family is known
+    if role == "patgrandfather" or role == "matgrandfather" or role == "father" or role == "motherspartner":
+        form.individual_gender.data = "Male"
+    elif role == "matgrandfather" or role == "matgrandmother" or role == "mother" or role == "fatherspartner":
+        form.individual_gender.data = "Female"
     individual_gender = form.individual_gender.data
     individual_dob = form.individual_dob.data
     if form.individual_birth_location.data:
@@ -31,83 +36,29 @@ def add_individual(form):
     db.session.commit()
     db.session.flush()
 
-    return new_individual.id
-
-
-
-
-
-
-
-
-
-
-########################################################################################################################
-
-def add_child(form):
-    child_forenames = form.individual_forenames.data
-    child_surname = form.individual_surname.data
-    child_gender = form.individual_gender.data
-    child_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        child_birth_location = form.individual_birth_location.data.id
-    else:
-        child_birth_location = form.individual_birth_location.data
-    child_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        child_death_location = form.individual_death_location.data.id
-    else:
-        child_death_location = form.individual_death_location.data
-
-    child_age = calculate_period(child_dob, child_dod)
-    child_fullname = fullname(child_forenames, child_surname)
-
-    new_child = Individual(surname=child_surname, fullname=child_fullname, forenames=child_forenames,
-                           gender=child_gender, dob=child_dob, dod=child_dod, age=child_age,
-                           birth_location=child_birth_location, death_location=child_death_location)
-    db.session.add(new_child)
-
-    db.session.commit()
-    db.session.flush()
-
-    session["child.id"] = new_child.id
-
-    link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
-
-    # Handles male and female children only
-    create_child_partnership(new_child)
+    session["new_individual_id"] = new_individual.id
 
     return
 
 
-def add_father(form):
-    father_forenames = form.individual_forenames.data
-    father_surname = form.individual_surname.data
-    father_gender = "Male"
-    father_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        father_birth_location = form.individual_birth_location.data.id
-    else:
-        father_birth_location = form.individual_birth_location.data
-    father_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        father_death_location = form.individual_death_location.data.id
-    else:
-        father_death_location = form.individual_death_location.data
-    father_fullname = fullname(father_forenames, father_surname)
-    father_age = calculate_period(father_dob, father_dod)
+def add_child():
 
-    new_father = Individual(surname=father_surname, fullname=father_fullname, forenames=father_forenames,
-                            gender=father_gender, dob=father_dob, birth_location=father_birth_location,
-                            dod=father_dod, death_location=father_death_location,
-                            age=father_age)
-    db.session.add(new_father)
+    session["child.id"] = session["new_individual_id"]
 
-    db.session.commit()
-    db.session.flush()
+    link_child(individual_id=session["child.id"], parents_id=session["partners.id"])
 
-    session["father.id"] = new_father.id
-    session["father_fullname"] = father_fullname
+    # Handles male and female children only
+    create_child_partnership(Individual.query.get_or_404(session["new_individual_id"]))
+
+    session.pop("new_individual_id", None)
+
+    return
+
+
+def add_father():
+
+    session["father.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("mother.id") is None:
         create_partners(partner_type="parents", father_id=session["father.id"], mother_id=None)
@@ -118,32 +69,10 @@ def add_father(form):
     return
 
 
-def add_mother(form):
-    mother_forenames = form.individual_forenames.data
-    mother_surname = form.individual_surname.data
-    mother_gender = "Female"
-    mother_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        mother_birth_location = form.individual_birth_location.data.id
-    else:
-        mother_birth_location = form.individual_birth_location.data
-    mother_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        mother_death_location = form.individual_death_location.data.id
-    else:
-        mother_death_location = form.individual_death_location.data
-    mother_fullname = fullname(mother_forenames, mother_surname)
-    mother_age = calculate_period(mother_dob, mother_dod)
+def add_mother():
 
-    new_mother = Individual(surname=mother_surname, fullname=mother_fullname, forenames=mother_forenames,
-                            gender=mother_gender, dob=mother_dob, birth_location=mother_birth_location,
-                            dod=mother_dod, death_location=mother_death_location,
-                            age=mother_age)
-    db.session.add(new_mother)
-
-    db.session.commit()
-    db.session.flush()
-    session["mother.id"] = new_mother.id
+    session["mother.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("father.id") is None:
         create_partners(partner_type="parents", father_id=None, mother_id=session["mother.id"])
@@ -154,34 +83,10 @@ def add_mother(form):
     return
 
 
-def add_matgrandfather(form):
-    matgrandfather_forenames = form.individual_forenames.data
-    matgrandfather_surname = form.individual_surname.data
-    matgrandfather_gender = "Male"
-    matgrandfather_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        matgrandfather_birth_location = form.individual_birth_location.data.id
-    else:
-        matgrandfather_birth_location = form.individual_birth_location.data
-    matgrandfather_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        matgrandfather_death_location = form.individual_death_location.data.id
-    else:
-        matgrandfather_death_location = form.individual_death_location.data
-    matgrandfather_fullname = fullname(matgrandfather_forenames, matgrandfather_surname)
-    mat_grandfather_age = calculate_period(matgrandfather_dob, matgrandfather_dod)
+def add_matgrandfather():
 
-    new_matgrandfather = Individual(surname=matgrandfather_surname, fullname=matgrandfather_fullname,
-                                    forenames=matgrandfather_forenames, gender=matgrandfather_gender,
-                                    dob=matgrandfather_dob, birth_location=matgrandfather_birth_location,
-                                    dod=matgrandfather_dod, death_location=matgrandfather_death_location,
-                                    age=mat_grandfather_age)
-    db.session.add(new_matgrandfather)
-
-    db.session.commit()
-    db.session.flush()
-
-    session["matgrandfather.id"] = new_matgrandfather.id
+    session["matgrandfather.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("matgrandmother.id") is None:
         create_partners(partner_type="matgrandparents", father_id=session["matgrandfather.id"], mother_id=None)
@@ -195,35 +100,10 @@ def add_matgrandfather(form):
     return
 
 
-def add_matgrandmother(form):
-    matgrandmother_forenames = form.individual_forenames.data
-    matgrandmother_surname = form.individual_surname.data
-    matgrandmother_gender = "Female"
-    matgrandmother_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        matgrandmother_birth_location = form.individual_birth_location.data.id
-    else:
-        matgrandmother_birth_location = form.individual_birth_location.data
-    matgrandmother_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        matgrandmother_death_location = form.individual_death_location.data.id
-    else:
-        matgrandmother_death_location = form.individual_death_location.data
-    matgrandmother_fullname = fullname(matgrandmother_forenames, matgrandmother_surname)
-    matgrandmother_age = calculate_period(matgrandmother_dob, matgrandmother_dod)
+def add_matgrandmother():
 
-    new_matgrandmother = Individual(surname=matgrandmother_surname, fullname=matgrandmother_fullname,
-                                    forenames=matgrandmother_forenames, gender=matgrandmother_gender,
-                                    dob=matgrandmother_dob, birth_location=matgrandmother_birth_location,
-                                    dod=matgrandmother_dod, death_location=matgrandmother_death_location,
-                                    age=matgrandmother_age)
-    db.session.add(new_matgrandmother)
-
-    db.session.commit()
-    db.session.flush()
-
-    session["matgrandmother.id"] = new_matgrandmother.id
-    session["matgrandmother_fullname"] = matgrandmother_fullname
+    session["matgrandmother.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("matgrandfather.id") is None:
         create_partners(partner_type="matgrandparents", father_id=None, mother_id=session["matgrandmother.id"])
@@ -237,70 +117,23 @@ def add_matgrandmother(form):
     return
 
 
-def add_partner(form, forwhom):
-    partner_forenames = form.individual_forenames.data
-    partner_surname = form.individual_surname.data
-    partner_gender = "Female"
-    partner_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        partner_birth_location = form.individual_birth_location.data.id
-    else:
-        partner_birth_location = form.individual_birth_location.data
-    partner_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        partner_death_location = form.individual_death_location.data.id
-    else:
-        partner_death_location = form.individual_death_location.data
-    partner_fullname = fullname(partner_forenames, partner_surname)
-    partner_age = calculate_period(partner_dob, partner_dod)
-
-    new_partner = Individual(surname=partner_surname, fullname=partner_fullname, forenames=partner_forenames,
-                            gender=partner_gender, dob=partner_dob, birth_location=partner_birth_location,
-                            dod=partner_dod, death_location=partner_death_location,
-                            age=partner_age)
-    db.session.add(new_partner)
-
-    db.session.commit()
-    db.session.flush()
+def add_partner(forwhom):
 
     if forwhom == "father":
-        session["mother.id"] = new_partner.id
+        session["mother.id"] = session["new_individual_id"]
     elif forwhom == "mother":
-        session["father.id"] = new_partner.id
+        session["father.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     create_partners(partner_type="parents", father_id=session["father.id"], mother_id=session["mother.id"])
 
     return
 
-def add_patgrandfather(form):
 
-    patgrandfather_forenames = form.individual_forenames.data
-    patgrandfather_surname = form.individual_surname.data
-    patgrandfather_gender = "Male"
-    patgrandfather_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        patgrandfather_birth_location = form.individual_birth_location.data.id
-    else:
-        patgrandfather_birth_location = form.individual_birth_location.data
-    patgrandfather_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        patgrandfather_death_location = form.individual_death_location.data.id
-    else:
-        patgrandfather_death_location = form.individual_death_location.data
-    patgrandfather_fullname = fullname(patgrandfather_forenames, patgrandfather_surname)
-    patgrandfather_age = calculate_period(patgrandfather_dob, patgrandfather_dod)
+def add_patgrandfather():
 
-    new_patgrandfather = Individual(surname=patgrandfather_surname, fullname=patgrandfather_fullname,
-                                    forenames=patgrandfather_forenames, gender=patgrandfather_gender,
-                                    dob=patgrandfather_dob, dod=patgrandfather_dod, age=patgrandfather_age,
-                                    birth_location=patgrandfather_birth_location,
-                                    death_location=patgrandfather_death_location)
-    db.session.add(new_patgrandfather)
-
-    db.session.commit()
-    db.session.flush()
-
-    session["patgrandfather.id"] = new_patgrandfather.id
+    session["patgrandfather.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("patgrandmother.id") is None:
         create_partners(partner_type="patgrandparents", father_id=session["patgrandfather.id"], mother_id=None)
@@ -314,35 +147,10 @@ def add_patgrandfather(form):
     return
 
 
-def add_patgrandmother(form):
-    patgrandmother_forenames = form.individual_forenames.data
-    patgrandmother_surname = form.individual_surname.data
-    patgrandmother_gender = "Female"
-    patgrandmother_dob = form.individual_dob.data
-    if form.individual_birth_location.data:
-        patgrandmother_birth_location = form.individual_birth_location.data.id
-    else:
-        patgrandmother_birth_location = form.individual_birth_location.data
-    patgrandmother_dod = form.individual_dod.data
-    if form.individual_death_location.data:
-        patgrandmother_death_location = form.individual_death_location.data.id
-    else:
-        patgrandmother_death_location = form.individual_death_location.data
-    patgrandmother_fullname = fullname(patgrandmother_forenames, patgrandmother_surname)
-    pat_grandmother_age = calculate_period(patgrandmother_dob, patgrandmother_dod)
+def add_patgrandmother():
 
-    new_patgrandmother = Individual(surname=patgrandmother_surname, fullname=patgrandmother_fullname,
-                                    forenames=patgrandmother_forenames, gender=patgrandmother_gender,
-                                    dob=patgrandmother_dob, birth_location=patgrandmother_birth_location,
-                                    dod=patgrandmother_dod, death_location=patgrandmother_death_location,
-                                    age=pat_grandmother_age)
-    db.session.add(new_patgrandmother)
-
-    db.session.commit()
-    db.session.flush()
-
-    session["patgrandmother.id"] = new_patgrandmother.id
-    session["patgrandmother_fullname"] = patgrandmother_fullname
+    session["patgrandmother.id"] = session["new_individual_id"]
+    session.pop("new_individual_id", None)
 
     if session.get("patgrandfather.id") is None:
         create_partners(partner_type="patgrandparents", father_id=None, mother_id=session["patgrandmother.id"])

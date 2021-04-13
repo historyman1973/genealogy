@@ -6,7 +6,7 @@ from genealogy.individual.forms import familyview_form, IndividualView, individu
     relationshipview_form
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_partner, add_child, session_pop_grandparents, \
-    create_child_partnership, calculate_period, delete_individual
+    create_child_partnership, calculate_period, delete_individual, add_person
 from ..master_lists.locations import add_location
 
 genealogy_blueprint = Blueprint("individual", __name__, template_folder="templates")
@@ -21,10 +21,12 @@ def index():
     form = IndividualView()    
 
     if request.form.get("individual_gender") == "Male":
-        add_father(form)
+        add_person(form, role="father")
+        add_father()
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
     elif request.form.get("individual_gender") == "Female":
-        add_mother(form)
+        add_person(form, role="mother")
+        add_mother()
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("new_family.html", form=form, genders=genders)
@@ -181,15 +183,15 @@ def show_family(parentsid):
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addfather") == "Add":
-            add_father(familyform)
+            add_father()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addmother") == "Add":
-            add_mother(familyform)
+            add_mother()
             return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
         if request.form.get("addchild") == "Add":
-            add_child(familyform)
+            add_child()
 
             children = db.session.query(Individual) \
                 .join(FamilyLink) \
@@ -316,43 +318,28 @@ def add_individual(role):
     form = IndividualView()
 
     if request.form.get("saveindividual") == "Save":
-        # if role == "patgrandfather":
-        #     add_patgrandfather(form)
-        # elif role == "patgrandmother":
-        #     add_patgrandmother(form)
-        # elif role == "matgrandfather":
-        #     add_matgrandfather(form)
-        # elif role == "matgrandmother":
-        #     add_matgrandmother(form)
-        # elif role == "father":
-        #     add_father(form)
-        # elif role == "mother":
-        #     add_mother(form)
-        # elif role == "fatherspartner":
-        #     add_partner(form, "father")
-        # elif role == "motherspartner":
-        #     add_partner(form, "mother")
-        # elif role == "child":
-        #     add_child(form)
+
+        # Pass the role along with the form to the general add_person() function (so the gender can be defined)
+        add_person(form, role)
 
         if role == "patgrandfather":
-            add_individual(form)
+            add_patgrandfather()
         elif role == "patgrandmother":
-            add_patgrandmother(form)
+            add_patgrandmother()
         elif role == "matgrandfather":
-            add_matgrandfather(form)
+            add_matgrandfather()
         elif role == "matgrandmother":
-            add_matgrandmother(form)
+            add_matgrandmother()
         elif role == "father":
-            add_father(form)
+            add_father()
         elif role == "mother":
-            add_mother(form)
+            add_mother()
         elif role == "fatherspartner":
-            add_partner(form, "father")
+            add_partner("father")
         elif role == "motherspartner":
-            add_partner(form, "mother")
+            add_partner("mother")
         elif role == "child":
-            add_child(form)
+            add_child()
 
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
