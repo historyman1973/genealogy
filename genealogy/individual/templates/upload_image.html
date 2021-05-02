@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" action="/addphoto/{{ id }}" class="col-md-12" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+    <div class="container mt-5">
+        {{ wtf.form_field(form.description, class='form-control') }}
+        {{ wtf.form_field(form.year, class='form-control w-auto') }}
+        {{ wtf.form_field(form.photo) }}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary mx-auto" type="submit" name="addphoto" value="Add">Save</button>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

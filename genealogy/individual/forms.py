@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, HiddenField
-from wtforms.fields.html5 import DateField
+from flask_wtf.file import FileField
+from wtforms import StringField, SelectField
+from wtforms.fields.html5 import DateField, IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from genealogy.models import genders
 from ..models import Individual, Parents, Location
@@ -85,6 +86,13 @@ def familyview_form(relationship_id):
     return FamilyView
 
 
+class ImageUpload(FlaskForm):
+    description = StringField(label="Description")
+    year = IntegerField(label="Year Taken")
+    photo = FileField(label="Upload photo")
+
+
+
 def individualview_form(individual_id):
     class IndividualView(FlaskForm):
 
@@ -99,6 +107,8 @@ def individualview_form(individual_id):
         individual_death_location = QuerySelectField("Place", query_factory=location_query, allow_blank=True,
                                                      get_label="full_location", default=Location.query.filter_by
             (id=Individual.query.get(individual_id).death_location).scalar())
+
+        individual_preferred_photo = IntegerField(default=Individual.query.get(individual_id).preferred_image)
 
         location_address = StringField(label="Address")
         location_parish = StringField(label="Parish (Church)")

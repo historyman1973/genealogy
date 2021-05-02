@@ -1,88 +1,142 @@
 {% extends "base.html" %}
 {% block content %}
 
-<form method="POST" class="col-md-12">
+<form method="POST" class="col mx-auto">
     {{form.hidden_tag()}}
-    <div class="container mt-5">
-        <br>
-        <div class="row py-2">
-            <div class="col-sm-4">
-                {{ wtf.form_field(form.individual_forenames, class='form-control') }}
+    <div class="parent-container d-flex">
+        <div class="container mt-5 mx-5 col-7 shadow" style="border:1px solid #cecece;">
+            <br>
+            <div class="row py-2">
+                <div class="col-sm-4">
+                    {{ wtf.form_field(form.individual_forenames, class='form-control') }}
+                </div>
+                <div class="col-sm-4">
+                    {{ wtf.form_field(form.individual_surname, class='form-control') }}
+                </div>
             </div>
-            <div class="col-sm-4">
-                {{ wtf.form_field(form.individual_surname, class='form-control') }}
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col-sm-1">Gender</div>
-            <div class="col-sm-4  w-auto">
-                <select name="individual_gender" class="form-select" aria-label="Default select example">
-                    {% if edit_individual %}
-                    {% for gender in genders %}
-                    {% if individual.gender == gender %}
-                    <option selected value="{{ gender }}">{{ gender }}</option>
-                    {% else %}
-                    <option value="{{ gender }}">{{ gender }}</option>
-                    {% endif %}
-                    {% endfor %}
-                    {% elif (role == "patgrandfather" or role == "matgrandfather" or role == "father" or
+            <div class="row py-2">
+                <div class="col-sm-2">Gender</div>
+                <div class="col-sm-4  w-auto">
+                    <select name="individual_gender" class="form-select" aria-label="Default select example">
+                        {% if edit_individual %}
+                        {% for gender in genders %}
+                        {% if individual.gender == gender %}
+                        <option selected value="{{ gender }}">{{ gender }}</option>
+                        {% else %}
+                        <option value="{{ gender }}">{{ gender }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        {% elif (role == "patgrandfather" or role == "matgrandfather" or role == "father" or
                         role == "motherspartner") %}
-                    <option selected value="{{ gender }}">Male</option>
-                    {% elif (role == "patgrandmother" or role == "matgrandmother" or role == "mother" or
+                        <option selected value="{{ gender }}">Male</option>
+                        {% elif (role == "patgrandmother" or role == "matgrandmother" or role == "mother" or
                         role == "fatherspartner") %}
-                    <option selected value="{{ gender }}">Female</option>
+                        <option selected value="{{ gender }}">Female</option>
+                        {% else %}
+                        {% for gender in genders %}
+                        <option value="{{ gender }}">{{ gender }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-sm-3 w-auto">
+                    {{ wtf.form_field(form.individual_dob, class='form-control w-auto') }}
+                </div>
+                <div class="col-sm-6">
+                    {{ wtf.form_field(form.individual_birth_location, class='form-select w-100') }}
+                </div>
+                <!-- Button trigger modal -->
+                <div class="col-sm-2 align-self-end mb-0">
+                    <a class="link-success" href="" id="birth_location" data-bs-toggle="modal"
+                       data-bs-target="#addlocation">Add new location</a>
+                </div>
+            </div>
+
+            <div class="row py-2">
+                <div class="col-sm-3 w-auto">
+                    {{ wtf.form_field(form.individual_dod, class='form-control w-auto') }}
+                </div>
+                <div class="col-sm-6">
+                    {{ wtf.form_field(form.individual_death_location, class='form-select w-100') }}
+                </div>
+                <!-- Button trigger modal -->
+                <div class="col-sm-2 align-self-end mb-0">
+                    <a class="link-success" href="" id="death_location" data-bs-toggle="modal"
+                       data-bs-target="#addlocation">Add new location</a>
+                </div>
+            </div>
+            <br>
+            <div class="d-grid gap-2 text-center">
+                <button class="btn btn-outline-primary" type="submit" name="cancelindividual" value="Cancel">Cancel</button>
+                <button class="btn btn-primary" type="submit" name="saveindividual" value="Save">Save</button>
+            </div>
+                <br>
+        </div>
+
+        {% if edit_individual %}
+        <div class="container mt-5 col-4 shadow" style="border:1px solid #cecece;">
+            <br>
+            <div class="row">
+                <div class="col">
+                    {% if photos %}
+                    <h5>Photos (click to zoom)</h5>
                     {% else %}
-                    {% for gender in genders %}
-                    <option value="{{ gender }}">{{ gender }}</option>
-                    {% endfor %}
+                    <h5>Photos</h5>
                     {% endif %}
-                </select>
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col-sm-3 w-auto">
-                {{ wtf.form_field(form.individual_dob, class='form-control w-auto') }}
-            </div>
-            <div class="col-sm-7 w-auto">
-                {{ wtf.form_field(form.individual_birth_location, class='form-select w-auto') }}
-            </div>
-            <!-- Button trigger modal -->
-            <div class="col-sm-2 w-auto align-self-end mb-0">
-                <a class="link-success" href="" id="birth_location" data-bs-toggle="modal"
-                   data-bs-target="#addlocation">Add new location</a>
-            </div>
-        </div>
+                    <table class="table">
+                        <thead>
+                        <tr class="table-success">
+                            <th scope="col">Year</th>
+                            <th scope="col">Description</th>
+                            <th scope="col" class="text-center">Image</th>
+                            <th scope="col">Pref.</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if photos %}
+                        {% for photo in photos %}
+                        <tr>
+                            <td>{{ photo.imageyear }}</td>
+                            <td>{{ photo.imagedesc }}</td>
+                            <td style="text-align: center;"><img style="max-height:100px;"
+                                                                 class = "img-thumbnail" src="{{ url_for('static',
+                                                             filename='photos/') }}{{ photo.imagepath }}"
+                                                                 data-bs-toggle="modal"
+                                                                 data-bs-target="#imageModal{{ photo.id }}"></td>
+                            {% if photo.id == individual.preferred_image %}
+                            <td><input type="radio" name="pref_photos" value="{{ photo.id }}" checked></td>
+                            {% else %}
+                            <td><input type="radio" name="pref_photos" value="{{ photo.id }}"></td>
+                            {% endif %}
 
-        <div class="row py-2">
-            <div class="col-sm-3 w-auto">
-                {{ wtf.form_field(form.individual_dod, class='form-control w-auto') }}
+
+
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                    <a class="btn btn-primary mx-auto mb-5" href="{{ url_for( 'add_photo', id=individual.id ) }}"
+                       name="addphoto">Add</a>
+                </div>
             </div>
-            <div class="col-sm-7 w-auto">
-                {{ wtf.form_field(form.individual_death_location, class='form-select w-auto') }}
-            </div>
-            <!-- Button trigger modal -->
-            <div class="col-sm-2 w-auto align-self-end mb-0">
-                <a class="link-success" href="" id="death_location" data-bs-toggle="modal"
-                   data-bs-target="#addlocation">Add new location</a>
-            </div>
+
         </div>
+        {% endif %}
     </div>
-    <br>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button class="btn btn-primary mx-auto" type="submit" name="saveindividual" value="Save">Save</button>
-    </div>
-    <br>
 
 
-    <!-- Modal -->
+    <!-- Location modal -->
     <div class="modal fade" id="addlocation" tabindex="-1" aria-labelledby="addLocationLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addLocationLabel">Add location</h5>
-<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
-<!--                            aria-label="Close"></button>-->
+                    <!--                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+                    <!--                            aria-label="Close"></button>-->
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="type" id="type" value=""/>
@@ -128,11 +182,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Photo modal -->
+    {% for photo in photos %}
+    <div class="modal fade" id="imageModal{{ photo.id }}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% if photo.imagedesc and photo.imageyear %}
+                    <h5 class="modal-title">{{ photo.imagedesc }}, {{ photo.imageyear }}</h5>
+                    {% elif photo.imagedesc and photo.imageyear is none %}
+                    <h5 class="modal-title">{{ photo.imagedesc }}</h5>
+                    {% elif photo.imagedesc is none and photo.imageyear %}
+                    <h5 class="modal-title">{{ photo.imageyear }}</h5>
+                    {% else %}
+                    ""
+                    {% endif %}
+
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <img style="max-height:600px; max-width:600px; width: auto; height: auto;"
+                         class = "img-thumbnail" src="{{ url_for('static',
+                         filename='photos/') }}{{ photo.imagepath }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
 </form>
 <script type="text/javascript">
     var eventType = "";
-    var birthlocation = document.getElementById('individual_birth_location');
-    var deathlocation = document.getElementById('individual_death_location');
 
     document.getElementById('birth_location').onclick = function() {
     eventType = "birth";
@@ -146,18 +230,15 @@
 
     document.getElementById('btnaddlocation').onclick = function() {
 
-    if (eventType === 'birth') {
-        len = document.getElementById('individual_birth_location').options.length
-        console.log("Trying to set birth location to " + len.toString());
-        document.getElementById('individual_birth_location').value = len.toString();
-        console.log("Done");
-    } else if (eventType === "death") {
-        document.getElementById('individual_death_location').value = deathlocation.options.length;
-    }
-    console.log("Script has executed, but trying again....")
-    document.getElementById('individual_birth_location').value = birthlocation.options.length.toString();
-    console.log("Tried again")
-    }
+        if (eventType === 'birth') {
+            var e = document.getElementById("individual_birth_location");
+            e.options[e.selectedIndex].value = e.length;
+
+        } else if (eventType === "death") {
+            var e = document.getElementById("individual_death_location");
+            e.options[e.selectedIndex].value = e.length;
+        }
+        }
 
 </script>
 {% endblock %}
