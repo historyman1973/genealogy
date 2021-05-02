@@ -148,21 +148,56 @@
                     <div class="col d-flex">
                         <!--                        ################################################## FATHER ###-->
                         {% if father %}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                More
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', context='familyview',
+                        <div class="col-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    More
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                           href="{{ url_for( 'edit_individual', context='familyview',
                                        id=father.id ) }}">Edit</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
-                                    Delete</a></li>
-                            </ul>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=father.id ) }}">
+                                        Delete</a></li>
+                                </ul>
+                            </div>
                         </div>
-                        <p class="display-6 col-10 text-center text-primary">{{ father.fullname }}</p>
+                        <div class="h4 col-8 text-center"><span class="text-primary">{{ father.fullname }}</span>
+
+                            <div class="row pt-2 pl-0 justify-content-center" style="font-size:0.6em">
+                                {% if father.dob and father.birth_location %}
+                                <p class="col-10 text-truncate ml-2">b. {{ father.dob | datedisplay }} -
+                                    {{ father.birth_location_rel.short_location }}</p>
+                                {% elif father.dob and father.birth_location is none %}
+                                <p class="row">b. {{ father.dob | datedisplay }}</p>
+                                {% elif father.dob is none and father.birth_location %}
+                                <p class="row text-truncate">b. {{ father.birth_location_rel.short_location }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="row justify-content-center" style="font-size:0.6em">
+                                {% if father.dod and father.death_location %}
+                                <p class="col-10 text-center text-truncate pl-0">d. {{ father.dod | datedisplay }} -
+                                    {{ father.death_location_rel.short_location }}</p>
+                                {% elif father.dod and father.death_location_rel.short_location is none %}
+                                <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
+                                {% elif father.dod is none and father.death_location %}
+                                <p class="col-10 text-center text-truncate">d. {{ father.death_location_rel.short_location }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if father.preferred_image %}
+                        <div class="col-2">
+                            <img style="max-height:100px;" class = "img-thumbnail" src="{{ url_for('static',
+                                                      filename='photos/') }}{{ father.preferred_image_rel.imagepath }}">
+                        </div>
+                        {% else %}
+                        <div class="col-2">
+                            &nbsp;
+                        </div>
+                        {% endif %}
                         {% else %}
                         <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="father"
                            href="{{ url_for( 'add_individual', role='father') }}">Add father</a>
@@ -171,74 +206,61 @@
                     <div class="col d-flex">
                         <!--                        ###################################################### MOTHER ###-->
                         {% if mother %}
-                        <p class="display-6 col-10 text-center text-danger">{{ mother.fullname }}</p>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle btn-lg"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                More
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                       href="{{ url_for( 'edit_individual', context='familyview',
+                        {% if mother.preferred_image %}
+                        <div class="col-2">
+                            <img style="max-height:100px;" class = "img-thumbnail" src="{{ url_for('static',
+                                                      filename='photos/') }}{{ mother.preferred_image_rel.imagepath }}">
+                        </div>
+                        {% else %}
+                        <div class="col-2">
+                            &nbsp;
+                        </div>
+                        {% endif %}
+                        <div class="h4 col-8 text-center"><span class="text-danger">{{ mother.fullname }}</span>
+                            <div class="row pt-2 pl-0 justify-content-center" style="font-size:0.6em">
+                                {% if mother.dob and mother.birth_location %}
+                                <p class="col-10 text-truncate ml-2">b. {{ mother.dob | datedisplay }} -
+                                    {{ mother.birth_location_rel.short_location }}</p>
+                                {% elif mother.dob and mother.birth_location is none %}
+                                <p class="row">b. {{ mother.dob | datedisplay }}</p>
+                                {% elif mother.dob is none and mother.birth_location %}
+                                <p class="row text-truncate">b. {{ mother.birth_location_rel.short_location }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="row justify-content-center" style="font-size:0.6em">
+                                {% if mother.dod and mother.death_location %}
+                                <p class="col-10 text-center text-truncate pl-0">d. {{ mother.dod | datedisplay }} -
+                                    {{ mother.death_location_rel.short_location }}</p>
+                                {% elif mother.dod and father.death_location_rel.short_location is none %}
+                                <p class="col-10 text-center">d. {{ mother.dod | datedisplay }}</p>
+                                {% elif mother.dod is none and mother.death_location %}
+                                <p class="col-10 text-center text-truncate">d. {{ mother.death_location_rel.short_location }}</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="col-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    More
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                           href="{{ url_for( 'edit_individual', context='familyview',
                                        id=mother.id ) }}">Edit</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
-                                    Delete</a></li>
-                            </ul>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for( 'delete', id=mother.id ) }}">
+                                        Delete</a></li>
+                                </ul>
+                            </div>
                         </div>
                         {% else %}
                         <a type="submit" class="btn btn-outline-secondary col-12 btn-lg" name="mother"
                            href="{{ url_for( 'add_individual', role='mother') }}">Add mother</a>
                         {% endif %}
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-5 pb-0" style="font-size:0.8em">
-                        {% if father.dob and father.birth_location %}
-                        <p class="col-10 text-center text-truncate">b. {{ father.dob | datedisplay }} -
-                            {{ father.birth_location_rel.short_location }}</p>
-                        {% elif father.dob and father.birth_location is none %}
-                        <p class="col-10 text-center">b. {{ father.dob | datedisplay }}</p>
-                        {% elif father.dob is none and father.birth_location %}
-                        <p class="col-10 text-center text-truncate">b. {{ father.birth_location_rel.short_location }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="col-5 pb-0" style="font-size:0.8em">
-                        {% if mother.dob and mother.birth_location %}
-                        <p class="col-10 text-center text-truncate">b. {{ mother.dob | datedisplay }} -
-                            {{ mother.birth_location_rel.short_location }}</p>
-                        {% elif mother.dob and mother.birth_location is none %}
-                        <p class="col-10 text-center">b. {{ mother.dob | datedisplay }}</p>
-                        {% elif mother.dob is none and mother.birth_location %}
-                        <p class="col-10 text-center text-truncate">b. {{ mother.birth_location_rel.short_location }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="col-1"></div>
-                </div>
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-5" style="font-size:0.8em">
-                        {% if father.dod and father.death_location %}
-                        <p class="col-10 text-center text-truncate p-0">d. {{ father.dod | datedisplay }} -
-                            {{ father.death_location_rel.short_location }}</p>
-                        {% elif father.dod and father.death_location_rel.short_location is none %}
-                        <p class="col-10 text-center">d. {{ father.dod | datedisplay }}</p>
-                        {% elif father.dod is none and father.death_location %}
-                        <p class="col-10 text-center text-truncate">d. {{ father.death_location_rel.short_location }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="col-5 pb-0" style="font-size:0.8em">
-                        {% if mother.dod and mother.death_location_rel.short_location %}
-                        <p class="col-10 text-center text-truncate">d. {{ mother.dod | datedisplay }} -
-                            {{ mother.death_location_rel.short_location }}</p>
-                        {% elif mother.dod and mother.death_location_rel.short_location is none %}
-                        <p class="col-10 text-center">d. {{ mother.dod | datedisplay }}</p>
-                        {% elif mother.dod is none and mother.death_location_rel.short_location %}
-                        <p class="col-10 text-center text-truncate">d. {{ mother.death_location_rel.short_location }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="col-1"></div>
                 </div>
                 <hr>
                 <!--              #         ####################################################### RELATIONSHIPS ###-->

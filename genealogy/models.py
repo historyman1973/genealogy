@@ -14,6 +14,26 @@ class FamilyLink(db.Model):
         self.parents_id = parents_id
 
 
+class IndividualImageLink(db.Model):
+    __tablename__ = "individual_image_link"
+
+    individual_id = db.Column(db.Integer, db.ForeignKey("individual.id"), primary_key=True)
+    image_id = db.Column(db.Integer, db.ForeignKey("image.id"), primary_key=True)
+
+    def __init__(self, individual_id, image_id):
+        self.individual_id = individual_id
+        self.image_id = image_id
+
+
+class Image(db.Model):
+    __tablename__ = "image"
+
+    id = db.Column(db.Integer, primary_key=True)
+    imageyear = db.Column(db.Integer)
+    imagedesc = db.Column(db.String)
+    imagepath = db.Column(db.String)
+
+
 class Individual(db.Model):
     __tablename__ = "individual"
 
@@ -22,6 +42,8 @@ class Individual(db.Model):
     surname = db.Column(db.Text)
     fullname = db.Column(db.Text)
     gender = db.Column(db.Text)
+    preferred_image = db.Column(db.Integer, db.ForeignKey("image.id"))
+    preferred_image_rel = db.relationship("Image", foreign_keys="[Individual.preferred_image]")
     dob = db.Column(db.Date)
     birth_location = db.Column(db.Integer, db.ForeignKey("location.id"))
     birth_location_rel = db.relationship("Location", foreign_keys="[Individual.birth_location]")

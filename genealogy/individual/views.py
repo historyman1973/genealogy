@@ -1,9 +1,13 @@
+import os
+
+from werkzeug.utils import secure_filename
+
 from app import app
 from flask import Blueprint, render_template, redirect, url_for, session, request, flash
-from genealogy import db
-from genealogy.models import Individual, Parents, FamilyLink, genders, Location
+from genealogy import db, photos
+from genealogy.models import Individual, Parents, FamilyLink, genders, Location, Image, IndividualImageLink
 from genealogy.individual.forms import familyview_form, IndividualView, individualview_form, RelationshipView, \
-    relationshipview_form
+    relationshipview_form, ImageUpload
 from genealogy.individual.individual_functions import fullname, link_child, add_father, add_mother, add_patgrandfather, \
     add_patgrandmother, add_matgrandfather, add_matgrandmother, add_partner, add_child, session_pop_grandparents, \
     create_child_partnership, calculate_period, delete_individual, add_person
@@ -30,6 +34,7 @@ def index():
         return redirect(url_for("show_family", parentsid=session["partners.id"]))
 
     return render_template("new_family.html", form=form, genders=genders)
+
 
 @app.route("/family/<parentsid>", methods=["GET", "POST"])
 def show_family(parentsid):
@@ -310,6 +315,11 @@ def location_list():
     return render_template("locations.html", locations=locations)
 
 
+@app.route("/uploadimage", methods=["POST"])
+def upload_image():
+    return render_template("uploadimage.html")
+
+
 @app.route("/add/<role>", methods=["GET", "POST"])
 def add_individual(role):
 
@@ -346,6 +356,7 @@ def add_individual(role):
     if request.form.get("addlocation") == "Add":
         add_location(form)
 
+
     return render_template("edit_individual.html", form=form, genders=genders, edit_individual=edit_individual,
                            role=role)
 
@@ -363,6 +374,15 @@ def edit_individual(context, id):
 
     original_gender = individual.gender
 
+    photo_query = db.session.query(Image).join(IndividualImageLink).filter(IndividualImageLink.individual_id == id)
+    if photo_query.count == 1:
+        preferred_photo = photo_query.first()
+    elif photo_query.count == 0:
+        preferred_photo = None
+    else:
+        preferred_photo = Individual.query.get(id).preferred_image
+    photos = photo_query.all()
+
     if request.form.get("saveindividual") == "Save":
         individual.forenames = form.individual_forenames.data
         individual.surname = form.individual_surname.data
@@ -377,6 +397,7 @@ def edit_individual(context, id):
             individual.death_location = form.individual_death_location.data.id
         else:
             individual.death_location = form.individual_death_location.data
+        individual.preferred_image = request.form["pref_photos"]
         individual.age = calculate_period(individual.dob, individual.dod)
 
         individual.fullname = fullname(individual.forenames, individual.surname)
@@ -395,8 +416,48 @@ def edit_individual(context, id):
     if request.form.get("addlocation") == "Add":
         add_location(form)
 
+    if request.form.get("cancelindividual") == "Cancel":
+        if context == "indlist":
+            individuals = Individual.query.all()
+            return render_template("individuals.html", individuals=individuals)
+        elif context == "familyview":
+            return redirect(url_for("show_family", parentsid=session["partners.id"]))
+
     return render_template("edit_individual.html", form=form, individual=individual, genders=genders,
-                           edit_individual=edit_individual)
+                           edit_individual=edit_individual, preferred_photo=preferred_photo, photos=photos)
+
+
+@app.route("/addphoto/<id>", methods=["GET", "POST"])
+def add_photo(id):
+    form = ImageUpload()
+
+    if request.form.get("addphoto") == "Add":
+
+        new_image_description = form.description.data
+        new_image_year = form.year.data
+
+        filename = secure_filename(form.photo.data.filename)                           #
+        form.photo.data.save('genealogy/static/photos/' + filename)
+
+        new_image = Image(imageyear=new_image_year, imagedesc=new_image_description, imagepath=filename)
+
+        db.session.add(new_image)
+        db.session.commit()
+        db.session.flush()
+
+        l = IndividualImageLink(individual_id=id, image_id=new_image.id)
+
+        db.session.add(l)
+        db.session.commit()
+        db.session.flush()
+
+        photo_query = db.session.query(Image).join(IndividualImageLink).filter(IndividualImageLink.individual_id == id)
+        if photo_query.count() == 1:
+            Individual.query.get_or_404(id).preferred_image = new_image.id
+
+        return redirect(url_for("edit_individual", context="familyview", id=id))
+
+    return render_template("upload_image.html", id=id, form=form)
 
 
 @app.route("/delete/<id>", methods=["GET", "POST"])
